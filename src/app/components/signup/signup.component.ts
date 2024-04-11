@@ -12,6 +12,8 @@ import {
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { ValidationService } from '../../services/validation.service';
+import { environment } from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-signup',
@@ -30,16 +32,21 @@ import { MatIconModule } from '@angular/material/icon';
 export class SignupComponent {
   authService = inject(AuthService);
   router = inject(Router);
-
-  signUpForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(8),
-    ]),
-  });
-
   hide = true;
+
+  validation = inject(ValidationService);
+
+  signUpForm = new FormGroup(
+    {
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.pattern(environment.passwordRegex),
+      ]),
+      confirmPassword: new FormControl('', [Validators.required]),
+    },
+    this.validation.passwordMatch('password', 'confirmPassword')
+  );
 
   onSubmit() {
     if (this.signUpForm.value.email && this.signUpForm.value.password)
@@ -63,4 +70,6 @@ export class SignupComponent {
   navToLogIn() {
     this.router.navigate(['log-in']);
   }
+
+  constructor(validation: ValidationService) {}
 }
