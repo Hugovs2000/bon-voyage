@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "bon-voyage-4398e": {
+      "hosting": {
+        "bon-voyage": [
+          "bon-voyage-4398e"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "bon-voyage-4398e"
+  }
+}
