@@ -70,6 +70,4 @@ export class SignupComponent {
   navToLogIn() {
     this.router.navigate(['log-in']);
   }
-
-  constructor(validation: ValidationService) {}
 }
