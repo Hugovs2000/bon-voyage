@@ -14,6 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ValidationService } from '../../services/validation.service';
 import { environment } from '../../../environments/environment.development';
+import { MatCardContent, MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-signup',
@@ -25,6 +26,8 @@ import { environment } from '../../../environments/environment.development';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
+    MatCardModule,
+    MatCardContent,
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss',
@@ -58,7 +61,7 @@ export class SignupComponent {
   signInWithGoogle() {
     this.authService
       .byGoogle()
-      .then(() => console.log('Logged in with google'))
+      .then(() => this.router.navigate(['']))
       .catch(error =>
         console.log(
           'An error occurred when logging in, please try again!',

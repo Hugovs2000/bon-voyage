@@ -1,15 +1,15 @@
 <p>
-  <mat-toolbar class="flex justify-between ">
+  <mat-toolbar class="flex justify-between">
     <div class="flex items-center">
-      <button mat-icon-button aria-label="Menu button">
+      <button class="btn btn-ghost -ml-2 px-2" aria-label="Menu button">
         <mat-icon>menu</mat-icon>
       </button>
-      <button class="text-blue-800" (click)="navToHome()">
+      <button class="btn btn-ghost text-blue-800 gap-0 text-xl md:text-2xl" (click)="navToHome()">
         Bon<span class="text-blue-400">Voyage</span>
       </button>
     </div>
     <div class="flex gap-4">
-      <button class="text-sm" aria-label="Log in button" (click)="navToLogin()">
+      <button class="btn btn-ghost text-sm" aria-label="Log in button" (click)="navToLogin()">
         Log In
       </button>
       <button class="btn bg-blue-400" aria-label="Sign up button" (click)="navToSignup()">

@@ -12,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../services/auth.service';
 import { MatDividerModule } from '@angular/material/divider';
 import { Router } from '@angular/router';
+import { MatCardContent, MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-login',
@@ -23,6 +24,8 @@ import { Router } from '@angular/router';
     MatIconModule,
     MatButtonModule,
     MatDividerModule,
+    MatCardModule,
+    MatCardContent,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -54,7 +57,7 @@ export class LoginComponent {
   signInWithGoogle() {
     this.authService
       .byGoogle()
-      .then(() => console.log('Logged in with google'))
+      .then(() => this.router.navigate(['']))
       .catch(error =>
         console.log(
           'An error occurred when logging in, please try again!',
