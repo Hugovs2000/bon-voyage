@@ -5,14 +5,19 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
+  user,
   UserCredential,
+  onAuthStateChanged,
+  signOut,
 } from '@angular/fire/auth';
+import { error } from '@angular/compiler-cli/src/transformers/util';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private _auth = inject(Auth);
+  isLoggedIn = false;
 
   byGoogle(): Promise<UserCredential> {
     return signInWithPopup(this._auth, new GoogleAuthProvider());
@@ -32,5 +37,15 @@ export class AuthService {
       email.trim(),
       password.trim()
     );
+  }
+
+  logUserOut() {
+    return signOut(this._auth).catch(error => console.error(error));
+  }
+
+  constructor() {
+    onAuthStateChanged(this._auth, user => {
+      this.isLoggedIn = !!(user?.uid && user?.uid?.length > 1);
+    });
   }
 }

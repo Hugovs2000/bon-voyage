@@ -8,6 +8,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LandingComponent } from './components/landing/landing.component';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -28,6 +29,12 @@ import { LandingComponent } from './components/landing/landing.component';
 export class AppComponent {
   title = 'bon-voyage';
   router = inject(Router);
+  authService = inject(AuthService);
+
+  signOut() {
+    this.authService.logUserOut();
+    this.router.navigate(['']);
+  }
 
   navToLogin() {
     this.router.navigate(['log-in']);
@@ -36,6 +43,6 @@ export class AppComponent {
     this.router.navigate(['sign-up']);
   }
   navToHome() {
-    this.router.navigate(['']);
+    this.router.navigate(['home']);
   }
 }

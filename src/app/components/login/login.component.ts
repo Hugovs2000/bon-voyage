@@ -48,7 +48,7 @@ export class LoginComponent {
     if (this.loginForm.value.email && this.loginForm.value.password)
       this.authService
         .login(this.loginForm.value.email, this.loginForm.value.password)
-        .then(() => this.router.navigate(['']))
+        .then(() => this.router.navigate(['home']))
         .catch(() =>
           console.log('An error occurred when logging in, please try again!')
         );
@@ -57,7 +57,7 @@ export class LoginComponent {
   signInWithGoogle() {
     this.authService
       .byGoogle()
-      .then(() => this.router.navigate(['']))
+      .then(() => this.router.navigate(['home']))
       .catch(error =>
         console.log(
           'An error occurred when logging in, please try again!',

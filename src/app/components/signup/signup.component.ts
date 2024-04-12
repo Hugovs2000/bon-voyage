@@ -55,7 +55,7 @@ export class SignupComponent {
     if (this.signUpForm.value.email && this.signUpForm.value.password)
       this.authService
         .signup(this.signUpForm.value.email, this.signUpForm.value.password)
-        .then(() => this.router.navigate(['log-in']));
+        .then(() => this.router.navigate(['home']));
   }
 
   signInWithGoogle() {

@@ -8,11 +8,17 @@
         Bon<span class="text-blue-400">Voyage</span>
       </button>
     </div>
-    <div class="flex gap-4">
-      <button class="btn btn-ghost text-sm" aria-label="Log in button" (click)="navToLogin()">
-        Log In
-      </button>
-      <button class="btn bg-blue-400" aria-label="Sign up button" (click)="navToSignup()">
+    <div class="flex gap-4 items-center">
+      @if (authService.isLoggedIn){
+        <button class="btn btn-ghost text-sm h-8 min-h-8" aria-label="Log in button" (click)="signOut()">
+          Log Out
+        </button>
+      } @else {
+        <button class="btn btn-ghost text-sm h-8 min-h-8" aria-label="Log in button" (click)="navToLogin()">
+          Log In
+        </button>
+      }
+      <button class="btn bg-blue-400 h-8 min-h-8" aria-label="Sign up button" (click)="navToSignup()">
         Sign Up
       </button>
     </div>
