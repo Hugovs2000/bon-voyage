@@ -5,12 +5,10 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
-  user,
   UserCredential,
   onAuthStateChanged,
   signOut,
 } from '@angular/fire/auth';
-import { error } from '@angular/compiler-cli/src/transformers/util';
 
 @Injectable({
   providedIn: 'root',
