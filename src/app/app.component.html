@@ -4,20 +4,27 @@
       <button class="btn btn-ghost -ml-2 px-2" aria-label="Menu button">
         <mat-icon>menu</mat-icon>
       </button>
-      <button class="btn btn-ghost text-blue-800 gap-0 text-xl md:text-2xl" (click)="navToHome()">
-        Bon<span class="text-blue-400">Voyage</span>
+      <button
+        class="btn btn-ghost gap-0 p-0 text-xl text-blue-800 md:px-4 md:text-2xl"
+        (click)="navToHome()">
+        Bon
+        <span class="text-blue-400">Voyage</span>
       </button>
     </div>
-    <div class="flex gap-4">
-      <button class="btn btn-ghost text-sm" aria-label="Log in button" (click)="navToLogin()">
+    <div class="flex gap-0 md:gap-4">
+      <button
+        class="btn btn-ghost text-sm"
+        aria-label="Log in button"
+        (click)="navToLogin()">
         Log In
       </button>
-      <button class="btn bg-blue-400" aria-label="Sign up button" (click)="navToSignup()">
+      <button
+        class="btn bg-blue-400"
+        aria-label="Sign up button"
+        (click)="navToSignup()">
         Sign Up
       </button>
     </div>
   </mat-toolbar>
 </p>
 <router-outlet />
-
-

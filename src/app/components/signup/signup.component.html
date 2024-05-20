@@ -1,9 +1,9 @@
-<div class="flex justify-center m-4 mt-8">
+<div class="m-4 mt-8 flex justify-center">
   <mat-card class="w-full md:w-1/2">
     <mat-card-content>
       <div class="flex flex-col gap-6 p-4 md:p-12">
-        <h2 class="font-bold text-xl self-start">Sign Up to BonVoyage</h2>
-        <button class="btn rounded-full w-full" (click)="signInWithGoogle()">
+        <h2 class="self-start text-xl font-bold">Sign Up to BonVoyage</h2>
+        <button class="btn w-full rounded-full" (click)="signInWithGoogle()">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"
@@ -39,7 +39,7 @@
         <form
           [formGroup]="signUpForm"
           (ngSubmit)="onSubmit()"
-          class="flex flex-col w-full gap-4">
+          class="flex w-full flex-col gap-4">
           <mat-form-field>
             <mat-label>Enter your email</mat-label>
             <input
@@ -95,7 +95,7 @@
         <p class="text-gray-400">
           Already have an account?
           <button
-            class="underline text-slate-950 hover:text-slate-700 hover:scale-105"
+            class="text-slate-950 underline hover:scale-105 hover:text-slate-700"
             (click)="navToLogIn()">
             Log In
           </button>

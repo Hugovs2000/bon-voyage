@@ -1,19 +1,32 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './components/login/login.component';
-import { SignupComponent } from './components/signup/signup.component';
-import { LandingComponent } from './components/landing/landing.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: LandingComponent,
+    loadComponent: () =>
+      import('./components/landing/landing.component').then(
+        m => m.LandingComponent
+      ),
   },
   {
     path: 'log-in',
-    component: LoginComponent,
+    loadComponent: () =>
+      import('./components/login/login.component').then(m => m.LoginComponent),
   },
   {
     path: 'sign-up',
-    component: SignupComponent,
+    loadComponent: () =>
+      import('./components/signup/signup.component').then(
+        m => m.SignupComponent
+      ),
+  },
+  {
+    path: 'error',
+    loadComponent: () =>
+      import('./components/error/error.component').then(m => m.ErrorComponent),
+  },
+  {
+    path: '**',
+    redirectTo: 'error',
   },
 ];
