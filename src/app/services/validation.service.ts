@@ -6,7 +6,7 @@ import { AbstractControl, ValidatorFn } from '@angular/forms';
 })
 export class ValidationService {
   passwordMatch(password: string, confirmPassword: string): ValidatorFn {
-    return (formGroup: AbstractControl): { [key: string]: any } | null => {
+    return (formGroup: AbstractControl): { [key: string]: unknown } | null => {
       const passwordControl = formGroup.get(password);
       const confirmPasswordControl = formGroup.get(confirmPassword);
 

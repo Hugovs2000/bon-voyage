@@ -4,26 +4,36 @@
       <button class="btn btn-ghost -ml-2 px-2" aria-label="Menu button">
         <mat-icon>menu</mat-icon>
       </button>
-      <button class="btn btn-ghost text-blue-800 gap-0 text-xl md:text-2xl" (click)="navToHome()">
-        Bon<span class="text-blue-400">Voyage</span>
+      <button
+        class="btn btn-ghost gap-0 p-0 text-xl text-blue-800 md:px-4 md:text-2xl"
+        (click)="navToHome()">
+        Bon
+        <span class="text-blue-400">Voyage</span>
       </button>
     </div>
-    <div class="flex gap-4 items-center">
-      @if (authService.isLoggedIn){
-        <button class="btn btn-ghost text-sm h-8 min-h-8" aria-label="Log in button" (click)="signOut()">
+    <div class="flex items-center gap-0 md:gap-4">
+      @if (authService.isLoggedIn) {
+        <button
+          class="btn btn-ghost h-8 min-h-8 text-sm"
+          aria-label="Log in button"
+          (click)="signOut()">
           Log Out
         </button>
       } @else {
-        <button class="btn btn-ghost text-sm h-8 min-h-8" aria-label="Log in button" (click)="navToLogin()">
+        <button
+          class="btn btn-ghost h-8 min-h-8 text-sm"
+          aria-label="Log in button"
+          (click)="navToLogin()">
           Log In
         </button>
       }
-      <button class="btn bg-blue-400 h-8 min-h-8" aria-label="Sign up button" (click)="navToSignup()">
+      <button
+        class="btn h-8 min-h-8 bg-blue-400"
+        aria-label="Sign up button"
+        (click)="navToSignup()">
         Sign Up
       </button>
     </div>
   </mat-toolbar>
 </p>
 <router-outlet />
-
-

@@ -5,14 +5,15 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { AuthService } from '../../services/auth.service';
-import { MatDividerModule } from '@angular/material/divider';
-import { Router } from '@angular/router';
 import { MatCardContent, MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -33,6 +34,7 @@ import { MatCardContent, MatCardModule } from '@angular/material/card';
 export class LoginComponent {
   authService = inject(AuthService);
   router = inject(Router);
+  snackBar = inject(MatSnackBar);
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -50,7 +52,13 @@ export class LoginComponent {
         .login(this.loginForm.value.email, this.loginForm.value.password)
         .then(() => this.router.navigate(['home']))
         .catch(() =>
-          console.log('An error occurred when logging in, please try again!')
+          this.snackBar.open(
+            'Could not log in. Invalid user credentials.',
+            'Close',
+            {
+              duration: 5000,
+            }
+          )
         );
   }
 
@@ -58,10 +66,13 @@ export class LoginComponent {
     this.authService
       .byGoogle()
       .then(() => this.router.navigate(['home']))
-      .catch(error =>
-        console.log(
-          'An error occurred when logging in, please try again!',
-          error
+      .catch(() =>
+        this.snackBar.open(
+          'Could not log in. An error occurred. Please try again.',
+          'Close',
+          {
+            duration: 5000,
+          }
         )
       );
   }
