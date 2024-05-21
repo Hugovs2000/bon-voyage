@@ -1,0 +1,9 @@
+{
+  "hosting": [
+    {
+      "target": "bon-voyage",
+      "source": ".",
+      "frameworksBackend": {}
+    }
+  ]
+}
