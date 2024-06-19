@@ -1,0 +1,11 @@
+<div
+  class="mb-4 grid grid-rows-3 gap-2 rounded-xl border-2 border-blue-400 bg-blue-300 p-4">
+  <div class="flex justify-between">
+    <div>{{ startDate() | date }} - {{ endDate() | date }}</div>
+    <div>{{ totalDuration() }} days</div>
+  </div>
+  <div class="flex justify-center text-2xl">{{ tripTitle() }}</div>
+  <div class="flex justify-end">
+    <div>{{ totalCost() | currency }}</div>
+  </div>
+</div>

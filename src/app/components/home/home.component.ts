@@ -1,31 +1,25 @@
+import { AsyncPipe } from '@angular/common';
 import { Component } from '@angular/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import {
-  NgxMatTimepickerComponent,
-  NgxMatTimepickerDirective,
-} from 'ngx-mat-timepicker';
-import { MatIconModule } from '@angular/material/icon';
+import { Observable, first } from 'rxjs';
+import { Trip } from '../../models/trips';
+import { ApiService } from '../../services/api.service';
+import { TripCardComponent } from '../trip-card/trip-card.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [
-    MatFormFieldModule,
-    MatDatepickerModule,
-    MatInputModule,
-    MatButtonModule,
-    NgxMatTimepickerComponent,
-    NgxMatTimepickerDirective,
-    MatIconModule,
-  ],
+  imports: [TripCardComponent, AsyncPipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  onTimeSet($event: string) {
-    console.log($event);
+  trips$: Observable<Trip[]> | undefined;
+
+  constructor(private apiService: ApiService) {
+    this.trips$ = this.apiService.getTrips().pipe(first());
+  }
+
+  handleTripClick(trip: string) {
+    console.log(`${trip} clicked`);
   }
 }
