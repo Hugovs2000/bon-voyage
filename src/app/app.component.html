@@ -11,19 +11,28 @@
         <span class="text-blue-400">Voyage</span>
       </button>
     </div>
-    <div class="flex gap-0 md:gap-4">
-      <button
-        class="btn btn-ghost text-sm"
-        aria-label="Log in button"
-        (click)="navToLogin()">
-        Log In
-      </button>
-      <button
-        class="btn bg-blue-400"
-        aria-label="Sign up button"
-        (click)="navToSignup()">
-        Sign Up
-      </button>
+    <div class="flex items-center gap-0 md:gap-4">
+      @if (authService.isLoggedIn()) {
+        <button
+          class="btn btn-ghost h-8 min-h-8 text-sm text-blue-800"
+          aria-label="Log in button"
+          (click)="signOut()">
+          Log Out
+        </button>
+      } @else {
+        <button
+          class="btn btn-ghost h-8 min-h-8 text-sm"
+          aria-label="Log in button"
+          (click)="navToLogin()">
+          Log In
+        </button>
+        <button
+          class="btn h-8 min-h-8 bg-blue-400"
+          aria-label="Sign up button"
+          (click)="navToSignup()">
+          Sign Up
+        </button>
+      }
     </div>
   </mat-toolbar>
 </p>

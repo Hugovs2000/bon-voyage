@@ -1,0 +1,29 @@
+[
+    {
+        "id": "1",
+        "userId": "1",
+        "title": "Trip A",
+        "startDate": "2020-01-01",
+        "endDate": "2020-01-10",
+        "totalDuration": 10,
+        "totalCost": 1000
+    },
+    {
+        "id": "2",
+        "userId": "1",
+        "title": "Trip B",
+        "startDate": "2020-02-01",
+        "endDate": "2020-02-10",
+        "totalDuration": 10,
+        "totalCost": 1000
+    },
+    {
+        "id": "3",
+        "userId": "2",
+        "title": "Trip C",
+        "startDate": "2020-03-01",
+        "endDate": "2020-03-10",
+        "totalDuration": 10,
+        "totalCost": 1000
+    }
+]
