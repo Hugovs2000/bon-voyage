@@ -1,3 +1,8 @@
+export interface TripState {
+  trips: Trip[];
+  isLoading: boolean;
+}
+
 export interface Trip {
   id: number;
   userId: number;

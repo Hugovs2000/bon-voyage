@@ -1,9 +1,11 @@
 import { CdkDragRelease, DragDropModule } from '@angular/cdk/drag-drop';
 import { AsyncPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { first } from 'rxjs';
+import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { SwipeDirective } from '../../directives/swipe.directive';
-import { ApiService } from '../../services/api.service';
+import { TripState } from '../../models/trips';
+import { getAllTrips } from '../../store/trips/actions';
+import { selectTrips } from '../../store/trips/selectors';
 import { TripCardComponent } from '../trip-card/trip-card.component';
 
 @Component({
@@ -14,8 +16,11 @@ import { TripCardComponent } from '../trip-card/trip-card.component';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  apiService = inject(ApiService);
-  trips$ = this.apiService.getTrips().pipe(first());
+  trips$ = this.store.select(selectTrips);
+
+  constructor(private store: Store<TripState>) {
+    this.store.dispatch(getAllTrips());
+  }
 
   resetPosition(event: CdkDragRelease) {
     event.source.reset();
