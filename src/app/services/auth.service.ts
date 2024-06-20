@@ -1,13 +1,13 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import {
   Auth,
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
-  UserCredential,
-  onAuthStateChanged,
   signOut,
+  UserCredential,
 } from '@angular/fire/auth';
 
 @Injectable({
@@ -15,7 +15,7 @@ import {
 })
 export class AuthService {
   private _auth = inject(Auth);
-  isLoggedIn = false;
+  isLoggedIn = signal(!!localStorage.getItem('user'));
 
   byGoogle(): Promise<UserCredential> {
     return signInWithPopup(this._auth, new GoogleAuthProvider());
@@ -38,12 +38,17 @@ export class AuthService {
   }
 
   logUserOut() {
-    return signOut(this._auth).catch(error => console.error(error));
+    return signOut(this._auth)
+      .then(() => {
+        this.isLoggedIn.set(false);
+        localStorage.removeItem('user');
+      })
+      .catch(error => console.error(error));
   }
 
   constructor() {
     onAuthStateChanged(this._auth, user => {
-      this.isLoggedIn = !!(user?.uid && user?.uid?.length > 1);
+      this.isLoggedIn.set(!!(user?.uid && user?.uid?.length > 1));
     });
   }
 }

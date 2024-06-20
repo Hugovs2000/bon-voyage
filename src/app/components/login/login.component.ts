@@ -50,7 +50,11 @@ export class LoginComponent {
     if (this.loginForm.value.email && this.loginForm.value.password)
       this.authService
         .login(this.loginForm.value.email, this.loginForm.value.password)
-        .then(() => this.router.navigate(['home']))
+        .then(() => {
+          localStorage.setItem('user', 'true');
+          this.authService.isLoggedIn.set(true);
+          this.router.navigate(['home']);
+        })
         .catch(() =>
           this.snackBar.open(
             'Could not log in. Invalid user credentials.',
@@ -65,7 +69,11 @@ export class LoginComponent {
   signInWithGoogle() {
     this.authService
       .byGoogle()
-      .then(() => this.router.navigate(['home']))
+      .then(() => {
+        localStorage.setItem('user', 'true');
+        this.authService.isLoggedIn.set(true);
+        this.router.navigate(['home']);
+      })
       .catch(() =>
         this.snackBar.open(
           'Could not log in. An error occurred. Please try again.',
