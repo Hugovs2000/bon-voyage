@@ -57,7 +57,11 @@ export class SignupComponent {
     if (this.signUpForm.value.email && this.signUpForm.value.password)
       this.authService
         .signup(this.signUpForm.value.email, this.signUpForm.value.password)
-        .then(() => this.router.navigate(['home']))
+        .then(() => {
+          localStorage.setItem('user', 'true');
+          this.authService.isLoggedIn.set(true);
+          this.router.navigate(['home']);
+        })
         .catch(() =>
           this.snackBar.open(
             'Could not sign up. An error occurred. Please try again.',
@@ -72,7 +76,11 @@ export class SignupComponent {
   signInWithGoogle() {
     this.authService
       .byGoogle()
-      .then(() => this.router.navigate(['home']))
+      .then(() => {
+        localStorage.setItem('user', 'true');
+        this.authService.isLoggedIn.set(true);
+        this.router.navigate(['home']);
+      })
       .catch(() =>
         this.snackBar.open(
           'Could not log in. An error occurred. Please try again.',

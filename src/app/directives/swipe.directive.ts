@@ -43,11 +43,10 @@ export class SwipeDirective {
       const duration = time - this.swipeTime;
 
       if (
-        duration < 1000 && //
-        Math.abs(direction[0]) > 30 && // Long enough
+        duration < 1000 &&
+        Math.abs(direction[0]) > 30 &&
         Math.abs(direction[0]) > Math.abs(direction[1] * 3)
       ) {
-        // Horizontal enough
         const swipeDir = direction[0] < 0 ? 'left' : 'right';
         if (swipeDir === 'left') {
           this.left.emit();
