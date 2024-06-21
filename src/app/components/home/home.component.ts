@@ -26,8 +26,8 @@ export class HomeComponent {
     event.source.reset();
   }
 
-  handleTripClick(trip: string) {
-    console.log(`${trip} clicked`);
+  handleTripClick(title: string, id: string) {
+    console.log(`${title} clicked, with id: ${id}`);
   }
 
   onSwipeRight(trip: string) {

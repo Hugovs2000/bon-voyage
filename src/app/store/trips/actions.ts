@@ -8,9 +8,39 @@ export const getAllTripsComplete = createAction(
   props<{ trips: Trip[] }>()
 );
 
-export const getTripById = createAction('[Trips] GetTripById');
+export const getTripById = createAction(
+  '[Trips] GetTripById',
+  props<{ tripId: string }>()
+);
 
 export const getTripByIdComplete = createAction(
   '[Trips] GetTripByIdComplete',
   props<{ trips: Trip }>()
 );
+
+export const createNewTrip = createAction(
+  '[Trips] CreateNewTrip',
+  props<{ trip: Trip }>()
+);
+
+export const createNewTripComplete = createAction(
+  '[Trips] CreateNewTripComplete',
+  props<{ trip: Trip }>()
+);
+
+export const updateTrip = createAction(
+  '[Trips] UpdateTrip',
+  props<{ tripId: string; trip: Trip }>()
+);
+
+export const updateTripComplete = createAction(
+  '[Trips] UpdateTripComplete',
+  props<{ trip: Trip }>()
+);
+
+export const deleteTrip = createAction(
+  '[Trips] DeleteTrip',
+  props<{ tripId: string }>()
+);
+
+export const deleteTripComplete = createAction('[Trips] DeleteTripComplete');
