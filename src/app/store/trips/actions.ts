@@ -7,3 +7,10 @@ export const getAllTripsComplete = createAction(
   '[Trips] GetAllTripsComplete',
   props<{ trips: Trip[] }>()
 );
+
+export const getTripById = createAction('[Trips] GetTripById');
+
+export const getTripByIdComplete = createAction(
+  '[Trips] GetTripByIdComplete',
+  props<{ trips: Trip }>()
+);
