@@ -19,8 +19,10 @@ export class TripsEffects {
               return getAllTripsComplete({ trips: [] });
             }
             const trips = data.docs.map(doc => {
-              doc.data() as Trip;
-              return { ...(doc.data() as Trip), docId: doc.id };
+              return {
+                ...(doc.data() as Trip),
+                docId: doc.id,
+              };
             });
             return getAllTripsComplete({ trips: trips });
           })

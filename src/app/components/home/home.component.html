@@ -16,9 +16,17 @@
           cdkDragLockAxis="x"
           (cdkDragReleased)="resetPosition($event)"
           cdkDragBoundary=".boundary">
-          <app-trip-card
-            [tripTitle]="trip.title"
-            (click)="handleTripClick(trip.title, trip.docId)" />
+          @if (
+            trip.startDate && trip.endDate && trip.duration && trip.totalCost
+          ) {
+            <app-trip-card
+              [tripTitle]="trip.title"
+              [startDate]="trip.startDate"
+              [endDate]="trip.endDate"
+              [duration]="trip.duration"
+              [totalCost]="trip.totalCost"
+              (click)="handleTripClick(trip.title, trip.docId)" />
+          }
         </div>
       </div>
     }
