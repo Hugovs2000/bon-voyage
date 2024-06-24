@@ -3,9 +3,9 @@ import { AsyncPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { SwipeDirective } from '../../directives/swipe.directive';
-import { getAllTrips } from '../../store/trips/actions';
+import { getAllTrips, setSelectedTripId } from '../../store/trips/actions';
 import { TripState } from '../../store/trips/reducer';
-import { selectTrips } from '../../store/trips/selectors';
+import { selectSelectedTrip, selectTrips } from '../../store/trips/selectors';
 import { TripCardComponent } from '../trip-card/trip-card.component';
 
 @Component({
@@ -17,6 +17,7 @@ import { TripCardComponent } from '../trip-card/trip-card.component';
 })
 export class HomeComponent {
   trips$ = this.store.select(selectTrips);
+  selectedTrip$ = this.store.select(selectSelectedTrip);
 
   constructor(private store: Store<TripState>) {
     this.store.dispatch(getAllTrips());
@@ -27,7 +28,7 @@ export class HomeComponent {
   }
 
   handleTripClick(title: string, id: string) {
-    console.log(`${title} clicked, with id: ${id}`);
+    this.store.dispatch(setSelectedTripId({ tripId: id }));
   }
 
   onSwipeRight(trip: string) {

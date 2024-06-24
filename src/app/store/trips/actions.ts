@@ -13,16 +13,6 @@ export const setSelectedTripId = createAction(
   props<{ tripId: string }>()
 );
 
-export const getTripById = createAction(
-  '[Trips] GetTripById',
-  props<{ tripId: string }>()
-);
-
-export const getTripByIdComplete = createAction(
-  '[Trips] GetTripByIdComplete',
-  props<{ trips: Trip }>()
-);
-
 export const createNewTrip = createAction(
   '[Trips] CreateNewTrip',
   props<{ trip: Trip }>()
@@ -35,7 +25,7 @@ export const createNewTripComplete = createAction(
 
 export const updateTrip = createAction(
   '[Trips] UpdateTrip',
-  props<{ tripId: string; trip: Trip }>()
+  props<{ trip: Trip }>()
 );
 
 export const updateTripComplete = createAction(
@@ -48,4 +38,7 @@ export const deleteTrip = createAction(
   props<{ tripId: string }>()
 );
 
-export const deleteTripComplete = createAction('[Trips] DeleteTripComplete');
+export const deleteTripComplete = createAction(
+  '[Trips] DeleteTripComplete',
+  props<{ tripId: string }>()
+);

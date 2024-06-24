@@ -4,7 +4,16 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { switchMap } from 'rxjs';
 import { Trip } from '../../models/trips';
 import { ApiService } from '../../services/api.service';
-import { getAllTrips, getAllTripsComplete } from './actions';
+import {
+  createNewTrip,
+  createNewTripComplete,
+  deleteTrip,
+  deleteTripComplete,
+  getAllTrips,
+  getAllTripsComplete,
+  updateTrip,
+  updateTripComplete,
+} from './actions';
 
 @Injectable()
 export class TripsEffects {
@@ -34,70 +43,63 @@ export class TripsEffects {
     )
   );
 
-  // TODO: Implement the rest of the effects
-  // getTripById$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(getTripById.type),
-  //     switchMap(() =>
-  //       this.apiService.getTripById().pipe(
-  //         map(trip => getTripByIdComplete({ trip })),
-  //         retry(1),
-  //         catchError(err => {
-  //           console.error(err);
-  //           return EMPTY;
-  //         })
-  //       )
-  //     )
-  //   )
-  // );
+  createNewTrip$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(createNewTrip.type),
+      switchMap((action: { type: string; trip: Trip }) =>
+        this.apiService
+          .addTrip(action.trip)
+          .then(data => {
+            if (!data) {
+              return createNewTripComplete({ trip: {} as Trip });
+            }
+            const trip = {
+              ...action.trip,
+              docId: data.id,
+            };
+            return createNewTripComplete({ trip: trip });
+          })
+          .catch(err => {
+            console.error(err);
+            return createNewTripComplete({ trip: {} as Trip });
+          })
+      )
+    )
+  );
 
-  // createNewTrip$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(createNewTrip.type),
-  //     switchMap(() =>
-  //       this.apiService.addTrip().pipe(
-  //         map(trip => createNewTripComplete({ trip })),
-  //         retry(1),
-  //         catchError(err => {
-  //           console.error(err);
-  //           return EMPTY;
-  //         })
-  //       )
-  //     )
-  //   )
-  // );
+  updateTrip$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updateTrip.type),
+      switchMap((action: { type: string; trip: Trip }) =>
+        this.apiService
+          .updateTrip(action.trip.docId, action.trip)
+          .then(() => {
+            return updateTripComplete({ trip: action.trip });
+          })
+          .catch(err => {
+            console.error(err);
+            return updateTripComplete({ trip: {} as Trip });
+          })
+      )
+    )
+  );
 
-  // updateTrip$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(updateTrip.type),
-  //     switchMap(() =>
-  //       this.apiService.updateTrip().pipe(
-  //         map(trip => updateTripComplete({ trip })),
-  //         retry(1),
-  //         catchError(err => {
-  //           console.error(err);
-  //           return EMPTY;
-  //         })
-  //       )
-  //     )
-  //   )
-  // );
-
-  // deleteTrip$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(deleteTrip.type),
-  //     switchMap(() =>
-  //       this.apiService.deleteTrip().pipe(
-  //         map(trip => deleteTripComplete()),
-  //         retry(1),
-  //         catchError(err => {
-  //           console.error(err);
-  //           return EMPTY;
-  //         })
-  //       )
-  //     )
-  //   )
-  // );
+  deleteTrip$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(deleteTrip.type),
+      switchMap((action: { type: string; tripId: string }) =>
+        this.apiService
+          .deleteTrip(action.tripId)
+          .then(() => {
+            return deleteTripComplete({ tripId: action.tripId });
+          })
+          .catch(err => {
+            console.error(err);
+            return deleteTripComplete({ tripId: action.tripId });
+          })
+      )
+    )
+  );
 
   constructor(
     private actions$: Actions,

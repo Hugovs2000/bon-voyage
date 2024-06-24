@@ -1,7 +1,17 @@
 import { isDevMode } from '@angular/core';
 import { createReducer, MetaReducer, on } from '@ngrx/store';
 import { Trip } from '../../models/trips';
-import { getAllTrips, getAllTripsComplete, setSelectedTripId } from './actions';
+import {
+  createNewTrip,
+  createNewTripComplete,
+  deleteTrip,
+  deleteTripComplete,
+  getAllTrips,
+  getAllTripsComplete,
+  setSelectedTripId,
+  updateTrip,
+  updateTripComplete,
+} from './actions';
 
 export const tripsFeatureKey = 'Trips';
 
@@ -27,6 +37,34 @@ export const tripsReducers = createReducer(
     isLoading: false,
     trips,
   })),
+  on(createNewTrip, state => ({
+    ...state,
+    isLoading: true,
+  })),
+  on(createNewTripComplete, (state, { trip }) => ({
+    ...state,
+    isLoading: false,
+    trips: [...state.trips, trip],
+  })),
+  on(updateTrip, state => ({
+    ...state,
+    isLoading: true,
+  })),
+  on(updateTripComplete, (state, { trip }) => ({
+    ...state,
+    isLoading: false,
+    trips: [...state.trips, trip],
+  })),
+  on(deleteTrip, state => ({
+    ...state,
+    isLoading: true,
+  })),
+  on(deleteTripComplete, (state, { tripId }) => ({
+    ...state,
+    isLoading: false,
+    trips: state.trips.filter(t => t.docId !== tripId),
+  })),
+
   on(setSelectedTripId, (state, { tripId }) => ({
     ...state,
     selectedTripId: tripId,
