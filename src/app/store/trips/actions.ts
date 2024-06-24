@@ -8,6 +8,11 @@ export const getAllTripsComplete = createAction(
   props<{ trips: Trip[] }>()
 );
 
+export const setSelectedTripId = createAction(
+  '[Trips] SetSelectedTripId',
+  props<{ tripId: string }>()
+);
+
 export const getTripById = createAction(
   '[Trips] GetTripById',
   props<{ tripId: string }>()

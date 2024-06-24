@@ -3,8 +3,8 @@ import { AsyncPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { SwipeDirective } from '../../directives/swipe.directive';
-import { TripState } from '../../models/trips';
 import { getAllTrips } from '../../store/trips/actions';
+import { TripState } from '../../store/trips/reducer';
 import { selectTrips } from '../../store/trips/selectors';
 import { TripCardComponent } from '../trip-card/trip-card.component';
 

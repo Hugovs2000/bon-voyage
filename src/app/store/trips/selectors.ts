@@ -1,13 +1,13 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { Trip, TripState } from '../../models/trips';
-import { tripsFeatureKey } from './reducer';
+import { Trip } from '../../models/trips';
+import { TripState, tripsFeatureKey } from './reducer';
 
 export const selectFeature = createFeatureSelector<TripState>(tripsFeatureKey);
 
 export const selectTrips = createSelector(selectFeature, state => {
   const updatedTrips = state.trips.map(trip => {
-    const startDates: Date[] = [];
-    const endDates: Date[] = [];
+    let startDate = new Date(8640000000000000);
+    let endDate = new Date(-8640000000000000);
     let totalTripCost = 0;
 
     if (trip.itinerary && trip.itinerary.length > 0) {
@@ -15,29 +15,46 @@ export const selectTrips = createSelector(selectFeature, state => {
         const newStartDate = activity.startDate.toDate();
         const newEndDate = activity.endDate.toDate();
 
-        startDates.push(newStartDate);
-        endDates.push(newEndDate);
+        startDate = startDate
+          ? newStartDate < startDate
+            ? newStartDate
+            : startDate
+          : newStartDate;
+        endDate = endDate
+          ? newEndDate > endDate
+            ? newEndDate
+            : endDate
+          : newEndDate;
         totalTripCost += activity.cost || 0;
       });
     }
 
-    startDates.sort((a, b) => a.getDate() - b.getDate());
-    endDates.sort((a, b) => a.getDate() - b.getDate());
-    console.log('startDates', startDates);
-    console.log('endDates', endDates);
-    const duration =
-      endDates[endDates.length - 1].getDate() - startDates[0].getDate() + 1;
+    if (
+      startDate === new Date(8640000000000000) ||
+      endDate === new Date(-8640000000000000)
+    ) {
+      return {
+        ...trip,
+        totalCost: totalTripCost,
+      } as Trip;
+    }
+
+    const duration = endDate.getDate() - startDate.getDate() + 1;
 
     return {
       ...trip,
-      startDate: startDates[0],
-      endDate: endDates[endDates.length - 1],
+      startDate: startDate,
+      endDate: endDate,
       duration: duration,
       totalCost: totalTripCost,
-    } as unknown as Trip;
+    } as Trip;
   });
   return {
     trips: updatedTrips,
     isLoading: state.isLoading,
   } as TripState;
 });
+
+export const selectSelectedTrip = createSelector(selectFeature, state =>
+  state.trips.find(trip => trip.docId === state.selectedTripId)
+);

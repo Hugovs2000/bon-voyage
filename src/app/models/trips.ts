@@ -1,10 +1,5 @@
 import { GeoPoint, Timestamp } from '@angular/fire/firestore';
 
-export interface TripState {
-  trips: Trip[];
-  isLoading: boolean;
-}
-
 export interface Trip {
   docId: string;
   userId: string;
