@@ -7,12 +7,16 @@ import { ApiService } from '../../services/api.service';
 import {
   createNewTrip,
   createNewTripComplete,
+  createNewTripError,
   deleteTrip,
   deleteTripComplete,
+  deleteTripError,
   getAllTrips,
   getAllTripsComplete,
+  getAllTripsError,
   updateTrip,
   updateTripComplete,
+  updateTripError,
 } from './actions';
 
 @Injectable()
@@ -36,8 +40,7 @@ export class TripsEffects {
             return getAllTripsComplete({ trips: trips });
           })
           .catch(err => {
-            console.error(err);
-            return getAllTripsComplete({ trips: [] });
+            return getAllTripsError({ error: err });
           })
       )
     )
@@ -50,7 +53,7 @@ export class TripsEffects {
         this.apiService
           .addTrip(action.trip)
           .then(data => {
-            if (!data) {
+            if (!data.id) {
               return createNewTripComplete({ trip: {} as Trip });
             }
             const trip = {
@@ -60,8 +63,7 @@ export class TripsEffects {
             return createNewTripComplete({ trip: trip });
           })
           .catch(err => {
-            console.error(err);
-            return createNewTripComplete({ trip: {} as Trip });
+            return createNewTripError({ error: err });
           })
       )
     )
@@ -77,8 +79,7 @@ export class TripsEffects {
             return updateTripComplete({ trip: action.trip });
           })
           .catch(err => {
-            console.error(err);
-            return updateTripComplete({ trip: {} as Trip });
+            return updateTripError({ error: err });
           })
       )
     )
@@ -94,8 +95,7 @@ export class TripsEffects {
             return deleteTripComplete({ tripId: action.tripId });
           })
           .catch(err => {
-            console.error(err);
-            return deleteTripComplete({ tripId: action.tripId });
+            return deleteTripError({ error: err });
           })
       )
     )
