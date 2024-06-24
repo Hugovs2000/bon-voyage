@@ -11,6 +11,7 @@
           swipe
           (left)="onSwipeLeft(trip.title)"
           (right)="onSwipeRight(trip.title)"
+          (onClick)="handleTripClick(trip.title, trip.docId)"
           class="w-3/5"
           cdkDrag
           cdkDragLockAxis="x"
@@ -24,8 +25,7 @@
               [startDate]="trip.startDate"
               [endDate]="trip.endDate"
               [duration]="trip.duration"
-              [totalCost]="trip.totalCost"
-              (click)="handleTripClick(trip.title, trip.docId)" />
+              [totalCost]="trip.totalCost" />
           }
         </div>
       </div>
