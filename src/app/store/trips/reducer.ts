@@ -41,8 +41,7 @@ export const tripsReducers = createReducer(
     isLoading: false,
     trips,
   })),
-  on(getAllTripsError, (state, { error }) => {
-    alert(`Error getting trips. Error message: ${error.message}`);
+  on(getAllTripsError, state => {
     return {
       ...state,
       isLoading: false,
@@ -57,8 +56,7 @@ export const tripsReducers = createReducer(
     isLoading: false,
     trips: [...state.trips, trip],
   })),
-  on(createNewTripError, (state, { error }) => {
-    alert(`Error creating new trip. Error message: ${error.message}`);
+  on(createNewTripError, state => {
     return {
       ...state,
       isLoading: false,
@@ -73,8 +71,7 @@ export const tripsReducers = createReducer(
     isLoading: false,
     trips: [...state.trips, trip],
   })),
-  on(updateTripError, (state, { error }) => {
-    alert(`Error updating trip. Error message: ${error.message}`);
+  on(updateTripError, state => {
     return {
       ...state,
       isLoading: false,
@@ -89,8 +86,7 @@ export const tripsReducers = createReducer(
     isLoading: false,
     trips: state.trips.filter(t => t.docId !== tripId),
   })),
-  on(deleteTripError, (state, { error }) => {
-    alert(`Error deleting trip. Error message: ${error.message}`);
+  on(deleteTripError, state => {
     return {
       ...state,
       isLoading: false,

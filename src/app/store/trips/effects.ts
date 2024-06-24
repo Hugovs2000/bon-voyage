@@ -40,7 +40,8 @@ export class TripsEffects {
             return getAllTripsComplete({ trips: trips });
           })
           .catch(err => {
-            return getAllTripsError({ error: err });
+            alert(`Error getting trips. Error message: ${err.message}`);
+            return getAllTripsError();
           })
       )
     )
@@ -63,7 +64,8 @@ export class TripsEffects {
             return createNewTripComplete({ trip: trip });
           })
           .catch(err => {
-            return createNewTripError({ error: err });
+            alert(`Error creating new trip. Error message: ${err.message}`);
+            return createNewTripError();
           })
       )
     )
@@ -79,7 +81,8 @@ export class TripsEffects {
             return updateTripComplete({ trip: action.trip });
           })
           .catch(err => {
-            return updateTripError({ error: err });
+            alert(`Error updating trip. Error message: ${err.message}`);
+            return updateTripError();
           })
       )
     )
@@ -95,7 +98,8 @@ export class TripsEffects {
             return deleteTripComplete({ tripId: action.tripId });
           })
           .catch(err => {
-            return deleteTripError({ error: err });
+            alert(`Error deleting trip. Error message: ${err.message}`);
+            return deleteTripError();
           })
       )
     )

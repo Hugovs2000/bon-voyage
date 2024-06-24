@@ -1,6 +1,6 @@
 @if (trips$ | async; as trips) {
   <div class="flex flex-col items-center overflow-x-hidden p-4">
-    @for (trip of trips.trips; track trip.docId) {
+    @for (trip of trips; track trip.docId) {
       <div class="boundary relative flex w-[150%] justify-center">
         <div
           class="absolute z-[-1] flex h-calc w-[60%] overflow-hidden rounded-xl">
