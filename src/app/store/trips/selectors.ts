@@ -59,6 +59,10 @@ export const selectTrips = createSelector(selectFeature, state => {
   } as TripState;
 });
 
+export const selectSelectedTripId = createSelector(selectFeature, state => {
+  return state.selectedTripId;
+});
+
 export const selectSelectedTrip = createSelector(selectFeature, state => {
   const trip = state.trips.find(trip => trip.docId === state.selectedTripId);
   return trip ? deriveDatesAndCost(trip) : null;
