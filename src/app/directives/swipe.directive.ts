@@ -7,6 +7,7 @@ import { Directive, EventEmitter, HostListener, Output } from '@angular/core';
 export class SwipeDirective {
   @Output() left = new EventEmitter<void>();
   @Output() right = new EventEmitter<void>();
+  @Output() onClick = new EventEmitter<void>();
 
   swipeCoord = [0, 0];
   swipeTime = new Date().getTime();
@@ -21,15 +22,27 @@ export class SwipeDirective {
     this.onSwipe($event, 'end');
   }
 
-  onSwipe(e: TouchEvent, when: string) {
+  @HostListener('mousedown', ['$event']) onMouseDown($event: MouseEvent) {
+    this.onSwipe($event, 'start');
+  }
+
+  @HostListener('mouseup', ['$event']) onMouseUp($event: MouseEvent) {
+    this.onSwipe($event, 'end');
+  }
+
+  onSwipe(e: TouchEvent | MouseEvent, when: string) {
     this.swipe(e, when);
   }
 
-  swipe(e: TouchEvent, when: string): void {
-    const coord: [number, number] = [
-      e.changedTouches[0].clientX,
-      e.changedTouches[0].clientY,
-    ];
+  swipe(e: TouchEvent | MouseEvent, when: string): void {
+    const coord: [number, number] = [0, 0];
+    if (e instanceof MouseEvent) {
+      coord[0] = e.clientX;
+      coord[1] = e.clientY;
+    } else {
+      coord[0] = e.changedTouches[0].clientX;
+      coord[1] = e.changedTouches[0].clientY;
+    }
     const time = new Date().getTime();
 
     if (when === 'start') {
@@ -53,6 +66,8 @@ export class SwipeDirective {
         } else {
           this.right.emit();
         }
+      } else if (duration < 1000 && e instanceof MouseEvent) {
+        this.onClick.emit();
       }
     }
   }

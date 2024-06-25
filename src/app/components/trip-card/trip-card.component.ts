@@ -12,6 +12,6 @@ export class TripCardComponent {
   tripTitle: InputSignal<string> = input<string>('');
   startDate: InputSignal<Date> = input<Date>(new Date());
   endDate: InputSignal<Date> = input<Date>(new Date());
-  totalDuration: InputSignal<number> = input<number>(0);
+  duration: InputSignal<number> = input<number>(1);
   totalCost: InputSignal<number> = input<number>(0);
 }

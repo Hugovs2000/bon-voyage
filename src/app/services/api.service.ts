@@ -1,21 +1,36 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EMPTY, catchError, retry } from 'rxjs';
+import {
+  Firestore,
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  updateDoc,
+} from '@angular/fire/firestore';
 import { Trip } from '../models/trips';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private http: HttpClient) {}
+  constructor(private firestore: Firestore) {}
 
   getTrips() {
-    return this.http.get<Trip[]>('assets/trips.json').pipe(
-      retry(2),
-      catchError(error => {
-        console.error('Error fetching trips', error);
-        return EMPTY;
-      })
-    );
+    return getDocs(collection(this.firestore, 'trips'));
+  }
+
+  addTrip(trip: Trip) {
+    return addDoc(collection(this.firestore, 'trips'), trip);
+  }
+
+  deleteTrip(tripId: string) {
+    return deleteDoc(doc(this.firestore, 'trips', tripId));
+  }
+
+  updateTrip(tripId: string, trip: Trip) {
+    return updateDoc(doc(this.firestore, 'trips', tripId), {
+      ...trip,
+    });
   }
 }

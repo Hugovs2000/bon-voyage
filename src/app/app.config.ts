@@ -7,8 +7,12 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideEffects } from '@ngrx/effects';
+import { provideState, provideStore } from '@ngrx/store';
 import { environment } from '../environments/environment.development';
 import { routes } from './app.routes';
+import { TripsEffects } from './store/trips/effects';
+import { tripsFeatureKey, tripsReducers } from './store/trips/reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,5 +25,8 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(provideFirestore(() => getFirestore())),
     provideAnimationsAsync(),
     provideHttpClient(),
+    provideStore(),
+    provideState({ name: tripsFeatureKey, reducer: tripsReducers }),
+    provideEffects(TripsEffects),
   ],
 };
