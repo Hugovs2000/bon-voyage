@@ -20,9 +20,5 @@ export interface ItineraryItem {
   startLocation?: GeoPoint;
   endLocation?: GeoPoint;
   notes?: string;
-  tags?: Tag[];
-}
-
-export interface Tag {
-  name: string;
+  tag: string;
 }

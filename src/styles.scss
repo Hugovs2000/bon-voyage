@@ -57,4 +57,13 @@ body {
   --mdc-snackbar-container-color: #ff4343;
   --mdc-snackbar-supporting-text-color: #000000 !important;
   --mat-snack-bar-button-color: #000000 !important;
+
+  --mdc-filled-text-field-container-color: white;
+  --mdc-icon-button-icon-color: black;
+  --mdc-filled-text-field-label-text-color: black;
+  --mdc-filled-text-field-container-shape: 8px;
+}
+
+.mat-mdc-form-field-error-wrapper {
+  padding: 0 0 !important;
 }

@@ -52,7 +52,7 @@ export class TripsEffects {
           .addTrip(action.trip)
           .then(data => {
             if (!data.id) {
-              return createNewTripComplete({ trip: {} as Trip });
+              return setLoadingState({ isLoading: false });
             }
             const trip = {
               ...action.trip,
