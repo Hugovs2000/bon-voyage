@@ -1,1 +1,153 @@
-<p>new-trip works!</p>
+<div class="p-4">
+  <form
+    class="flex flex-col gap-2"
+    [formGroup]="newTripForm"
+    (ngSubmit)="onSubmit()">
+    <mat-form-field hideRequiredMarker="true" class="md:w-96">
+      <mat-label>Title:</mat-label>
+      <input
+        type="text"
+        matInput
+        placeholder="Type Here..."
+        formControlName="title"
+        required />
+      <mat-error>Please enter a title</mat-error>
+    </mat-form-field>
+
+    <h2>Itinerary:</h2>
+    <div class="flex flex-wrap gap-4">
+      @for (activity of itineraryForms.controls; track $index) {
+        <div class="card card-compact w-full bg-gray-300 shadow-xl md:w-96">
+          <div class="card-body">
+            <h2 class="card-title">Create Activity!</h2>
+            <button
+              type="button"
+              class="absolute right-4 top-4 flex items-center gap-1 text-blue-700"
+              onclick="tagModal.showModal()">
+              @if (
+                newTripForm.value.itinerary?.[$index]?.tag &&
+                newTripForm.value.itinerary?.[$index]?.tag !== ''
+              ) {
+                {{ newTripForm.value.itinerary?.[$index]?.tag }}
+                <mat-icon fontIcon="edit"></mat-icon>
+              } @else {
+                Add tag
+                <mat-icon fontIcon="add_circle"></mat-icon>
+              }
+            </button>
+            <div formArrayName="itinerary">
+              <div [formGroupName]="$index">
+                <dialog id="tagModal" class="modal">
+                  <div class="modal-box">
+                    <form method="dialog">
+                      <button
+                        class="btn btn-circle btn-ghost btn-sm absolute right-4 top-4">
+                        ✕
+                      </button>
+                    </form>
+                    <h3 class="text-lg font-bold">Create Tag!</h3>
+                    <mat-form-field
+                      hideRequiredMarker="true"
+                      class="mt-2 w-full">
+                      <mat-label>Tag:</mat-label>
+                      <input
+                        type="text"
+                        matInput
+                        placeholder="Type Here..."
+                        formControlName="tag"
+                        required />
+                      <mat-error>Please enter a tag</mat-error>
+                    </mat-form-field>
+                    <p class="py-4">
+                      Press ESC key or click on ✕ button to close
+                    </p>
+                  </div>
+                </dialog>
+                <mat-form-field hideRequiredMarker="true" class="w-full">
+                  <mat-label>Title:</mat-label>
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="Type Here..."
+                    formControlName="title" />
+                  <mat-error>Please enter a valid title</mat-error>
+                </mat-form-field>
+
+                <mat-form-field hideRequiredMarker="true" class="w-full">
+                  <mat-label>Enter a date range</mat-label>
+                  <mat-date-range-input
+                    [dateFilter]="filter"
+                    [rangePicker]="picker">
+                    <input
+                      matStartDate
+                      formControlName="startDate"
+                      placeholder="Start date" />
+                    <input
+                      matEndDate
+                      formControlName="endDate"
+                      placeholder="End date" />
+                  </mat-date-range-input>
+                  <mat-datepicker-toggle
+                    matIconSuffix
+                    [for]="picker"></mat-datepicker-toggle>
+                  <mat-date-range-picker #picker></mat-date-range-picker>
+                  <mat-error>Please enter a valid date range</mat-error>
+                </mat-form-field>
+
+                <div class="mb-4 flex flex-col">
+                  <button type="button" class="btn w-fit self-center bg-white">
+                    Choose location on map
+                  </button>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <mat-form-field hideRequiredMarker="true">
+                    <mat-label>Cost:</mat-label>
+                    <input
+                      type="number"
+                      matInput
+                      formControlName="cost"
+                      required />
+                    <mat-error class="text-nowrap">
+                      Please enter a valid amount
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field hideRequiredMarker="true">
+                    <mat-label>Currency</mat-label>
+                    <mat-select
+                      name="currency"
+                      formControlName="currency"
+                      required>
+                      @for (currency of currencies; track currency) {
+                        <mat-option [value]="currency.value">
+                          {{ currency.value }}
+                        </mat-option>
+                      }
+                    </mat-select>
+                    <mat-error>Please select a currency</mat-error>
+                  </mat-form-field>
+                </div>
+
+                <mat-form-field hideRequiredMarker="true" class="w-full">
+                  <mat-label>Leave a comment</mat-label>
+                  <textarea
+                    matInput
+                    placeholder="Ex. Remember to pack toothbrush..."
+                    formControlName="notes"></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="card-actions justify-end"></div>
+          </div>
+        </div>
+      }
+    </div>
+    <button
+      type="button"
+      [disabled]="true"
+      class="btn w-fit self-end bg-warning">
+      Add activity
+    </button>
+    <button class="btn w-fit self-end bg-success" type="submit">Submit</button>
+  </form>
+</div>
