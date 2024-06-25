@@ -22,3 +22,10 @@ export interface ItineraryItem {
   notes?: string;
   tag: string;
 }
+
+export const currencies = [
+  { value: 'ZAR' },
+  { value: 'GBP' },
+  { value: 'USD' },
+  { value: 'EUR' },
+];

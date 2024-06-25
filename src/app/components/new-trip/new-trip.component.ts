@@ -14,9 +14,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Store } from '@ngrx/store';
-import { Trip } from '../../models/trips';
+import { Trip, currencies } from '../../models/trips';
 import { createNewTrip } from '../../store/trips/actions';
 import { TripState } from '../../store/trips/reducer';
+import { filterConfig } from '../../utils/filterCalendar';
 
 @Component({
   selector: 'app-new-trip',
@@ -35,20 +36,10 @@ import { TripState } from '../../store/trips/reducer';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewTripComponent {
-  store = inject(Store<TripState>);
+  private store = inject(Store<TripState>);
 
-  filter = (d: Date | null): boolean => {
-    const day = d || new Date();
-    const today = new Date(new Date().setDate(new Date().getDate() - 1));
-    return day > today;
-  };
-
-  currencies = [
-    { value: 'ZAR' },
-    { value: 'GBP' },
-    { value: 'USD' },
-    { value: 'EUR' },
-  ];
+  filter = filterConfig;
+  currencies = currencies;
 
   newTripForm = new FormGroup({
     title: new FormControl('', Validators.required),
@@ -56,16 +47,16 @@ export class NewTripComponent {
     itinerary: new FormArray([
       new FormGroup({
         title: new FormControl('', Validators.required),
-        startDate: new FormControl<Date | Timestamp>(
-          new Date(),
+        startDate: new FormControl<Date | Timestamp | null>(
+          null,
           Validators.required
         ),
-        endDate: new FormControl<Date | Timestamp>(
-          new Date(),
+        endDate: new FormControl<Date | Timestamp | null>(
+          null,
           Validators.required
         ),
         cost: new FormControl(null, [Validators.required, Validators.min(0)]),
-        currency: new FormControl(''),
+        currency: new FormControl('', Validators.required),
         startLocation: new FormControl(new GeoPoint(0, 0)),
         endLocation: new FormControl(new GeoPoint(0, 0)),
         notes: new FormControl(''),
@@ -79,7 +70,7 @@ export class NewTripComponent {
   }
 
   onSubmit() {
-    if (this.newTripForm.value.itinerary) {
+    if (this.newTripForm.valid && this.newTripForm.value.itinerary) {
       for (const trip of this.newTripForm.value.itinerary) {
         if (trip.startDate instanceof Date) {
           trip.startDate = Timestamp.fromDate(trip.startDate);
@@ -88,8 +79,8 @@ export class NewTripComponent {
           trip.endDate = Timestamp.fromDate(trip.endDate);
         }
       }
+      const trip = { ...(this.newTripForm.value as Trip), userId: 'abc' };
+      this.store.dispatch(createNewTrip({ trip }));
     }
-    const trip = { ...(this.newTripForm.value as Trip), userId: 'abc' };
-    this.store.dispatch(createNewTrip({ trip }));
   }
 }

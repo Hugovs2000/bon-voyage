@@ -9,8 +9,7 @@
         type="text"
         matInput
         placeholder="Type Here..."
-        formControlName="title"
-        required />
+        formControlName="title" />
       <mat-error>Please enter a title</mat-error>
     </mat-form-field>
 
@@ -54,8 +53,7 @@
                         type="text"
                         matInput
                         placeholder="Type Here..."
-                        formControlName="tag"
-                        required />
+                        formControlName="tag" />
                       <mat-error>Please enter a tag</mat-error>
                     </mat-form-field>
                     <p class="py-4">
@@ -103,21 +101,14 @@
                 <div class="flex items-center gap-2">
                   <mat-form-field hideRequiredMarker="true">
                     <mat-label>Cost:</mat-label>
-                    <input
-                      type="number"
-                      matInput
-                      formControlName="cost"
-                      required />
+                    <input type="number" matInput formControlName="cost" />
                     <mat-error class="text-nowrap">
                       Please enter a valid amount
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field hideRequiredMarker="true">
                     <mat-label>Currency</mat-label>
-                    <mat-select
-                      name="currency"
-                      formControlName="currency"
-                      required>
+                    <mat-select name="currency" formControlName="currency">
                       @for (currency of currencies; track currency) {
                         <mat-option [value]="currency.value">
                           {{ currency.value }}
@@ -142,12 +133,19 @@
         </div>
       }
     </div>
+
     <button
       type="button"
       [disabled]="true"
       class="btn w-fit self-end bg-warning">
       Add activity
     </button>
-    <button class="btn w-fit self-end bg-success" type="submit">Submit</button>
+
+    <button
+      class="btn w-fit self-end bg-success"
+      type="submit"
+      [disabled]="!newTripForm.valid">
+      Submit
+    </button>
   </form>
 </div>
