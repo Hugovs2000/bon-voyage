@@ -4,17 +4,14 @@ import { Trip } from '../../models/trips';
 import {
   createNewTrip,
   createNewTripComplete,
-  createNewTripError,
   deleteTrip,
   deleteTripComplete,
-  deleteTripError,
   getAllTrips,
   getAllTripsComplete,
-  getAllTripsError,
+  setLoadingState,
   setSelectedTripId,
   updateTrip,
   updateTripComplete,
-  updateTripError,
 } from './actions';
 
 export const tripsFeatureKey = 'Trips';
@@ -41,12 +38,6 @@ export const tripsReducers = createReducer(
     isLoading: false,
     trips,
   })),
-  on(getAllTripsError, state => {
-    return {
-      ...state,
-      isLoading: false,
-    };
-  }),
   on(createNewTrip, state => ({
     ...state,
     isLoading: true,
@@ -56,12 +47,6 @@ export const tripsReducers = createReducer(
     isLoading: false,
     trips: [...state.trips, trip],
   })),
-  on(createNewTripError, state => {
-    return {
-      ...state,
-      isLoading: false,
-    };
-  }),
   on(updateTrip, state => ({
     ...state,
     isLoading: true,
@@ -71,12 +56,6 @@ export const tripsReducers = createReducer(
     isLoading: false,
     trips: [...state.trips, trip],
   })),
-  on(updateTripError, state => {
-    return {
-      ...state,
-      isLoading: false,
-    };
-  }),
   on(deleteTrip, state => ({
     ...state,
     isLoading: true,
@@ -86,16 +65,16 @@ export const tripsReducers = createReducer(
     isLoading: false,
     trips: state.trips.filter(t => t.docId !== tripId),
   })),
-  on(deleteTripError, state => {
-    return {
-      ...state,
-      isLoading: false,
-    };
-  }),
   on(setSelectedTripId, (state, { tripId }) => ({
     ...state,
     selectedTripId: tripId,
-  }))
+  })),
+  on(setLoadingState, (state, { isLoading }) => {
+    return {
+      ...state,
+      isLoading: isLoading,
+    };
+  })
 );
 
 export const metaReducers: MetaReducer<Trip>[] = isDevMode() ? [] : [];

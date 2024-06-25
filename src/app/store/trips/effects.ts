@@ -7,16 +7,13 @@ import { ApiService } from '../../services/api.service';
 import {
   createNewTrip,
   createNewTripComplete,
-  createNewTripError,
   deleteTrip,
   deleteTripComplete,
-  deleteTripError,
   getAllTrips,
   getAllTripsComplete,
-  getAllTripsError,
+  setLoadingState,
   updateTrip,
   updateTripComplete,
-  updateTripError,
 } from './actions';
 
 @Injectable()
@@ -41,7 +38,7 @@ export class TripsEffects {
           })
           .catch(err => {
             alert(`Error getting trips. Error message: ${err.message}`);
-            return getAllTripsError();
+            return setLoadingState({ isLoading: false });
           })
       )
     )
@@ -65,7 +62,7 @@ export class TripsEffects {
           })
           .catch(err => {
             alert(`Error creating new trip. Error message: ${err.message}`);
-            return createNewTripError();
+            return setLoadingState({ isLoading: false });
           })
       )
     )
@@ -82,7 +79,7 @@ export class TripsEffects {
           })
           .catch(err => {
             alert(`Error updating trip. Error message: ${err.message}`);
-            return updateTripError();
+            return setLoadingState({ isLoading: false });
           })
       )
     )
@@ -99,7 +96,7 @@ export class TripsEffects {
           })
           .catch(err => {
             alert(`Error deleting trip. Error message: ${err.message}`);
-            return deleteTripError();
+            return setLoadingState({ isLoading: false });
           })
       )
     )
