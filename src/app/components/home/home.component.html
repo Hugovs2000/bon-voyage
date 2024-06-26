@@ -17,15 +17,13 @@
           cdkDragLockAxis="x"
           (cdkDragReleased)="resetPosition($event)"
           cdkDragBoundary=".boundary">
-          @if (
-            trip.startDate && trip.endDate && trip.duration && trip.totalCost
-          ) {
+          @if (trip.startDate && trip.endDate && trip.duration) {
             <app-trip-card
               [tripTitle]="trip.title"
               [startDate]="trip.startDate"
               [endDate]="trip.endDate"
               [duration]="trip.duration"
-              [totalCost]="trip.totalCost" />
+              [totalCost]="trip.totalCost ?? 0" />
           }
         </div>
       </div>

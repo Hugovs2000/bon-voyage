@@ -32,7 +32,10 @@ export const deriveDatesAndCost = (trip: Trip) => {
     } as Trip;
   }
 
-  const duration = endDate.getDate() - startDate.getDate() + 1;
+  const duration =
+    Math.floor(
+      Math.abs(endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+    ) + 1;
 
   return {
     ...trip,

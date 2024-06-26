@@ -52,6 +52,7 @@ export class TripsEffects {
           .addTrip(action.trip)
           .then(data => {
             if (!data.id) {
+              alert(`Error creating new trip. No document ID returned.`);
               return setLoadingState({ isLoading: false });
             }
             const trip = {

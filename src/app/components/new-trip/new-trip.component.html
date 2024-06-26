@@ -1,4 +1,5 @@
 <div class="p-4">
+  <h1 class="text-xl font-extrabold">Create a new trip!</h1>
   <form
     class="flex flex-col gap-2"
     [formGroup]="newTripForm"
@@ -13,16 +14,18 @@
       <mat-error>Please enter a title</mat-error>
     </mat-form-field>
 
-    <h2>Itinerary:</h2>
+    <h2 class="mb-2 text-lg font-semibold">Itinerary:</h2>
     <div class="flex flex-wrap gap-4">
-      @for (activity of itineraryForms.controls; track $index) {
-        <div class="card card-compact w-full bg-gray-300 shadow-xl md:w-96">
+      @for (activity of itineraryForm.controls; track $index) {
+        <div
+          class="card card-compact mb-2 w-full bg-gray-300 shadow-xl md:w-96">
           <div class="card-body">
-            <h2 class="card-title">Create Activity!</h2>
+            <h2 class="card-title">Create an Activity!</h2>
             <button
               type="button"
+              id="{{ $index }}"
               class="absolute right-4 top-4 flex items-center gap-1 text-blue-700"
-              onclick="tagModal.showModal()">
+              (click)="openTagDialog($event)">
               @if (
                 newTripForm.value.itinerary?.[$index]?.tag &&
                 newTripForm.value.itinerary?.[$index]?.tag !== ''
@@ -36,7 +39,7 @@
             </button>
             <div formArrayName="itinerary">
               <div [formGroupName]="$index">
-                <dialog id="tagModal" class="modal">
+                <dialog id="dialog-{{ $index }}" class="modal">
                   <div class="modal-box">
                     <form method="dialog">
                       <button
@@ -67,6 +70,7 @@
                     type="text"
                     matInput
                     placeholder="Type Here..."
+                    [value]="activity.value.title"
                     formControlName="title" />
                   <mat-error>Please enter a valid title</mat-error>
                 </mat-form-field>
@@ -78,10 +82,12 @@
                     [rangePicker]="picker">
                     <input
                       matStartDate
+                      [value]="activity.value.startDate"
                       formControlName="startDate"
                       placeholder="Start date" />
                     <input
                       matEndDate
+                      [value]="activity.value.endDate"
                       formControlName="endDate"
                       placeholder="End date" />
                   </mat-date-range-input>
@@ -93,7 +99,9 @@
                 </mat-form-field>
 
                 <div class="mb-4 flex flex-col">
-                  <button type="button" class="btn w-fit self-center bg-white">
+                  <button
+                    type="button"
+                    class="btn mb-2 w-fit self-center bg-white">
                     Choose location on map
                   </button>
                 </div>
@@ -101,14 +109,21 @@
                 <div class="flex items-center gap-2">
                   <mat-form-field hideRequiredMarker="true">
                     <mat-label>Cost:</mat-label>
-                    <input type="number" matInput formControlName="cost" />
+                    <input
+                      type="number"
+                      matInput
+                      [value]="activity.value.cost"
+                      formControlName="cost" />
                     <mat-error class="text-nowrap">
                       Please enter a valid amount
                     </mat-error>
                   </mat-form-field>
                   <mat-form-field hideRequiredMarker="true">
                     <mat-label>Currency</mat-label>
-                    <mat-select name="currency" formControlName="currency">
+                    <mat-select
+                      name="currency"
+                      [value]="activity.value.currency"
+                      formControlName="currency">
                       @for (currency of currencies; track currency) {
                         <mat-option [value]="currency.value">
                           {{ currency.value }}
@@ -123,9 +138,23 @@
                   <mat-label>Leave a comment</mat-label>
                   <textarea
                     matInput
+                    [value]="activity.value.notes"
+                    cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize"
+                    cdkAutosizeMinRows="1"
+                    cdkAutosizeMaxRows="5"
                     placeholder="Ex. Remember to pack toothbrush..."
                     formControlName="notes"></textarea>
                 </mat-form-field>
+
+                <div class="flex w-full justify-end">
+                  <button
+                    type="button"
+                    class="btn btn-error"
+                    (click)="removeActivity($index)">
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
             <div class="card-actions justify-end"></div>
@@ -136,13 +165,13 @@
 
     <button
       type="button"
-      [disabled]="true"
-      class="btn w-fit self-end bg-warning">
+      class="btn w-fit self-end bg-warning"
+      (click)="addActivity()">
       Add activity
     </button>
 
     <button
-      class="btn w-fit self-end bg-success"
+      class="btn mt-4 w-fit self-end bg-success"
       type="submit"
       [disabled]="!newTripForm.valid">
       Submit

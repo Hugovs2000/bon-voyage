@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Trip, currencies } from '../../models/trips';
 import { createNewTrip } from '../../store/trips/actions';
@@ -37,6 +38,7 @@ import { filterConfig } from '../../utils/filterCalendar';
 })
 export class NewTripComponent {
   private store = inject(Store<TripState>);
+  private router = inject(Router);
 
   filter = filterConfig;
   currencies = currencies;
@@ -65,8 +67,44 @@ export class NewTripComponent {
     ]),
   });
 
-  get itineraryForms() {
+  get itineraryForm() {
     return this.newTripForm.get('itinerary') as FormArray;
+  }
+
+  addActivity() {
+    this.itineraryForm.push(
+      new FormGroup({
+        title: new FormControl('', Validators.required),
+        startDate: new FormControl<Date | Timestamp | null>(
+          null,
+          Validators.required
+        ),
+        endDate: new FormControl<Date | Timestamp | null>(
+          null,
+          Validators.required
+        ),
+        cost: new FormControl(null, [Validators.required, Validators.min(0)]),
+        currency: new FormControl('', Validators.required),
+        startLocation: new FormControl(new GeoPoint(0, 0)),
+        endLocation: new FormControl(new GeoPoint(0, 0)),
+        notes: new FormControl(''),
+        tag: new FormControl(''),
+      })
+    );
+  }
+
+  removeActivity(index: number) {
+    this.itineraryForm.removeAt(index);
+  }
+
+  openTagDialog(event: Event) {
+    const element = event.target as HTMLElement;
+    const dialogRef = document.getElementById(
+      `dialog-${element.id}`
+    ) as HTMLDialogElement;
+    if (dialogRef) {
+      dialogRef.showModal();
+    }
   }
 
   onSubmit() {
@@ -81,6 +119,7 @@ export class NewTripComponent {
       }
       const trip = { ...(this.newTripForm.value as Trip), userId: 'abc' };
       this.store.dispatch(createNewTrip({ trip }));
+      this.router.navigate(['home']);
     }
   }
 }
