@@ -117,7 +117,7 @@ export class AlterTripComponent {
       const trip = { ...(this.tripForm.value as Trip), userId: 'abc' };
 
       this.store.dispatch(createNewTrip({ trip }));
-      window.location.reload();
+      // TODO: navigate to trip details page on success
     }
   }
 }
