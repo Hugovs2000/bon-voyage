@@ -6,7 +6,11 @@ import { Store } from '@ngrx/store';
 import { SwipeDirective } from '../../directives/swipe.directive';
 import { getAllTrips, setSelectedTripId } from '../../store/trips/actions';
 import { TripState } from '../../store/trips/reducer';
-import { selectSelectedTrip, selectTrips } from '../../store/trips/selectors';
+import {
+  selectLoadingState,
+  selectSelectedTrip,
+  selectTrips,
+} from '../../store/trips/selectors';
 import { TripCardComponent } from '../trip-card/trip-card.component';
 
 @Component({
@@ -19,6 +23,7 @@ import { TripCardComponent } from '../trip-card/trip-card.component';
 export class HomeComponent {
   trips$ = this.store.select(selectTrips);
   selectedTrip$ = this.store.select(selectSelectedTrip);
+  loading$ = this.store.select(selectLoadingState);
 
   constructor(
     private store: Store<TripState>,

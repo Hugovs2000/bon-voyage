@@ -12,7 +12,7 @@ import { provideState, provideStore } from '@ngrx/store';
 import { environment } from '../environments/environment.development';
 import { routes } from './app.routes';
 import { TripsEffects } from './store/trips/effects';
-import { tripsFeatureKey, tripsReducers } from './store/trips/reducer';
+import { debug, tripsFeatureKey, tripsReducers } from './store/trips/reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,7 +25,12 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(provideFirestore(() => getFirestore())),
     provideAnimationsAsync(),
     provideHttpClient(),
-    provideStore(),
+    provideStore(
+      {},
+      {
+        metaReducers: [debug],
+      }
+    ),
     provideState({ name: tripsFeatureKey, reducer: tripsReducers }),
     provideEffects(TripsEffects),
   ],

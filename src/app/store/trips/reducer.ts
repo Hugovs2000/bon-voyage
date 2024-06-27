@@ -1,5 +1,5 @@
 import { isDevMode } from '@angular/core';
-import { createReducer, MetaReducer, on } from '@ngrx/store';
+import { ActionReducer, createReducer, MetaReducer, on } from '@ngrx/store';
 import { Trip } from '../../models/trips';
 import {
   createNewTrip,
@@ -77,4 +77,12 @@ export const tripsReducers = createReducer(
   })
 );
 
-export const metaReducers: MetaReducer<Trip>[] = isDevMode() ? [] : [];
+export function debug(reducer: ActionReducer<any>): ActionReducer<any> {
+  return function (state, action) {
+    console.log('action', action);
+    console.log('state', reducer(state, action));
+
+    return reducer(state, action);
+  };
+}
+export const metaReducers: MetaReducer[] = isDevMode() ? [debug] : [];
