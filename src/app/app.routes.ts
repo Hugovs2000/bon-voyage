@@ -30,8 +30,8 @@ export const routes: Routes = [
   {
     path: 'new-trip',
     loadComponent: () =>
-      import('./components/new-trip/new-trip.component').then(
-        m => m.NewTripComponent
+      import('./components/alter-trip/alter-trip.component').then(
+        m => m.AlterTripComponent
       ),
     canActivate: [authGuard],
   },
