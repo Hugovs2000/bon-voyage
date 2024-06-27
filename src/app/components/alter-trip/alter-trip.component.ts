@@ -1,4 +1,4 @@
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -25,6 +25,7 @@ import { Store } from '@ngrx/store';
 import { ItineraryItem, Trip } from '../../models/trips';
 import { createNewTrip } from '../../store/trips/actions';
 import { TripState } from '../../store/trips/reducer';
+import { selectLoadingState } from '../../store/trips/selectors';
 import { ItineraryCardComponent } from '../itinerary-card/itinerary-card.component';
 import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.component';
 
@@ -42,6 +43,7 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
     ItineraryFormComponent,
     DatePipe,
     ItineraryCardComponent,
+    AsyncPipe,
   ],
   templateUrl: './alter-trip.component.html',
   styleUrl: './alter-trip.component.scss',
@@ -53,6 +55,7 @@ export class AlterTripComponent {
   private store = inject(Store<TripState>);
   private router = inject(Router);
 
+  loading$ = this.store.select(selectLoadingState);
   selectedActivity = signal<ItineraryItem>({} as ItineraryItem);
 
   tripForm = new FormGroup({
@@ -118,6 +121,7 @@ export class AlterTripComponent {
 
       this.store.dispatch(createNewTrip({ trip }));
       // TODO: navigate to trip details page on success
+      // this.router.navigate(['/trip', trip.id]);
     }
   }
 }
