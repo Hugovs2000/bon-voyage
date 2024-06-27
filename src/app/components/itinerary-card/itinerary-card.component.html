@@ -1,0 +1,22 @@
+<div
+  class="mb-4 grid grid-rows-3 gap-2 rounded-xl border-2 border-blue-400 bg-blue-300 p-4">
+  <div class="flex justify-between">
+    @if (newStartDate && newEndDate) {
+      <div>{{ newStartDate | date }} - {{ newEndDate | date }}</div>
+    }
+
+    <button
+      type="button"
+      class="btn btn-error text-white"
+      (click)="handleDeleteClick()">
+      <mat-icon fontIcon="delete"></mat-icon>
+    </button>
+  </div>
+  @if (inputActivity().title) {
+    <div class="flex justify-center text-2xl">{{ inputActivity().title }}</div>
+  }
+
+  <div class="flex justify-end">
+    <div>{{ inputActivity().cost | currency }}</div>
+  </div>
+</div>

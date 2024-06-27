@@ -1,0 +1,140 @@
+<div class="card card-compact mb-2 w-full bg-gray-300 shadow-xl md:w-96">
+  <div class="card-body">
+    <h2 class="card-title">Create an Activity!</h2>
+    <button
+      type="button"
+      class="absolute right-4 top-4 flex items-center gap-1 text-blue-700"
+      onclick="tagModal.showModal()">
+      @if (activityForm.value.tag && activityForm.value.tag !== '') {
+        {{ activityForm.value.tag }}
+        <mat-icon fontIcon="edit"></mat-icon>
+      } @else {
+        Add tag
+        <mat-icon fontIcon="add_circle"></mat-icon>
+      }
+    </button>
+    <div [formGroup]="activityForm">
+      <dialog id="tagModal" class="modal">
+        <div class="modal-box">
+          <form method="dialog">
+            <button
+              type="button"
+              (click)="cancelTag()"
+              class="btn btn-circle btn-ghost btn-sm absolute right-4 top-4">
+              ✕
+            </button>
+          </form>
+          <h3 class="text-lg font-bold">Create Tag!</h3>
+          <mat-form-field hideRequiredMarker="true" class="mt-2 w-full">
+            <mat-label>Tag:</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder="Type Here..."
+              formControlName="tag" />
+            <mat-error>Please enter a tag</mat-error>
+          </mat-form-field>
+          <p class="py-4">Tap on ✕ to cancel.</p>
+          <form method="dialog" class="flex justify-end">
+            <button
+              type="button"
+              class="btn btn-success btn-sm"
+              onclick="tagModal.close()">
+              Done
+            </button>
+          </form>
+        </div>
+      </dialog>
+      <mat-form-field hideRequiredMarker="true" class="w-full">
+        <mat-label>Title:</mat-label>
+        <input
+          type="text"
+          matInput
+          placeholder="Type Here..."
+          [value]="activityForm.value.title"
+          formControlName="title" />
+        <mat-error>Please enter a valid title</mat-error>
+      </mat-form-field>
+
+      <mat-form-field hideRequiredMarker="true" class="w-full">
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [dateFilter]="filter" [rangePicker]="picker">
+          <input
+            matStartDate
+            [value]="activityForm.value.startDate"
+            formControlName="startDate"
+            placeholder="Start date" />
+          <input
+            matEndDate
+            [value]="activityForm.value.endDate"
+            formControlName="endDate"
+            placeholder="End date" />
+        </mat-date-range-input>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+        <mat-error>Please enter a valid date range</mat-error>
+      </mat-form-field>
+
+      <div class="mb-4 flex flex-col">
+        <button type="button" class="btn mb-2 w-fit self-center bg-white">
+          Choose location on map
+        </button>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <mat-form-field hideRequiredMarker="true">
+          <mat-label>Cost:</mat-label>
+          <input
+            type="number"
+            matInput
+            [value]="activityForm.value.cost"
+            formControlName="cost" />
+          <mat-error class="text-nowrap">Please enter a valid amount</mat-error>
+        </mat-form-field>
+        <mat-form-field hideRequiredMarker="true">
+          <mat-label>Currency</mat-label>
+          <mat-select
+            name="currency"
+            [value]="activityForm.value.currency"
+            formControlName="currency">
+            @for (currency of currencies; track currency) {
+              <mat-option [value]="currency.value">
+                {{ currency.value }}
+              </mat-option>
+            }
+          </mat-select>
+          <mat-error>Please select a currency</mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field hideRequiredMarker="true" class="w-full">
+        <mat-label>Leave a comment</mat-label>
+        <textarea
+          matInput
+          [value]="activityForm.value.notes"
+          cdkTextareaAutosize
+          #autosize="cdkTextareaAutosize"
+          cdkAutosizeMinRows="1"
+          cdkAutosizeMaxRows="5"
+          placeholder="Ex. Remember to pack toothbrush..."
+          formControlName="notes"></textarea>
+      </mat-form-field>
+
+      <div class="flex w-full justify-end gap-2">
+        <button type="button" class="btn btn-error" (click)="clearForm()">
+          Clear
+        </button>
+        <button
+          type="button"
+          class="btn w-fit self-end border-none bg-warning"
+          (click)="addActivity()"
+          [disabled]="!activityForm.valid">
+          Add activity
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-actions justify-end"></div>
+</div>
