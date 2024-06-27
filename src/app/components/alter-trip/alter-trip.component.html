@@ -2,7 +2,7 @@
   <div>Loading...</div>
 } @else {
   <div class="p-4">
-    @if (inputTrip().docId && inputTrip().title) {
+    @if (inputTrip().docId) {
       <h1 class="text-xl font-extrabold">Edit Trip: {{ inputTrip().title }}</h1>
     } @else {
       <h1 class="text-xl font-extrabold">Create a new trip!</h1>

@@ -20,7 +20,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ItineraryItem, Trip } from '../../models/trips';
 import { createNewTrip } from '../../store/trips/actions';
@@ -53,7 +52,6 @@ export class AlterTripComponent {
   inputTrip: InputSignal<Trip> = input<Trip>({} as Trip);
 
   private store = inject(Store<TripState>);
-  private router = inject(Router);
 
   loading$ = this.store.select(selectLoadingState);
   selectedActivity = signal<ItineraryItem>({} as ItineraryItem);
@@ -65,10 +63,7 @@ export class AlterTripComponent {
   });
 
   get itineraryForm() {
-    const activities = this.tripForm.get('itinerary') as FormArray;
-    if (activities.length > 0) {
-    }
-    return activities;
+    return this.tripForm.get('itinerary') as FormArray;
   }
 
   addActivity(activity: ItineraryItem) {
