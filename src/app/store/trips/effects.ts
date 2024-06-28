@@ -31,7 +31,7 @@ export class TripsEffects {
             }
             const trips = data.docs
               .filter(
-                doc => (doc.data() as Trip).userId !== this.authService.userId
+                doc => (doc.data() as Trip).userId === this.authService.userId
               )
               .map(doc => {
                 return {
