@@ -1,0 +1,45 @@
+@if ((loading$ | async) ?? false) {
+  <div>Loading...</div>
+} @else {
+  <div class="p-4">
+    @if (inputTrip().docId) {
+      <h1 class="text-xl font-extrabold">Edit Trip: {{ inputTrip().title }}</h1>
+    } @else {
+      <h1 class="text-xl font-extrabold">Create a new trip!</h1>
+    }
+    <form
+      class="flex flex-col gap-2"
+      [formGroup]="tripForm"
+      (ngSubmit)="onSubmit()">
+      <mat-form-field hideRequiredMarker="true" class="md:w-96">
+        <mat-label>Title:</mat-label>
+        <input
+          type="text"
+          [value]="inputTrip().title"
+          matInput
+          placeholder="E.g. Trip to Paris..."
+          formControlName="title" />
+        <mat-error>Please enter a title</mat-error>
+      </mat-form-field>
+
+      <h2 class="mb-2 text-lg font-semibold">Itinerary:</h2>
+      @for (activity of itinerary; track activity) {
+        <app-itinerary-card
+          [inputActivity]="activity"
+          (deleteClicked)="removeActivity(activity)" />
+      }
+      <div class="flex flex-wrap gap-4">
+        <app-itinerary-form
+          class="w-full"
+          (outputActivity)="addActivity($event)" />
+      </div>
+
+      <button
+        class="btn mt-4 w-fit self-end bg-success"
+        type="submit"
+        [disabled]="!tripForm.valid">
+        Save trip
+      </button>
+    </form>
+  </div>
+}

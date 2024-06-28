@@ -68,6 +68,7 @@ export class SignupComponent {
             'Close',
             {
               duration: 5000,
+              panelClass: ['snackbar-error'],
             }
           )
         );
@@ -87,6 +88,7 @@ export class SignupComponent {
           'Close',
           {
             duration: 5000,
+            panelClass: ['snackbar-error'],
           }
         )
       );

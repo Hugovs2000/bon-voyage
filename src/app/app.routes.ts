@@ -28,6 +28,14 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'new-trip',
+    loadComponent: () =>
+      import('./components/alter-trip/alter-trip.component').then(
+        m => m.AlterTripComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
     path: 'error',
     loadComponent: () =>
       import('./components/error/error.component').then(m => m.ErrorComponent),

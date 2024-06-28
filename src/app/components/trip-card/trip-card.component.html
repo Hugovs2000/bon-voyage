@@ -11,9 +11,8 @@
   @if (tripTitle()) {
     <div class="flex justify-center text-2xl">{{ tripTitle() }}</div>
   }
-  @if (totalCost()) {
-    <div class="flex justify-end">
-      <div>{{ totalCost() | currency }}</div>
-    </div>
-  }
+
+  <div class="flex justify-end">
+    <div>{{ totalCost() | currency: currency() : 'symbol-narrow' }}</div>
+  </div>
 </div>

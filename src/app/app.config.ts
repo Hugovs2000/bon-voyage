@@ -1,4 +1,8 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  isDevMode,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { provideHttpClient } from '@angular/common/http';
@@ -12,7 +16,7 @@ import { provideState, provideStore } from '@ngrx/store';
 import { environment } from '../environments/environment.development';
 import { routes } from './app.routes';
 import { TripsEffects } from './store/trips/effects';
-import { tripsFeatureKey, tripsReducers } from './store/trips/reducer';
+import { debug, tripsFeatureKey, tripsReducers } from './store/trips/reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,7 +29,12 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(provideFirestore(() => getFirestore())),
     provideAnimationsAsync(),
     provideHttpClient(),
-    provideStore(),
+    provideStore(
+      {},
+      {
+        metaReducers: isDevMode() ? [debug] : [],
+      }
+    ),
     provideState({ name: tripsFeatureKey, reducer: tripsReducers }),
     provideEffects(TripsEffects),
   ],

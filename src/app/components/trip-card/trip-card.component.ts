@@ -14,4 +14,5 @@ export class TripCardComponent {
   endDate: InputSignal<Date> = input<Date>(new Date());
   duration: InputSignal<number> = input<number>(1);
   totalCost: InputSignal<number> = input<number>(0);
+  currency: InputSignal<string> = input<string>('ZAR');
 }

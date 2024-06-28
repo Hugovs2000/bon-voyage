@@ -51,7 +51,7 @@ export class LoginComponent {
       this.authService
         .login(this.loginForm.value.email, this.loginForm.value.password)
         .then(() => {
-          localStorage.setItem('user', 'true');
+          localStorage.setItem('user', this.authService.userId ?? 'true');
           this.authService.isLoggedIn.set(true);
           this.router.navigate(['home']);
         })
@@ -61,6 +61,7 @@ export class LoginComponent {
             'Close',
             {
               duration: 5000,
+              panelClass: ['snackbar-error'],
             }
           )
         );
@@ -70,7 +71,7 @@ export class LoginComponent {
     this.authService
       .byGoogle()
       .then(() => {
-        localStorage.setItem('user', 'true');
+        localStorage.setItem('user', this.authService.userId ?? 'true');
         this.authService.isLoggedIn.set(true);
         this.router.navigate(['home']);
       })
@@ -80,6 +81,7 @@ export class LoginComponent {
           'Close',
           {
             duration: 5000,
+            panelClass: ['snackbar-error'],
           }
         )
       );

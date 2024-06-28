@@ -12,6 +12,7 @@ export interface Trip {
 }
 
 export interface ItineraryItem {
+  id?: string;
   title: string;
   startDate: Timestamp;
   endDate: Timestamp;
@@ -20,9 +21,12 @@ export interface ItineraryItem {
   startLocation?: GeoPoint;
   endLocation?: GeoPoint;
   notes?: string;
-  tags?: Tag[];
+  tag: string;
 }
 
-export interface Tag {
-  name: string;
-}
+export const currencies = [
+  { value: 'ZAR' },
+  { value: 'GBP' },
+  { value: 'USD' },
+  { value: 'EUR' },
+];
