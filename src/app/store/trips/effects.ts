@@ -79,6 +79,10 @@ export class TripsEffects {
               ...action.trip,
               docId: data.id,
             };
+            this.snackBar.open('Trip Created Successfully!', 'Close', {
+              duration: 5000,
+              panelClass: ['snackbar-success'],
+            });
             return createNewTripComplete({ trip: trip });
           })
           .catch(() => {
@@ -103,6 +107,10 @@ export class TripsEffects {
         this.apiService
           .updateTrip(action.trip.docId, action.trip)
           .then(() => {
+            this.snackBar.open('Trip Updated Successfully!', 'Close', {
+              duration: 5000,
+              panelClass: ['snackbar-success'],
+            });
             return updateTripComplete({ trip: action.trip });
           })
           .catch(() => {

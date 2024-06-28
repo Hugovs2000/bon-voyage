@@ -18,6 +18,9 @@ export class AuthService {
   isLoggedIn = signal(!!localStorage.getItem('user'));
 
   get userId() {
+    if (localStorage.getItem('user')) {
+      return localStorage.getItem('user')?.valueOf();
+    }
     return this._auth.currentUser?.uid;
   }
 
@@ -52,7 +55,10 @@ export class AuthService {
 
   constructor() {
     onAuthStateChanged(this._auth, user => {
-      this.isLoggedIn.set(!!(user?.uid && user?.uid?.length > 1));
+      if (user?.uid) {
+        localStorage.setItem('user', user.uid);
+        this.isLoggedIn.set(!!(user.uid && user.uid.length > 1));
+      }
     });
   }
 }
