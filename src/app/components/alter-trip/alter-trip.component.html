@@ -26,7 +26,7 @@
       @for (activity of itinerary; track activity) {
         <app-itinerary-card
           [inputActivity]="activity"
-          (deleteClicked)="removeActivity($event)" />
+          (deleteClicked)="removeActivity(activity)" />
       }
       <div class="flex flex-wrap gap-4">
         <app-itinerary-form
