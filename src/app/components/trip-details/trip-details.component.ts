@@ -1,10 +1,15 @@
 import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { first } from 'rxjs';
-import { getAllTrips, setSelectedTripId } from '../../store/trips/actions';
+import { ItineraryItem, Trip } from '../../models/trips';
+import {
+  getAllTrips,
+  setSelectedTripId,
+  updateTrip,
+} from '../../store/trips/actions';
 import { TripState } from '../../store/trips/reducer';
 import {
   selectLoadingState,
@@ -26,15 +31,21 @@ import { ItineraryCardComponent } from '../itinerary-card/itinerary-card.compone
   styleUrl: './trip-details.component.scss',
 })
 export class TripDetailsComponent {
+  @ViewChild('confirmModal')
+  modalRef: ElementRef<HTMLDialogElement> | null = null;
+
   trip$ = this.store.select(selectSelectedTrip);
   loading$ = this.store.select(selectLoadingState);
+
+  tripToUpdate = signal<Trip | null>(null);
+  activityToDelete = signal<ItineraryItem | null>(null);
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private store: Store<TripState>,
     private router: Router
   ) {
-    this.trip$.pipe(first()).subscribe(trip => {
+    this.trip$.pipe(takeUntilDestroyed()).subscribe(trip => {
       if (!trip) {
         this.store.dispatch(getAllTrips());
         this.store.dispatch(
@@ -44,6 +55,37 @@ export class TripDetailsComponent {
         );
       }
     });
+  }
+
+  closeModal() {
+    this.modalRef?.nativeElement.close();
+  }
+
+  openModal() {
+    this.modalRef?.nativeElement.showModal();
+  }
+
+  handleDeleteActivityClick(trip: Trip, selectedActivity: ItineraryItem) {
+    this.tripToUpdate.set(trip);
+    this.activityToDelete.set(selectedActivity);
+    this.openModal();
+  }
+
+  deleteActivity() {
+    if (this.tripToUpdate()?.docId) {
+      const newActivities = this.tripToUpdate()?.itinerary?.filter(
+        act => act.id !== this.activityToDelete()?.id
+      );
+      this.store.dispatch(
+        updateTrip({
+          trip: {
+            ...(this.tripToUpdate() ??
+              ({ docId: this.tripToUpdate()?.docId } as Trip)),
+            itinerary: newActivities,
+          },
+        })
+      );
+    }
   }
 
   handleHomeClick() {
