@@ -37,7 +37,7 @@ export class TripsEffects {
             return getAllTripsComplete({ trips: trips });
           })
           .catch(err => {
-            alert(`Error getting trips. Error message: ${err.message}`);
+            alert('Apologies, could not retrieve trips.');
             return setLoadingState({ isLoading: false });
           })
       )
@@ -52,7 +52,7 @@ export class TripsEffects {
           .addTrip(action.trip)
           .then(data => {
             if (!data.id) {
-              alert(`Error creating new trip. No document ID returned.`);
+              alert('Apologies, could not save new trip. Please try again.');
               return setLoadingState({ isLoading: false });
             }
             const trip = {
@@ -62,7 +62,7 @@ export class TripsEffects {
             return createNewTripComplete({ trip: trip });
           })
           .catch(err => {
-            alert(`Error creating new trip. Error message: ${err.message}`);
+            alert('Apologies, could not save new trip. Please try again.');
             return setLoadingState({ isLoading: false });
           })
       )
@@ -79,7 +79,7 @@ export class TripsEffects {
             return updateTripComplete({ trip: action.trip });
           })
           .catch(err => {
-            alert(`Error updating trip. Error message: ${err.message}`);
+            alert('Apologies, could not update trip. Please try again.');
             return setLoadingState({ isLoading: false });
           })
       )
@@ -96,7 +96,7 @@ export class TripsEffects {
             return deleteTripComplete({ tripId: action.tripId });
           })
           .catch(err => {
-            alert(`Error deleting trip. Error message: ${err.message}`);
+            alert(`There was a problem deleting the trip. Please try again`);
             return setLoadingState({ isLoading: false });
           })
       )
