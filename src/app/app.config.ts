@@ -1,4 +1,8 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  isDevMode,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { provideHttpClient } from '@angular/common/http';
@@ -28,7 +32,7 @@ export const appConfig: ApplicationConfig = {
     provideStore(
       {},
       {
-        metaReducers: [debug],
+        metaReducers: isDevMode() ? [debug] : [],
       }
     ),
     provideState({ name: tripsFeatureKey, reducer: tripsReducers }),
