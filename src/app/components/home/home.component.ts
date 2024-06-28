@@ -1,10 +1,14 @@
 import { CdkDragRelease, DragDropModule } from '@angular/cdk/drag-drop';
 import { AsyncPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { SwipeDirective } from '../../directives/swipe.directive';
-import { getAllTrips, setSelectedTripId } from '../../store/trips/actions';
+import {
+  deleteTrip,
+  getAllTrips,
+  setSelectedTripId,
+} from '../../store/trips/actions';
 import { TripState } from '../../store/trips/reducer';
 import {
   selectLoadingState,
@@ -25,6 +29,11 @@ export class HomeComponent {
   selectedTrip$ = this.store.select(selectSelectedTrip);
   loading$ = this.store.select(selectLoadingState);
 
+  selectedTripId = signal('');
+
+  @ViewChild('confirmModal')
+  modalRef: ElementRef | null = null;
+
   constructor(
     private store: Store<TripState>,
     private router: Router
@@ -36,6 +45,21 @@ export class HomeComponent {
     event.source.reset();
   }
 
+  closeModal() {
+    if (this.modalRef) {
+      const modal = this.modalRef.nativeElement as HTMLDialogElement;
+      this.selectedTripId.set('');
+      modal.close();
+    }
+  }
+
+  openModal() {
+    if (this.modalRef) {
+      const modal = this.modalRef.nativeElement as HTMLDialogElement;
+      modal.showModal();
+    }
+  }
+
   handleTripClick(title: string, id: string) {
     this.store.dispatch(setSelectedTripId({ tripId: id }));
   }
@@ -45,7 +69,15 @@ export class HomeComponent {
   }
 
   onSwipeLeft(trip: string) {
-    console.log('Delete', trip);
+    this.selectedTripId.set(trip);
+    this.openModal();
+  }
+
+  deleteTrip() {
+    if (this.selectedTripId() !== '') {
+      this.store.dispatch(deleteTrip({ tripId: this.selectedTripId() }));
+      this.closeModal();
+    }
   }
 
   handleAddTripClick() {
