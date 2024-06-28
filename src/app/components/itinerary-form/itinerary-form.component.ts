@@ -1,9 +1,11 @@
 import { CurrencyPipe } from '@angular/common';
 import {
   Component,
+  ElementRef,
   EventEmitter,
   InputSignal,
   Output,
+  ViewChild,
   input,
 } from '@angular/core';
 import { GeoPoint, Timestamp } from '@angular/fire/firestore';
@@ -43,6 +45,9 @@ export class ItineraryFormComponent {
 
   @Output() outputActivity = new EventEmitter<ItineraryItem>();
 
+  @ViewChild('tagModal')
+  tagModalRef: ElementRef | null = null;
+
   filter = filterConfig;
   currencies = currencies;
 
@@ -59,7 +64,7 @@ export class ItineraryFormComponent {
       this.inputActivity().endDate ?? Timestamp.now(),
       Validators.required
     ),
-    cost: new FormControl(this.inputActivity().cost ?? null, [
+    cost: new FormControl(this.inputActivity().cost ?? 0, [
       Validators.required,
       Validators.min(0),
     ]),
@@ -86,9 +91,20 @@ export class ItineraryFormComponent {
 
   cancelTag() {
     this.activityForm.get('tag')?.reset();
-    const modalRef = document.getElementById('tagModal') as HTMLDialogElement;
-    if (modalRef) {
-      modalRef.close();
+    this.closeTagModal();
+  }
+
+  openTagModal() {
+    if (this.tagModalRef) {
+      const modal = this.tagModalRef.nativeElement as HTMLDialogElement;
+      modal.showModal();
+    }
+  }
+
+  closeTagModal() {
+    if (this.tagModalRef) {
+      const modal = this.tagModalRef.nativeElement as HTMLDialogElement;
+      modal.close();
     }
   }
 

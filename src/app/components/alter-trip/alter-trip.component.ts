@@ -1,4 +1,4 @@
-import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,11 +15,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { Store } from '@ngrx/store';
 import { ItineraryItem, Trip } from '../../models/trips';
 import { createNewTrip } from '../../store/trips/actions';
@@ -32,17 +29,12 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
   selector: 'app-alter-trip',
   standalone: true,
   imports: [
-    ReactiveFormsModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    CurrencyPipe,
-    MatIconModule,
-    ItineraryFormComponent,
-    DatePipe,
-    ItineraryCardComponent,
     AsyncPipe,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    ItineraryCardComponent,
+    ItineraryFormComponent,
+    MatInputModule,
   ],
   templateUrl: './alter-trip.component.html',
   styleUrl: './alter-trip.component.scss',

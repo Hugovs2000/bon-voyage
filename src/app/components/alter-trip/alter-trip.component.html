@@ -17,7 +17,7 @@
           type="text"
           [value]="inputTrip().title"
           matInput
-          placeholder="Type Here..."
+          placeholder="E.g. Trip to Paris..."
           formControlName="title" />
         <mat-error>Please enter a title</mat-error>
       </mat-form-field>
@@ -39,7 +39,7 @@
         class="btn mt-4 w-fit self-end bg-success"
         type="submit"
         [disabled]="!tripForm.valid">
-        Submit
+        Save trip
       </button>
     </form>
   </div>

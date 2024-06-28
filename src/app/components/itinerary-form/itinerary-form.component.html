@@ -4,7 +4,7 @@
     <button
       type="button"
       class="absolute right-4 top-4 flex items-center gap-1 text-blue-700"
-      onclick="tagModal.showModal()">
+      (click)="openTagModal()">
       @if (activityForm.value.tag && activityForm.value.tag !== '') {
         {{ activityForm.value.tag }}
         <mat-icon fontIcon="edit"></mat-icon>
@@ -14,7 +14,7 @@
       }
     </button>
     <div [formGroup]="activityForm">
-      <dialog id="tagModal" class="modal">
+      <dialog #tagModal class="modal">
         <div class="modal-box">
           <form method="dialog">
             <button
@@ -39,7 +39,7 @@
             <button
               type="button"
               class="btn btn-success btn-sm"
-              onclick="tagModal.close()">
+              (click)="closeTagModal()">
               Done
             </button>
           </form>
@@ -77,11 +77,12 @@
         <mat-error>Please enter a valid date range</mat-error>
       </mat-form-field>
 
-      <div class="mb-4 flex flex-col">
+      <!-- TODO: Implement map -->
+      <!-- <div class="mb-4 flex flex-col">
         <button type="button" class="btn mb-2 w-fit self-center bg-white">
           Choose location on map
         </button>
-      </div>
+      </div> -->
 
       <div class="flex items-center gap-2">
         <mat-form-field hideRequiredMarker="true">
