@@ -54,14 +54,24 @@ body {
 }
 
 :root {
-  --mdc-snackbar-container-color: #ff4343;
-  --mdc-snackbar-supporting-text-color: #000000 !important;
-  --mat-snack-bar-button-color: #000000 !important;
-
   --mdc-filled-text-field-container-color: white;
   --mdc-icon-button-icon-color: black;
   --mdc-filled-text-field-label-text-color: black;
   --mdc-filled-text-field-container-shape: 8px;
+
+  .mat-mdc-snack-bar-container {
+    &.snackbar-success {
+      --mdc-snackbar-container-color: #4caf50;
+      --mat-mdc-snack-bar-button-color: black;
+      --mdc-snackbar-supporting-text-color: black;
+    }
+    &.snackbar-error {
+      --mdc-snackbar-container-color: #f53224;
+      --mat-mdc-snack-bar-button-color: white;
+      --mdc-snackbar-supporting-text-color: white;
+      --mat-snack-bar-button-color: white;
+    }
+  }
 }
 
 .mat-mdc-form-field-error-wrapper {

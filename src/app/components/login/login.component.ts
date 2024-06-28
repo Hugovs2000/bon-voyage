@@ -61,6 +61,7 @@ export class LoginComponent {
             'Close',
             {
               duration: 5000,
+              panelClass: ['snackbar-error'],
             }
           )
         );
@@ -80,6 +81,7 @@ export class LoginComponent {
           'Close',
           {
             duration: 5000,
+            panelClass: ['snackbar-error'],
           }
         )
       );

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { switchMap } from 'rxjs';
 import { Trip } from '../../models/trips';
 import { ApiService } from '../../services/api.service';
@@ -41,8 +42,15 @@ export class TripsEffects {
               });
             return getAllTripsComplete({ trips: trips });
           })
-          .catch(err => {
-            alert('Apologies, could not retrieve trips.');
+          .catch(() => {
+            this.snackBar.open(
+              'Apologies, could not retrieve trips.',
+              'Close',
+              {
+                duration: 5000,
+                panelClass: ['snackbar-error'],
+              }
+            );
             return setLoadingState({ isLoading: false });
           })
       )
@@ -57,7 +65,14 @@ export class TripsEffects {
           .addTrip(action.trip)
           .then(data => {
             if (!data.id) {
-              alert('Apologies, could not save new trip. Please try again.');
+              this.snackBar.open(
+                'Apologies, could not save new trip. Please try again.',
+                'Close',
+                {
+                  duration: 5000,
+                  panelClass: ['snackbar-error'],
+                }
+              );
               return setLoadingState({ isLoading: false });
             }
             const trip = {
@@ -66,8 +81,15 @@ export class TripsEffects {
             };
             return createNewTripComplete({ trip: trip });
           })
-          .catch(err => {
-            alert('Apologies, could not save new trip. Please try again.');
+          .catch(() => {
+            this.snackBar.open(
+              'Apologies, could not save new trip. Please try again.',
+              'Close',
+              {
+                duration: 5000,
+                panelClass: ['snackbar-error'],
+              }
+            );
             return setLoadingState({ isLoading: false });
           })
       )
@@ -83,8 +105,15 @@ export class TripsEffects {
           .then(() => {
             return updateTripComplete({ trip: action.trip });
           })
-          .catch(err => {
-            alert('Apologies, could not update trip. Please try again.');
+          .catch(() => {
+            this.snackBar.open(
+              'Apologies, could not update trip. Please try again.',
+              'Close',
+              {
+                duration: 5000,
+                panelClass: ['snackbar-error'],
+              }
+            );
             return setLoadingState({ isLoading: false });
           })
       )
@@ -98,10 +127,21 @@ export class TripsEffects {
         this.apiService
           .deleteTrip(action.tripId)
           .then(() => {
+            this.snackBar.open('Trip Deleted Successfully!', 'Close', {
+              duration: 5000,
+              panelClass: ['snackbar-success'],
+            });
             return deleteTripComplete({ tripId: action.tripId });
           })
-          .catch(err => {
-            alert(`There was a problem deleting the trip. Please try again`);
+          .catch(() => {
+            this.snackBar.open(
+              'There was a problem deleting the trip. Please try again',
+              'Close',
+              {
+                duration: 5000,
+                panelClass: ['snackbar-error'],
+              }
+            );
             return setLoadingState({ isLoading: false });
           })
       )
@@ -111,6 +151,7 @@ export class TripsEffects {
   constructor(
     private actions$: Actions,
     private apiService: ApiService,
-    private authService: AuthService
+    private authService: AuthService,
+    private snackBar: MatSnackBar
   ) {}
 }
