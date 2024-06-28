@@ -36,6 +36,13 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'trip/:id',
+    loadComponent: () =>
+      import('./components/trip-details/trip-details.component').then(
+        m => m.TripDetailsComponent
+      ),
+  },
+  {
     path: 'error',
     loadComponent: () =>
       import('./components/error/error.component').then(m => m.ErrorComponent),

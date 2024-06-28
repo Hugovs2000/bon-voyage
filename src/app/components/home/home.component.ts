@@ -54,8 +54,9 @@ export class HomeComponent {
     this.modalRef?.nativeElement.showModal();
   }
 
-  handleTripClick(title: string, id: string) {
+  handleTripClick(id: string) {
     this.store.dispatch(setSelectedTripId({ tripId: id }));
+    this.router.navigate(['/trip', id]);
   }
 
   onSwipeRight(trip: string) {
