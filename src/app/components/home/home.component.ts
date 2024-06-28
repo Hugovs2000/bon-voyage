@@ -32,7 +32,7 @@ export class HomeComponent {
   selectedTripId = signal('');
 
   @ViewChild('confirmModal')
-  modalRef: ElementRef | null = null;
+  modalRef: ElementRef<HTMLDialogElement> | null = null;
 
   constructor(
     private store: Store<TripState>,
@@ -46,18 +46,12 @@ export class HomeComponent {
   }
 
   closeModal() {
-    if (this.modalRef) {
-      const modal = this.modalRef.nativeElement as HTMLDialogElement;
-      this.selectedTripId.set('');
-      modal.close();
-    }
+    this.selectedTripId.set('');
+    this.modalRef?.nativeElement.close();
   }
 
   openModal() {
-    if (this.modalRef) {
-      const modal = this.modalRef.nativeElement as HTMLDialogElement;
-      modal.showModal();
-    }
+    this.modalRef?.nativeElement.showModal();
   }
 
   handleTripClick(title: string, id: string) {

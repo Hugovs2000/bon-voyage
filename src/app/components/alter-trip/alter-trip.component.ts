@@ -71,8 +71,7 @@ export class AlterTripComponent {
   }
 
   removeActivity(activity: ItineraryItem) {
-    const newItinerary = this.itinerary.filter(act => act.id !== activity.id);
-    this.itinerary = newItinerary;
+    this.itinerary = this.itinerary.filter(act => act.id !== activity.id);
   }
 
   onSubmit() {

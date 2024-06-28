@@ -47,7 +47,7 @@ export class ItineraryFormComponent {
   @Output() outputActivity = new EventEmitter<ItineraryItem>();
 
   @ViewChild('tagModal')
-  tagModalRef: ElementRef | null = null;
+  tagModalRef: ElementRef<HTMLDialogElement> | null = null;
 
   filter = filterConfig;
   currencies = currencies;
@@ -100,17 +100,11 @@ export class ItineraryFormComponent {
   }
 
   openTagModal() {
-    if (this.tagModalRef) {
-      const modal = this.tagModalRef.nativeElement as HTMLDialogElement;
-      modal.showModal();
-    }
+    this.tagModalRef?.nativeElement.showModal();
   }
 
   closeTagModal() {
-    if (this.tagModalRef) {
-      const modal = this.tagModalRef.nativeElement as HTMLDialogElement;
-      modal.close();
-    }
+    this.tagModalRef?.nativeElement.close();
   }
 
   clearForm() {
