@@ -23,11 +23,16 @@ export const deriveDatesAndCost = (trip: Trip) => {
   }
 
   if (
-    startDate === new Date(8640000000000000) ||
-    endDate === new Date(-8640000000000000)
+    startDate >= new Date(864000000000000) ||
+    endDate <= new Date(-864000000000000)
   ) {
+    startDate = new Date();
+    endDate = new Date();
     return {
       ...trip,
+      startDate: startDate,
+      endDate: endDate,
+      duration: 1,
       totalCost: totalTripCost,
     } as Trip;
   }
