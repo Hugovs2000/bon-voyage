@@ -4,6 +4,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { switchMap } from 'rxjs';
 import { Trip } from '../../models/trips';
 import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
 import {
   createNewTrip,
   createNewTripComplete,
@@ -28,12 +29,16 @@ export class TripsEffects {
             if (data.empty) {
               return getAllTripsComplete({ trips: [] });
             }
-            const trips = data.docs.map(doc => {
-              return {
-                ...(doc.data() as Trip),
-                docId: doc.id,
-              };
-            });
+            const trips = data.docs
+              .filter(
+                doc => (doc.data() as Trip).userId !== this.authService.userId
+              )
+              .map(doc => {
+                return {
+                  ...(doc.data() as Trip),
+                  docId: doc.id,
+                };
+              });
             return getAllTripsComplete({ trips: trips });
           })
           .catch(err => {
@@ -105,6 +110,7 @@ export class TripsEffects {
 
   constructor(
     private actions$: Actions,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private authService: AuthService
   ) {}
 }
