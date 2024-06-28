@@ -13,6 +13,6 @@
   }
 
   <div class="flex justify-end">
-    <div>{{ totalCost() | currency }}</div>
+    <div>{{ totalCost() | currency: currency() : 'symbol-narrow' }}</div>
   </div>
 </div>

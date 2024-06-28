@@ -17,6 +17,11 @@
   }
 
   <div class="flex justify-end">
-    <div>{{ inputActivity().cost | currency }}</div>
+    <div>
+      {{
+        inputActivity().cost
+          | currency: inputActivity().currency : 'symbol-narrow'
+      }}
+    </div>
   </div>
 </div>
