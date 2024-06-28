@@ -20,6 +20,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { v4 as uuid } from 'uuid';
 import { ItineraryItem, currencies } from '../../models/trips';
 import { filterConfig } from '../../utils/filterCalendar';
 
@@ -84,7 +85,11 @@ export class ItineraryFormComponent {
 
   addActivity() {
     if (this.activityForm.valid) {
-      this.outputActivity.emit(this.activityForm.value as ItineraryItem);
+      const activity = {
+        ...this.activityForm.value,
+        id: uuid(),
+      } as ItineraryItem;
+      this.outputActivity.emit(activity);
       this.activityForm.reset();
     }
   }

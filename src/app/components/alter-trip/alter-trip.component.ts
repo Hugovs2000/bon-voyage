@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import {
-  FormArray,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
@@ -56,12 +55,9 @@ export class AlterTripComponent {
       this.authService.userId ?? 'abc',
       Validators.required
     ),
-    itinerary: new FormArray([]),
   });
 
-  get itineraryForm() {
-    return this.tripForm.get('itinerary') as FormArray;
-  }
+  itinerary: ItineraryItem[] = [];
 
   addActivity(activity: ItineraryItem) {
     if (activity.startDate instanceof Date) {
@@ -71,52 +67,32 @@ export class AlterTripComponent {
       activity.endDate = Timestamp.fromDate(activity.endDate);
     }
 
-    this.itineraryForm.push(
-      new FormGroup({
-        title: new FormControl(activity.title, Validators.required),
-        startDate: new FormControl<Timestamp>(
-          activity.startDate,
-          Validators.required
-        ),
-        endDate: new FormControl<Timestamp>(
-          activity.endDate,
-          Validators.required
-        ),
-        cost: new FormControl(activity.cost, [
-          Validators.required,
-          Validators.min(0),
-        ]),
-        currency: new FormControl(activity.currency, Validators.required),
-        startLocation: new FormControl(activity.startLocation),
-        endLocation: new FormControl(activity.endLocation),
-        notes: new FormControl(activity.notes),
-        tag: new FormControl(activity.tag),
-      })
-    );
+    this.itinerary.push(activity);
   }
 
-  removeActivity(index: number) {
-    this.itineraryForm.removeAt(index);
+  removeActivity(id: string) {
+    const newItinerary = this.itinerary.filter(activity => activity.id !== id);
+    this.itinerary = newItinerary;
   }
 
   onSubmit() {
     if (
       this.tripForm.valid &&
-      this.tripForm.value.itinerary &&
       this.tripForm.value.userId &&
       this.tripForm.value.userId !== 'abc'
     ) {
-      for (const trip of this.tripForm.value.itinerary as ItineraryItem[]) {
-        if (trip.startDate instanceof Date) {
-          trip.startDate = Timestamp.fromDate(trip.startDate);
+      for (const activity of this.itinerary) {
+        if (activity.startDate instanceof Date) {
+          activity.startDate = Timestamp.fromDate(activity.startDate);
         }
-        if (trip.endDate instanceof Date) {
-          trip.endDate = Timestamp.fromDate(trip.endDate);
+        if (activity.endDate instanceof Date) {
+          activity.endDate = Timestamp.fromDate(activity.endDate);
         }
       }
 
       const trip = {
         ...this.tripForm.value,
+        itinerary: this.itinerary,
       } as Trip;
 
       this.store.dispatch(createNewTrip({ trip }));

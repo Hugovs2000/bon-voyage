@@ -23,9 +23,8 @@
       </mat-form-field>
 
       <h2 class="mb-2 text-lg font-semibold">Itinerary:</h2>
-      @for (activity of tripForm.value.itinerary; track $index) {
+      @for (activity of itinerary; track activity) {
         <app-itinerary-card
-          [indexNumber]="$index"
           [inputActivity]="activity"
           (deleteClicked)="removeActivity($event)" />
       }

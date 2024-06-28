@@ -7,7 +7,6 @@ import {
   Output,
   input,
 } from '@angular/core';
-import { Timestamp } from '@angular/fire/firestore';
 import { MatIconModule } from '@angular/material/icon';
 import { ItineraryItem } from '../../models/trips';
 
@@ -22,9 +21,8 @@ export class ItineraryCardComponent implements OnInit {
   inputActivity: InputSignal<ItineraryItem> = input<ItineraryItem>(
     {} as ItineraryItem
   );
-  indexNumber: InputSignal<number> = input<number>(0);
 
-  @Output() deleteClicked = new EventEmitter<number>();
+  @Output() deleteClicked = new EventEmitter<string>();
 
   newStartDate: Date = new Date();
   newEndDate: Date = new Date();
@@ -35,16 +33,16 @@ export class ItineraryCardComponent implements OnInit {
       this.inputActivity().startDate &&
       this.inputActivity().endDate
     ) {
-      if (this.inputActivity().startDate instanceof Timestamp) {
+      if (this.inputActivity().startDate) {
         this.newStartDate = this.inputActivity().startDate.toDate();
       }
-      if (this.inputActivity().endDate instanceof Timestamp) {
+      if (this.inputActivity().endDate) {
         this.newEndDate = this.inputActivity().endDate.toDate();
       }
     }
   }
 
   handleDeleteClick() {
-    this.deleteClicked.emit(this.indexNumber());
+    this.deleteClicked.emit(this.inputActivity().id);
   }
 }

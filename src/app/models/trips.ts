@@ -12,6 +12,7 @@ export interface Trip {
 }
 
 export interface ItineraryItem {
+  id?: string;
   title: string;
   startDate: Timestamp;
   endDate: Timestamp;
