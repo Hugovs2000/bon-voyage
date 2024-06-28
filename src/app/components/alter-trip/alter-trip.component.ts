@@ -19,6 +19,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Store } from '@ngrx/store';
 import { ItineraryItem, Trip } from '../../models/trips';
+import { AuthService } from '../../services/auth.service';
 import { createNewTrip } from '../../store/trips/actions';
 import { TripState } from '../../store/trips/reducer';
 import { selectLoadingState } from '../../store/trips/selectors';
@@ -44,13 +45,17 @@ export class AlterTripComponent {
   inputTrip: InputSignal<Trip> = input<Trip>({} as Trip);
 
   private store = inject(Store<TripState>);
+  private authService = inject(AuthService);
 
   loading$ = this.store.select(selectLoadingState);
   selectedActivity = signal<ItineraryItem>({} as ItineraryItem);
 
   tripForm = new FormGroup({
     title: new FormControl('', Validators.required),
-    userId: new FormControl('abc', Validators.required),
+    userId: new FormControl(
+      this.authService.userId ?? 'abc',
+      Validators.required
+    ),
     itinerary: new FormArray([]),
   });
 
@@ -95,7 +100,12 @@ export class AlterTripComponent {
   }
 
   onSubmit() {
-    if (this.tripForm.valid && this.tripForm.value.itinerary) {
+    if (
+      this.tripForm.valid &&
+      this.tripForm.value.itinerary &&
+      this.tripForm.value.userId &&
+      this.tripForm.value.userId !== 'abc'
+    ) {
       for (const trip of this.tripForm.value.itinerary as ItineraryItem[]) {
         if (trip.startDate instanceof Date) {
           trip.startDate = Timestamp.fromDate(trip.startDate);
@@ -104,7 +114,10 @@ export class AlterTripComponent {
           trip.endDate = Timestamp.fromDate(trip.endDate);
         }
       }
-      const trip = { ...(this.tripForm.value as Trip), userId: 'abc' };
+
+      const trip = {
+        ...this.tripForm.value,
+      } as Trip;
 
       this.store.dispatch(createNewTrip({ trip }));
       // TODO: navigate to trip details page on success

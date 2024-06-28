@@ -17,6 +17,10 @@ export class AuthService {
   private _auth = inject(Auth);
   isLoggedIn = signal(!!localStorage.getItem('user'));
 
+  get userId() {
+    return this._auth.currentUser?.uid;
+  }
+
   byGoogle(): Promise<UserCredential> {
     return signInWithPopup(this._auth, new GoogleAuthProvider());
   }
