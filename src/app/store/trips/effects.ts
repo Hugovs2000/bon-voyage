@@ -15,6 +15,7 @@ import {
   getAllTrips,
   getAllTripsComplete,
   setLoadingState,
+  setSelectedTripId,
   updateTrip,
   updateTripComplete,
 } from './actions';
@@ -85,6 +86,7 @@ export class TripsEffects {
               panelClass: ['snackbar-success'],
             });
             this.router.navigate(['/trip', trip.docId]);
+            setSelectedTripId({ tripId: trip.docId });
             return createNewTripComplete({ trip: trip });
           })
           .catch(() => {

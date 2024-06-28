@@ -1,5 +1,7 @@
 @if ((loading$ | async) ?? false) {
-  <div>Loading...</div>
+  <div class="flex h-full w-full items-center justify-center pb-[3.5rem]">
+    <mat-spinner></mat-spinner>
+  </div>
 } @else {
   <div class="p-4">
     @if (inputTrip().docId) {

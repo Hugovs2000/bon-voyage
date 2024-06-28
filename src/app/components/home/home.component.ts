@@ -1,6 +1,7 @@
 import { CdkDragRelease, DragDropModule } from '@angular/cdk/drag-drop';
 import { AsyncPipe } from '@angular/common';
 import { Component, ElementRef, ViewChild, signal } from '@angular/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { SwipeDirective } from '../../directives/swipe.directive';
@@ -20,7 +21,13 @@ import { TripCardComponent } from '../trip-card/trip-card.component';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [TripCardComponent, AsyncPipe, SwipeDirective, DragDropModule],
+  imports: [
+    TripCardComponent,
+    AsyncPipe,
+    SwipeDirective,
+    DragDropModule,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })

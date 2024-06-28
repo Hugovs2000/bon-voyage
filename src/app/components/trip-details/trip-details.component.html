@@ -1,1 +1,41 @@
-<p>trip-details works!</p>
+@if ((loading$ | async) ?? false) {
+  <div class="flex h-full w-full items-center justify-center pb-[3.5rem]">
+    <mat-spinner></mat-spinner>
+  </div>
+} @else {
+  @if (trip$ | async; as trip) {
+    <div class="flex flex-col gap-2 p-4">
+      <h1 class="text-2xl font-bold">{{ trip.title }}</h1>
+      <div>
+        <p>Start Date: {{ trip.startDate | date }}</p>
+        <p>End Date: {{ trip.endDate | date }}</p>
+        <p>
+          Duration: {{ trip.duration }}
+          {{ trip.duration === 1 ? 'day' : 'days' }}
+        </p>
+        <p>
+          Total Cost: {{ trip.totalCost | currency: 'ZAR' : 'symbol-narrow' }}
+        </p>
+      </div>
+      <div>
+        <h2 class="mb-2 text-xl font-bold">Itinerary:</h2>
+        @if (trip.itinerary && trip.itinerary.length > 0) {
+          @for (activity of trip.itinerary; track activity) {
+            <app-itinerary-card [inputActivity]="activity"></app-itinerary-card>
+          }
+        } @else {
+          <p>Your trip is looking quite sketch without any activities 👀</p>
+        }
+      </div>
+    </div>
+  } @else {
+    <div class="flex flex-col justify-center p-4">
+      <p class="text-wrap text-center">
+        Oops! Something went wrong. Please return home.
+      </p>
+      <button (click)="handleHomeClick()" class="btn btn-link">
+        Return Home
+      </button>
+    </div>
+  }
+}

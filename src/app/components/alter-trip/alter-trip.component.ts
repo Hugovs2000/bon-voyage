@@ -16,6 +16,7 @@ import {
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Store } from '@ngrx/store';
 import { ItineraryItem, Trip } from '../../models/trips';
 import { AuthService } from '../../services/auth.service';
@@ -35,6 +36,7 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
     ItineraryCardComponent,
     ItineraryFormComponent,
     MatInputModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './alter-trip.component.html',
   styleUrl: './alter-trip.component.scss',
