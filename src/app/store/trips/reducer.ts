@@ -46,6 +46,7 @@ export const tripsReducers = createReducer(
     ...state,
     isLoading: false,
     trips: [...state.trips, trip],
+    selectedTripId: trip.docId,
   })),
   on(updateTrip, state => ({
     ...state,
@@ -54,7 +55,7 @@ export const tripsReducers = createReducer(
   on(updateTripComplete, (state, { trip }) => ({
     ...state,
     isLoading: false,
-    trips: [...state.trips, trip],
+    trips: state.trips.map(t => (t.docId === trip.docId ? trip : t)),
   })),
   on(deleteTrip, state => ({
     ...state,

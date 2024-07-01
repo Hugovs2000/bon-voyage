@@ -1,5 +1,7 @@
 @if ((loading$ | async) ?? false) {
-  <div>Loading...</div>
+  <div class="flex h-full w-full items-center justify-center pb-14">
+    <mat-spinner></mat-spinner>
+  </div>
 } @else {
   @if (trips$ | async; as trips) {
     @if (trips.length > 0) {
@@ -15,8 +17,8 @@
               swipe
               (left)="onSwipeLeft(trip.docId)"
               (right)="onSwipeRight(trip.title)"
-              (onClick)="handleTripClick(trip.title, trip.docId)"
-              class="w-3/5"
+              (onClick)="handleTripClick(trip.docId)"
+              class="w-3/5 cursor-pointer"
               cdkDrag
               cdkDragLockAxis="x"
               (cdkDragReleased)="resetPosition($event)"

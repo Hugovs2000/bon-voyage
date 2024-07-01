@@ -16,6 +16,7 @@ import {
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Store } from '@ngrx/store';
 import { ItineraryItem, Trip } from '../../models/trips';
 import { AuthService } from '../../services/auth.service';
@@ -35,6 +36,7 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
     ItineraryCardComponent,
     ItineraryFormComponent,
     MatInputModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './alter-trip.component.html',
   styleUrl: './alter-trip.component.scss',
@@ -42,12 +44,14 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
 })
 export class AlterTripComponent {
   inputTrip: InputSignal<Trip> = input<Trip>({} as Trip);
+  selectedActivity = signal<ItineraryItem>({} as ItineraryItem);
 
   private store = inject(Store<TripState>);
   private authService = inject(AuthService);
 
   loading$ = this.store.select(selectLoadingState);
-  selectedActivity = signal<ItineraryItem>({} as ItineraryItem);
+
+  itinerary: ItineraryItem[] = [];
 
   tripForm = new FormGroup({
     title: new FormControl('', Validators.required),
@@ -56,8 +60,6 @@ export class AlterTripComponent {
       Validators.required
     ),
   });
-
-  itinerary: ItineraryItem[] = [];
 
   addActivity(activity: ItineraryItem) {
     if (activity.startDate instanceof Date) {
@@ -95,8 +97,6 @@ export class AlterTripComponent {
       } as Trip;
 
       this.store.dispatch(createNewTrip({ trip }));
-      // TODO: navigate to trip details page on success
-      // this.router.navigate(['/trip', trip.id]);
     }
   }
 }

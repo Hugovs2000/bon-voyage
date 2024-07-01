@@ -1,5 +1,6 @@
 <div
-  class="mb-4 grid grid-rows-3 gap-2 rounded-xl border-2 border-blue-400 bg-blue-300 p-4">
+  class="mb-4 grid grid-rows-3 gap-2 rounded-xl border-2 border-blue-400 bg-blue-300 p-4"
+  (click)="handleItineraryClick($event)">
   <div class="flex justify-between">
     @if (newStartDate && newEndDate) {
       <div>{{ newStartDate | date }} - {{ newEndDate | date }}</div>
@@ -7,8 +8,8 @@
 
     <button
       type="button"
-      class="btn btn-error text-white"
-      (click)="handleDeleteClick()">
+      class="btn btn-error z-10 text-white"
+      (click)="handleDeleteClick($event)">
       <mat-icon fontIcon="delete"></mat-icon>
     </button>
   </div>

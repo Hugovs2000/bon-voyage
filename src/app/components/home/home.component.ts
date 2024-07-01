@@ -1,6 +1,7 @@
 import { CdkDragRelease, DragDropModule } from '@angular/cdk/drag-drop';
 import { AsyncPipe } from '@angular/common';
 import { Component, ElementRef, ViewChild, signal } from '@angular/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { SwipeDirective } from '../../directives/swipe.directive';
@@ -20,7 +21,13 @@ import { TripCardComponent } from '../trip-card/trip-card.component';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [TripCardComponent, AsyncPipe, SwipeDirective, DragDropModule],
+  imports: [
+    TripCardComponent,
+    AsyncPipe,
+    SwipeDirective,
+    DragDropModule,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -54,8 +61,9 @@ export class HomeComponent {
     this.modalRef?.nativeElement.showModal();
   }
 
-  handleTripClick(title: string, id: string) {
+  handleTripClick(id: string) {
     this.store.dispatch(setSelectedTripId({ tripId: id }));
+    this.router.navigate(['/trip', id]);
   }
 
   onSwipeRight(trip: string) {
