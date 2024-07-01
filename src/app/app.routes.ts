@@ -50,6 +50,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'edit/:id',
+    loadComponent: () =>
+      import('./components/alter-trip/alter-trip.component').then(
+        m => m.AlterTripComponent
+      ),
+  },
+  {
     path: 'error',
     loadComponent: () =>
       import('./components/error/error.component').then(m => m.ErrorComponent),

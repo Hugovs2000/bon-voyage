@@ -3,7 +3,7 @@ import {
   importProvidersFrom,
   isDevMode,
 } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { provideHttpClient } from '@angular/common/http';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
@@ -20,7 +20,7 @@ import { debug, tripsFeatureKey, tripsReducers } from './store/trips/reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes),
+    provideRouter(routes, withComponentInputBinding()),
     provideNativeDateAdapter(),
     importProvidersFrom(
       provideFirebaseApp(() => initializeApp(environment.firebase))
