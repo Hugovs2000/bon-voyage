@@ -106,7 +106,7 @@ export class TripDetailsComponent {
     }
   }
 
-  handleHomeClick() {
+  returnHome() {
     this.router.navigate(['/home']);
   }
 }

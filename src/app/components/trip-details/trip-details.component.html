@@ -32,6 +32,9 @@
         }
       </div>
     </div>
+    <div class="flex w-full justify-end gap-2 p-4 pt-0">
+      <button class="btn btn-success" (click)="returnHome()">Done</button>
+    </div>
     <dialog #confirmModal class="modal">
       <div class="modal-box">
         <h3 class="text-lg font-bold">Hold on!</h3>
@@ -53,9 +56,7 @@
       <p class="text-wrap text-center">
         Oops! Something went wrong. Please return home.
       </p>
-      <button (click)="handleHomeClick()" class="btn btn-link">
-        Return Home
-      </button>
+      <button (click)="returnHome()" class="btn btn-link">Return Home</button>
     </div>
   }
 }

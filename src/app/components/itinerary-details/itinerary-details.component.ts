@@ -1,12 +1,16 @@
 import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, ElementRef, ViewChild, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ItineraryItem } from '../../models/trips';
-import { getAllTrips, setSelectedTripId } from '../../store/trips/actions';
+import { ItineraryItem, Trip } from '../../models/trips';
+import {
+  getAllTrips,
+  setSelectedTripId,
+  updateTrip,
+} from '../../store/trips/actions';
 import { TripState } from '../../store/trips/reducer';
 import {
   selectLoadingState,
@@ -22,6 +26,9 @@ import { deriveDuration } from '../../utils/deriveDatesAndCost';
   styleUrl: './itinerary-details.component.scss',
 })
 export class ItineraryDetailsComponent {
+  @ViewChild('confirmModal')
+  modalRef: ElementRef<HTMLDialogElement> | null = null;
+
   selectedTrip$ = this.store.select(selectSelectedTrip);
   loading$ = this.store.select(selectLoadingState);
 
@@ -29,6 +36,7 @@ export class ItineraryDetailsComponent {
   activityId = signal<string>(
     this.activatedRoute.snapshot.params['itineraryId']
   );
+  tripToUpdate = signal<Trip>({} as Trip);
   activity = signal<ItineraryItem>({} as ItineraryItem);
   newStartDate = signal<Date>(new Date());
   newEndDate = signal<Date>(new Date());
@@ -37,7 +45,8 @@ export class ItineraryDetailsComponent {
   constructor(
     private activatedRoute: ActivatedRoute,
     private store: Store<TripState>,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {
     this.selectedTrip$.pipe(takeUntilDestroyed()).subscribe(trip => {
       if (!trip) {
@@ -48,6 +57,7 @@ export class ItineraryDetailsComponent {
           })
         );
       } else {
+        this.tripToUpdate.set(trip);
         const activity = trip.itinerary?.find(
           activity => activity.id === this.activityId()
         );
@@ -74,5 +84,39 @@ export class ItineraryDetailsComponent {
         }
       }
     });
+  }
+
+  closeModal() {
+    this.modalRef?.nativeElement.close();
+  }
+
+  openModal() {
+    this.modalRef?.nativeElement.showModal();
+  }
+
+  handleDoneClick() {
+    this.router.navigate(['/trip', this.tripId()]);
+  }
+
+  handleDeleteClick() {
+    this.openModal();
+  }
+
+  deleteActivity() {
+    if (this.tripToUpdate()?.docId) {
+      const newActivities = this.tripToUpdate()?.itinerary?.filter(
+        act => act.id !== this.activityId()
+      );
+      this.store.dispatch(
+        updateTrip({
+          trip: {
+            ...(this.tripToUpdate() ??
+              ({ docId: this.tripToUpdate()?.docId } as Trip)),
+            itinerary: newActivities,
+          },
+        })
+      );
+      this.router.navigate(['/trip', this.tripId()]);
+    }
   }
 }
