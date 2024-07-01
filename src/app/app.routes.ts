@@ -43,6 +43,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'trip/:id/itinerary/:itineraryId',
+    loadComponent: () =>
+      import('./components/itinerary-details/itinerary-details.component').then(
+        m => m.ItineraryDetailsComponent
+      ),
+  },
+  {
     path: 'error',
     loadComponent: () =>
       import('./components/error/error.component').then(m => m.ErrorComponent),

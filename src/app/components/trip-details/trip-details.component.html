@@ -18,14 +18,14 @@
         </p>
       </div>
       <div>
-        <h2 class="mb-2 text-xl font-bold">Itinerary:</h2>
+        <h2 class="mb-2 text-xl font-bold">Itineraries:</h2>
         @if (trip.itinerary && trip.itinerary.length > 0) {
           @for (activity of trip.itinerary; track activity) {
             <app-itinerary-card
+              class="cursor-pointer"
               [inputActivity]="activity"
-              (deleteClicked)="
-                handleDeleteActivityClick(trip, activity)
-              "></app-itinerary-card>
+              (itineraryClicked)="handleActivityClick(activity.id)"
+              (deleteClicked)="handleDeleteActivityClick(trip, activity)" />
           }
         } @else {
           <p>Your trip is looking quite sketch without any activities 👀</p>

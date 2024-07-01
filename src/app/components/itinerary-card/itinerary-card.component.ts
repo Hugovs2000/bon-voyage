@@ -23,6 +23,7 @@ export class ItineraryCardComponent implements OnInit {
   );
 
   @Output() deleteClicked = new EventEmitter();
+  @Output() itineraryClicked = new EventEmitter();
 
   newStartDate: Date = new Date();
   newEndDate: Date = new Date();
@@ -42,7 +43,13 @@ export class ItineraryCardComponent implements OnInit {
     }
   }
 
-  handleDeleteClick() {
+  handleItineraryClick(event: Event) {
+    event.stopPropagation();
+    this.itineraryClicked.emit();
+  }
+
+  handleDeleteClick(event: Event) {
+    event.stopPropagation();
     this.deleteClicked.emit();
   }
 }

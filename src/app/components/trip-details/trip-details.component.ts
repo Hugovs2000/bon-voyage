@@ -2,6 +2,7 @@ import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, ElementRef, ViewChild, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ItineraryItem, Trip } from '../../models/trips';
@@ -43,7 +44,8 @@ export class TripDetailsComponent {
   constructor(
     private activatedRoute: ActivatedRoute,
     private store: Store<TripState>,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.trip$.pipe(takeUntilDestroyed()).subscribe(trip => {
       if (!trip) {
@@ -84,6 +86,24 @@ export class TripDetailsComponent {
             itinerary: newActivities,
           },
         })
+      );
+    }
+  }
+
+  handleActivityClick(id: string | undefined) {
+    if (id) {
+      this.router.navigate([
+        `trip/${this.activatedRoute.snapshot.params['id']}/itinerary/`,
+        id,
+      ]);
+    } else {
+      this.snackBar.open(
+        'There was a problem loading the itinerary. Please try again.',
+        'Close',
+        {
+          duration: 5000,
+          panelClass: ['snackbar-error'],
+        }
       );
     }
   }

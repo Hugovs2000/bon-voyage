@@ -18,7 +18,7 @@
               (left)="onSwipeLeft(trip.docId)"
               (right)="onSwipeRight(trip.title)"
               (onClick)="handleTripClick(trip.docId)"
-              class="w-3/5"
+              class="w-3/5 cursor-pointer"
               cdkDrag
               cdkDragLockAxis="x"
               (cdkDragReleased)="resetPosition($event)"
