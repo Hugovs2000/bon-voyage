@@ -46,6 +46,7 @@ export const tripsReducers = createReducer(
     ...state,
     isLoading: false,
     trips: [...state.trips, trip],
+    selectedTripId: trip.docId,
   })),
   on(updateTrip, state => ({
     ...state,

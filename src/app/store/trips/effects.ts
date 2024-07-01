@@ -3,7 +3,6 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
 import { switchMap } from 'rxjs';
 import { Trip } from '../../models/trips';
 import { ApiService } from '../../services/api.service';
@@ -16,11 +15,9 @@ import {
   getAllTrips,
   getAllTripsComplete,
   setLoadingState,
-  setSelectedTripId,
   updateTrip,
   updateTripComplete,
 } from './actions';
-import { TripState } from './reducer';
 
 @Injectable()
 export class TripsEffects {
@@ -88,7 +85,6 @@ export class TripsEffects {
               panelClass: ['snackbar-success'],
             });
             this.router.navigate(['/trip', trip.docId]);
-            this.store.dispatch(setSelectedTripId({ tripId: trip.docId }));
             return createNewTripComplete({ trip: trip });
           })
           .catch(() => {
@@ -167,7 +163,6 @@ export class TripsEffects {
     private apiService: ApiService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
-    private router: Router,
-    private store: Store<TripState>
+    private router: Router
   ) {}
 }
