@@ -30,7 +30,7 @@
       @for (activity of itinerary; track activity) {
         <app-itinerary-card
           [inputActivity]="activity"
-          (deleteClicked)="removeActivity(activity)" />
+          (deleteClicked)="openConfirmModal(activity)" />
       }
       <div class="flex flex-wrap gap-4">
         <app-itinerary-form
@@ -39,11 +39,28 @@
       </div>
 
       <button
-        class="btn mt-4 w-fit self-end bg-success"
+        class="btn mt-4 w-fit self-end bg-success text-base"
         type="submit"
         [disabled]="!tripForm.valid">
+        <mat-icon>save</mat-icon>
         Save trip
       </button>
     </form>
+    <dialog #confirmModal class="modal">
+      <div class="modal-box">
+        <h3 class="text-lg font-bold">Hold on!</h3>
+        <p class="py-4">Are you sure you would like to delete this activity?</p>
+        <div class="modal-action">
+          <div class="flex gap-2">
+            <button class="btn btn-warning" (click)="closeConfirmModal()">
+              Cancel
+            </button>
+            <button class="btn btn-error" (click)="confirmDelete()">
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </dialog>
   </div>
 }

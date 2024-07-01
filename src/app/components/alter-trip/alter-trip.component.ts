@@ -2,9 +2,11 @@ import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   Input,
   OnDestroy,
   OnInit,
+  ViewChild,
   inject,
   signal,
 } from '@angular/core';
@@ -16,6 +18,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Store } from '@ngrx/store';
@@ -47,6 +50,7 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
     ItineraryFormComponent,
     MatInputModule,
     MatProgressSpinnerModule,
+    MatIconModule,
   ],
   templateUrl: './alter-trip.component.html',
   styleUrl: './alter-trip.component.scss',
@@ -62,9 +66,13 @@ export class AlterTripComponent implements OnInit, OnDestroy {
     }
   }
 
+  @ViewChild('confirmModal')
+  confirmModal: ElementRef<HTMLDialogElement> | null = null;
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   selectedTrip = signal<Trip>({} as Trip);
+  activityToDelete = signal({} as ItineraryItem);
 
   private store = inject(Store<TripState>);
   private authService = inject(AuthService);
@@ -112,7 +120,22 @@ export class AlterTripComponent implements OnInit, OnDestroy {
   }
 
   removeActivity(activity: ItineraryItem) {
+    this.confirmModal?.nativeElement.close();
     this.itinerary = this.itinerary.filter(act => act.id !== activity.id);
+  }
+
+  openConfirmModal(activity: ItineraryItem) {
+    this.confirmModal?.nativeElement.showModal();
+    this.activityToDelete.set(activity);
+  }
+
+  confirmDelete() {
+    this.removeActivity(this.activityToDelete());
+  }
+
+  closeConfirmModal() {
+    this.confirmModal?.nativeElement.close();
+    this.activityToDelete.set({} as ItineraryItem);
   }
 
   onSubmit() {
