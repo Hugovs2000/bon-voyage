@@ -40,6 +40,7 @@ export class TripDetailsComponent {
 
   tripToUpdate = signal<Trip | null>(null);
   activityToDelete = signal<ItineraryItem | null>(null);
+  tripId = signal<string>(this.activatedRoute.snapshot.params['id']);
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -52,7 +53,7 @@ export class TripDetailsComponent {
         this.store.dispatch(getAllTrips());
         this.store.dispatch(
           setSelectedTripId({
-            tripId: this.activatedRoute.snapshot.params['id'],
+            tripId: this.tripId(),
           })
         );
       }
@@ -92,10 +93,7 @@ export class TripDetailsComponent {
 
   handleActivityClick(id: string | undefined) {
     if (id) {
-      this.router.navigate([
-        `trip/${this.activatedRoute.snapshot.params['id']}/itinerary/`,
-        id,
-      ]);
+      this.router.navigate([`trip/${this.tripId()}/itinerary/`, id]);
     } else {
       this.snackBar.open(
         'There was a problem loading the itinerary. Please try again.',

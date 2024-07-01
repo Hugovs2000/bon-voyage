@@ -37,10 +37,7 @@ export const deriveDatesAndCost = (trip: Trip) => {
     } as Trip;
   }
 
-  const duration =
-    Math.floor(
-      Math.abs(endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
-    ) + 1;
+  const duration = deriveDuration(startDate, endDate);
 
   return {
     ...trip,
@@ -49,4 +46,12 @@ export const deriveDatesAndCost = (trip: Trip) => {
     duration: duration,
     totalCost: totalTripCost,
   } as Trip;
+};
+
+export const deriveDuration = (startDate: Date, endDate: Date) => {
+  return (
+    Math.floor(
+      Math.abs(endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+    ) + 1
+  );
 };
