@@ -61,13 +61,13 @@ export const exchange = (currency: string, cost: number) => {
     case 'ZAR':
       return cost;
     case 'USD':
-      return (cost * 1) / 0.0544658672;
+      return cost / 0.0544658672;
     case 'EUR':
-      return (cost * 1) / 0.050721892;
+      return cost / 0.050721892;
     case 'GBP':
-      return (cost * 1) / 0.0430759725;
+      return cost / 0.0430759725;
     case 'AUD':
-      return (cost * 1) / 0.0818589465;
+      return cost / 0.0818589465;
     default:
       return cost;
   }
