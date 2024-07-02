@@ -30,7 +30,17 @@
       @for (activity of itinerary; track activity) {
         <app-itinerary-card
           [inputActivity]="activity"
+          (editClicked)="setActivityToEdit(activity)"
           (deleteClicked)="openConfirmModal(activity)" />
+        @if (activityToEdit().id && activityToEdit().id === activity.id) {
+          <div class="flex flex-wrap gap-4">
+            <app-itinerary-form
+              class="w-full"
+              [activity]="activityToEdit()"
+              (cancelClicked)="cancelEdit()"
+              (outputActivity)="updateActivity($event)" />
+          </div>
+        }
       }
       <div class="flex flex-wrap gap-4">
         <app-itinerary-form

@@ -6,12 +6,20 @@
       <div>{{ newStartDate | date }} - {{ newEndDate | date }}</div>
     }
 
-    <button
-      type="button"
-      class="btn btn-error z-10 text-white"
-      (click)="handleDeleteClick($event)">
-      <mat-icon fontIcon="delete"></mat-icon>
-    </button>
+    <div class="flex gap-2">
+      <button
+        type="button"
+        class="btn btn-warning z-10 text-white"
+        (click)="handleEditClick($event)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button
+        type="button"
+        class="btn btn-error z-10 text-white"
+        (click)="handleDeleteClick($event)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
   </div>
   @if (inputActivity().title) {
     <div class="flex justify-center text-2xl">{{ inputActivity().title }}</div>

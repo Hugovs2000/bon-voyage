@@ -2,14 +2,15 @@ import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   ElementRef,
   Input,
-  OnDestroy,
   OnInit,
   ViewChild,
   inject,
   signal,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Timestamp } from '@angular/fire/firestore';
 import {
   FormControl,
@@ -22,7 +23,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Store } from '@ngrx/store';
-import { ReplaySubject, takeUntil } from 'rxjs';
 import { ItineraryItem, Trip } from '../../models/trips';
 import { AuthService } from '../../services/auth.service';
 import {
@@ -56,7 +56,7 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
   styleUrl: './alter-trip.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AlterTripComponent implements OnInit, OnDestroy {
+export class AlterTripComponent implements OnInit {
   @Input() set id(id: string) {
     if (id) {
       this.store.dispatch(getAllTrips());
@@ -69,10 +69,11 @@ export class AlterTripComponent implements OnInit, OnDestroy {
   @ViewChild('confirmModal')
   confirmModal: ElementRef<HTMLDialogElement> | null = null;
 
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  destroyRef = inject(DestroyRef);
 
   selectedTrip = signal<Trip>({} as Trip);
-  activityToDelete = signal({} as ItineraryItem);
+  activityToDelete = signal<ItineraryItem>({} as ItineraryItem);
+  activityToEdit = signal<ItineraryItem>({} as ItineraryItem);
 
   private store = inject(Store<TripState>);
   private authService = inject(AuthService);
@@ -92,7 +93,7 @@ export class AlterTripComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.store
       .select(selectSelectedTrip)
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(trip => {
         if (trip) {
           this.selectedTrip.set(trip);
@@ -100,7 +101,6 @@ export class AlterTripComponent implements OnInit, OnDestroy {
             title: trip.title,
             userId: trip.userId,
           });
-
           this.itinerary = Array.isArray(trip.itinerary)
             ? [...trip.itinerary]
             : ([] as ItineraryItem[]);
@@ -124,6 +124,20 @@ export class AlterTripComponent implements OnInit, OnDestroy {
     this.itinerary = this.itinerary.filter(act => act.id !== activity.id);
   }
 
+  setActivityToEdit(activity: ItineraryItem) {
+    this.activityToEdit.set(activity);
+  }
+
+  updateActivity(activity: ItineraryItem) {
+    this.removeActivity(activity);
+    this.addActivity(activity);
+    this.activityToEdit.set({} as ItineraryItem);
+  }
+
+  cancelEdit() {
+    this.activityToEdit.set({} as ItineraryItem);
+  }
+
   openConfirmModal(activity: ItineraryItem) {
     this.confirmModal?.nativeElement.showModal();
     this.activityToDelete.set(activity);
@@ -131,6 +145,7 @@ export class AlterTripComponent implements OnInit, OnDestroy {
 
   confirmDelete() {
     this.removeActivity(this.activityToDelete());
+    this.activityToDelete.set({} as ItineraryItem);
   }
 
   closeConfirmModal() {
@@ -169,10 +184,5 @@ export class AlterTripComponent implements OnInit, OnDestroy {
         this.store.dispatch(createNewTrip({ trip }));
       }
     }
-  }
-
-  ngOnDestroy(): void {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
   }
 }
