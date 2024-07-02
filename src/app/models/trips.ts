@@ -29,4 +29,5 @@ export const currencies = [
   { value: 'GBP' },
   { value: 'USD' },
   { value: 'EUR' },
+  { value: 'AUD' },
 ];

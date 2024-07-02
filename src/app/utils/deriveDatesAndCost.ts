@@ -18,7 +18,7 @@ export const deriveDatesAndCost = (trip: Trip) => {
         endDate = newEndDate;
       }
 
-      totalTripCost += activity.cost || 0;
+      totalTripCost += exchange(activity.currency ?? 'ZAR', activity.cost ?? 0);
     });
   }
 
@@ -54,4 +54,21 @@ export const deriveDuration = (startDate: Date, endDate: Date) => {
       Math.abs(endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
     ) + 1
   );
+};
+
+export const exchange = (currency: string, cost: number) => {
+  switch (currency) {
+    case 'ZAR':
+      return cost;
+    case 'USD':
+      return (cost * 1) / 0.0544658672;
+    case 'EUR':
+      return (cost * 1) / 0.050721892;
+    case 'GBP':
+      return (cost * 1) / 0.0430759725;
+    case 'AUD':
+      return (cost * 1) / 0.0818589465;
+    default:
+      return cost;
+  }
 };

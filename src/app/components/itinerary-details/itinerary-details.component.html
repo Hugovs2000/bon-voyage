@@ -25,6 +25,12 @@
             activity().cost | currency: activity().currency : 'symbol-narrow'
           }}
         </p>
+        @if (activity().currency !== 'ZAR') {
+          <p>
+            Cost in Rand (ZAR):
+            {{ costInZAR() | currency: 'ZAR' : 'symbol-narrow' }}
+          </p>
+        }
         @if (activity().notes) {
           <p class="mt-4">Notes:</p>
           <p>{{ activity().notes }}</p>

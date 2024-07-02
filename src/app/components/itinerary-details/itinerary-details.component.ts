@@ -16,7 +16,7 @@ import {
   selectLoadingState,
   selectSelectedTrip,
 } from '../../store/trips/selectors';
-import { deriveDuration } from '../../utils/deriveDatesAndCost';
+import { deriveDuration, exchange } from '../../utils/deriveDatesAndCost';
 
 @Component({
   selector: 'app-itinerary-details',
@@ -41,6 +41,7 @@ export class ItineraryDetailsComponent {
   newStartDate = signal<Date>(new Date());
   newEndDate = signal<Date>(new Date());
   duration = signal<number>(0);
+  costInZAR = signal<number>(0);
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -72,6 +73,9 @@ export class ItineraryDetailsComponent {
           this.duration.set(
             deriveDuration(this.newStartDate(), this.newEndDate())
           );
+          if (activity.currency && activity.cost) {
+            this.costInZAR.set(exchange(activity.currency, activity.cost));
+          }
         } else {
           this.snackBar.open(
             'There was a problem finding the itinerary. Please try again.',
