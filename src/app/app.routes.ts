@@ -41,6 +41,7 @@ export const routes: Routes = [
       import('./components/trip-details/trip-details.component').then(
         m => m.TripDetailsComponent
       ),
+    canActivate: [authGuard],
   },
   {
     path: 'trip/:id/itinerary/:itineraryId',
@@ -48,6 +49,7 @@ export const routes: Routes = [
       import('./components/itinerary-details/itinerary-details.component').then(
         m => m.ItineraryDetailsComponent
       ),
+    canActivate: [authGuard],
   },
   {
     path: 'edit/:id',
@@ -55,6 +57,7 @@ export const routes: Routes = [
       import('./components/alter-trip/alter-trip.component').then(
         m => m.AlterTripComponent
       ),
+    canActivate: [authGuard],
   },
   {
     path: 'error',
