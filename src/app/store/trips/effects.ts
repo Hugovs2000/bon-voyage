@@ -142,6 +142,7 @@ export class TripsEffects {
               duration: 5000,
               panelClass: ['snackbar-success'],
             });
+            this.router.navigate(['home']);
             return deleteTripComplete({ tripId: action.tripId });
           })
           .catch(() => {

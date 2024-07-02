@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ItineraryItem, Trip } from '../../models/trips';
 import {
+  deleteTrip,
   getAllTrips,
   setSelectedTripId,
   updateTrip,
@@ -34,8 +35,10 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
   styleUrl: './trip-details.component.scss',
 })
 export class TripDetailsComponent {
-  @ViewChild('confirmModal')
-  modalRef: ElementRef<HTMLDialogElement> | null = null;
+  @ViewChild('confirmDeleteActivityModal')
+  actModalRef: ElementRef<HTMLDialogElement> | null = null;
+  @ViewChild('confirmDeleteTripModal')
+  tripModalRef: ElementRef<HTMLDialogElement> | null = null;
 
   trip$ = this.store.select(selectSelectedTrip);
   loading$ = this.store.select(selectLoadingState);
@@ -66,16 +69,21 @@ export class TripDetailsComponent {
   }
 
   closeModal() {
-    this.modalRef?.nativeElement.close();
+    this.actModalRef?.nativeElement.close();
+    this.tripModalRef?.nativeElement.close();
   }
 
-  openModal() {
-    this.modalRef?.nativeElement.showModal();
+  confirmActivityDelete() {
+    this.actModalRef?.nativeElement.showModal();
+  }
+
+  confirmTripDelete() {
+    this.tripModalRef?.nativeElement.showModal();
   }
 
   handleDeleteActivityClick(selectedActivity: ItineraryItem) {
     this.activityToDelete.set(selectedActivity);
-    this.openModal();
+    this.confirmActivityDelete();
   }
 
   deleteActivity() {
@@ -114,7 +122,7 @@ export class TripDetailsComponent {
     this.activityToEdit.set(activity);
   }
 
-  cleatActivityToEdit() {
+  clearActivityToEdit() {
     this.activityToEdit.set({} as ItineraryItem);
   }
 
@@ -135,7 +143,28 @@ export class TripDetailsComponent {
     }
   }
 
+  addActivity(activity: ItineraryItem) {
+    if (this.tripToUpdate()?.docId && this.tripToUpdate()?.docId !== '') {
+      this.store.dispatch(
+        updateTrip({
+          trip: {
+            ...this.tripToUpdate(),
+            itinerary: [...(this.tripToUpdate().itinerary ?? []), activity],
+          },
+        })
+      );
+    }
+  }
+
   returnHome() {
     this.router.navigate(['/home']);
+  }
+
+  editTrip() {
+    this.router.navigate(['edit/', this.tripToUpdate()?.docId]);
+  }
+
+  deleteTrip() {
+    this.store.dispatch(deleteTrip({ tripId: this.tripToUpdate()?.docId }));
   }
 }
