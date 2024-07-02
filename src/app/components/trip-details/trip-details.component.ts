@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ItineraryItem, Trip } from '../../models/trips';
 import {
+  deleteTrip,
   getAllTrips,
   setSelectedTripId,
   updateTrip,
@@ -17,6 +18,7 @@ import {
   selectSelectedTrip,
 } from '../../store/trips/selectors';
 import { ItineraryCardComponent } from '../itinerary-card/itinerary-card.component';
+import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.component';
 
 @Component({
   selector: 'app-trip-details',
@@ -27,19 +29,23 @@ import { ItineraryCardComponent } from '../itinerary-card/itinerary-card.compone
     AsyncPipe,
     DatePipe,
     CurrencyPipe,
+    ItineraryFormComponent,
   ],
   templateUrl: './trip-details.component.html',
   styleUrl: './trip-details.component.scss',
 })
 export class TripDetailsComponent {
-  @ViewChild('confirmModal')
-  modalRef: ElementRef<HTMLDialogElement> | null = null;
+  @ViewChild('confirmDeleteActivityModal')
+  actModalRef: ElementRef<HTMLDialogElement> | null = null;
+  @ViewChild('confirmDeleteTripModal')
+  tripModalRef: ElementRef<HTMLDialogElement> | null = null;
 
   trip$ = this.store.select(selectSelectedTrip);
   loading$ = this.store.select(selectLoadingState);
 
-  tripToUpdate = signal<Trip | null>(null);
-  activityToDelete = signal<ItineraryItem | null>(null);
+  tripToUpdate = signal<Trip>({} as Trip);
+  activityToDelete = signal<ItineraryItem>({} as ItineraryItem);
+  activityToEdit = signal<ItineraryItem>({} as ItineraryItem);
   tripId = signal<string>(this.activatedRoute.snapshot.params['id']);
 
   constructor(
@@ -56,26 +62,32 @@ export class TripDetailsComponent {
             tripId: this.tripId(),
           })
         );
+      } else {
+        this.tripToUpdate.set(trip);
       }
     });
   }
 
   closeModal() {
-    this.modalRef?.nativeElement.close();
+    this.actModalRef?.nativeElement.close();
+    this.tripModalRef?.nativeElement.close();
   }
 
-  openModal() {
-    this.modalRef?.nativeElement.showModal();
+  confirmActivityDelete() {
+    this.actModalRef?.nativeElement.showModal();
   }
 
-  handleDeleteActivityClick(trip: Trip, selectedActivity: ItineraryItem) {
-    this.tripToUpdate.set(trip);
+  confirmTripDelete() {
+    this.tripModalRef?.nativeElement.showModal();
+  }
+
+  handleDeleteActivityClick(selectedActivity: ItineraryItem) {
     this.activityToDelete.set(selectedActivity);
-    this.openModal();
+    this.confirmActivityDelete();
   }
 
   deleteActivity() {
-    if (this.tripToUpdate()?.docId) {
+    if (this.tripToUpdate()?.docId && this.tripToUpdate()?.docId !== '') {
       const newActivities = this.tripToUpdate()?.itinerary?.filter(
         act => act.id !== this.activityToDelete()?.id
       );
@@ -106,7 +118,53 @@ export class TripDetailsComponent {
     }
   }
 
+  setActivityToEdit(activity: ItineraryItem) {
+    this.activityToEdit.set(activity);
+  }
+
+  clearActivityToEdit() {
+    this.activityToEdit.set({} as ItineraryItem);
+  }
+
+  updateActivity(activity: ItineraryItem) {
+    if (this.tripToUpdate()?.docId && this.tripToUpdate()?.docId !== '') {
+      const newActivities = this.tripToUpdate().itinerary?.map(act =>
+        act.id === activity.id ? activity : act
+      );
+      this.store.dispatch(
+        updateTrip({
+          trip: {
+            ...this.tripToUpdate(),
+            itinerary: newActivities,
+          },
+        })
+      );
+      this.activityToEdit.set({} as ItineraryItem);
+    }
+  }
+
+  addActivity(activity: ItineraryItem) {
+    if (this.tripToUpdate()?.docId && this.tripToUpdate()?.docId !== '') {
+      this.store.dispatch(
+        updateTrip({
+          trip: {
+            ...this.tripToUpdate(),
+            itinerary: [...(this.tripToUpdate().itinerary ?? []), activity],
+          },
+        })
+      );
+    }
+  }
+
   returnHome() {
     this.router.navigate(['/home']);
+  }
+
+  editTrip() {
+    this.router.navigate(['edit/', this.tripToUpdate()?.docId]);
+  }
+
+  deleteTrip() {
+    this.store.dispatch(deleteTrip({ tripId: this.tripToUpdate()?.docId }));
   }
 }

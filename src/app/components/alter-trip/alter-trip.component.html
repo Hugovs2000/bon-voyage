@@ -4,8 +4,10 @@
   </div>
 } @else {
   <div class="p-4">
-    @if (inputTrip().docId) {
-      <h1 class="text-xl font-extrabold">Edit Trip: {{ inputTrip().title }}</h1>
+    @if (selectedTrip().docId && selectedTrip().docId !== '') {
+      <h1 class="text-xl font-extrabold">
+        Edit Trip: {{ selectedTrip().title }}
+      </h1>
     } @else {
       <h1 class="text-xl font-extrabold">Create a new trip!</h1>
     }
@@ -17,7 +19,7 @@
         <mat-label>Title:</mat-label>
         <input
           type="text"
-          [value]="inputTrip().title"
+          [value]="selectedTrip().title"
           matInput
           placeholder="E.g. Trip to Paris..."
           formControlName="title" />
@@ -28,7 +30,17 @@
       @for (activity of itinerary; track activity) {
         <app-itinerary-card
           [inputActivity]="activity"
-          (deleteClicked)="removeActivity(activity)" />
+          (editClicked)="setActivityToEdit(activity)"
+          (deleteClicked)="openConfirmModal(activity)" />
+        @if (activityToEdit().id && activityToEdit().id === activity.id) {
+          <div class="flex flex-wrap gap-4">
+            <app-itinerary-form
+              class="w-full"
+              [activity]="activityToEdit()"
+              (cancelClicked)="cancelEdit()"
+              (outputActivity)="updateActivity($event)" />
+          </div>
+        }
       }
       <div class="flex flex-wrap gap-4">
         <app-itinerary-form
@@ -36,12 +48,38 @@
           (outputActivity)="addActivity($event)" />
       </div>
 
-      <button
-        class="btn mt-4 w-fit self-end bg-success"
-        type="submit"
-        [disabled]="!tripForm.valid">
-        Save trip
-      </button>
+      <div class="flex gap-2 self-end">
+        <button
+          class="btn mt-4 w-fit bg-error text-base"
+          type="button"
+          (click)="returnHome()">
+          <mat-icon>cancel</mat-icon>
+          Cancel
+        </button>
+        <button
+          class="btn mt-4 w-fit bg-success text-base"
+          type="submit"
+          [disabled]="!tripForm.valid">
+          <mat-icon>save</mat-icon>
+          Save trip
+        </button>
+      </div>
     </form>
+    <dialog #confirmModal class="modal">
+      <div class="modal-box">
+        <h3 class="text-lg font-bold">Hold on!</h3>
+        <p class="py-4">Are you sure you would like to delete this activity?</p>
+        <div class="modal-action">
+          <div class="flex gap-2">
+            <button class="btn btn-warning" (click)="closeConfirmModal()">
+              Cancel
+            </button>
+            <button class="btn btn-error" (click)="confirmDelete()">
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </dialog>
   </div>
 }
