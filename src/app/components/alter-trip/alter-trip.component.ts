@@ -22,6 +22,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ItineraryItem, Trip } from '../../models/trips';
 import { AuthService } from '../../services/auth.service';
@@ -69,14 +70,14 @@ export class AlterTripComponent implements OnInit {
   @ViewChild('confirmModal')
   confirmModal: ElementRef<HTMLDialogElement> | null = null;
 
-  destroyRef = inject(DestroyRef);
-
   selectedTrip = signal<Trip>({} as Trip);
   activityToDelete = signal<ItineraryItem>({} as ItineraryItem);
   activityToEdit = signal<ItineraryItem>({} as ItineraryItem);
 
+  private destroyRef = inject(DestroyRef);
   private store = inject(Store<TripState>);
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   loading$ = this.store.select(selectLoadingState);
 
@@ -184,5 +185,9 @@ export class AlterTripComponent implements OnInit {
         this.store.dispatch(createNewTrip({ trip }));
       }
     }
+  }
+
+  returnHome() {
+    this.router.navigate(['home']);
   }
 }

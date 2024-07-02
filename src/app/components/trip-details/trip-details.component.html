@@ -25,7 +25,18 @@
               class="cursor-pointer"
               [inputActivity]="activity"
               (itineraryClicked)="handleActivityClick(activity.id)"
-              (deleteClicked)="handleDeleteActivityClick(trip, activity)" />
+              (editClicked)="setActivityToEdit(activity)"
+              (deleteClicked)="handleDeleteActivityClick(activity)" />
+            @if (
+              activityToEdit().id &&
+              activityToEdit().id !== '' &&
+              activityToEdit().id === activity.id
+            ) {
+              <app-itinerary-form
+                [activity]="activityToEdit()"
+                (cancelClicked)="cleatActivityToEdit()"
+                (outputActivity)="updateActivity($event)" />
+            }
           }
         } @else {
           <p>Your trip is looking quite sketch without any activities 👀</p>

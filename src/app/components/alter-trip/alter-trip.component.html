@@ -48,13 +48,22 @@
           (outputActivity)="addActivity($event)" />
       </div>
 
-      <button
-        class="btn mt-4 w-fit self-end bg-success text-base"
-        type="submit"
-        [disabled]="!tripForm.valid">
-        <mat-icon>save</mat-icon>
-        Save trip
-      </button>
+      <div class="flex gap-2 self-end">
+        <button
+          class="btn mt-4 w-fit bg-error text-base"
+          type="button"
+          (click)="returnHome()">
+          <mat-icon>cancel</mat-icon>
+          Cancel
+        </button>
+        <button
+          class="btn mt-4 w-fit bg-success text-base"
+          type="submit"
+          [disabled]="!tripForm.valid">
+          <mat-icon>save</mat-icon>
+          Save trip
+        </button>
+      </div>
     </form>
     <dialog #confirmModal class="modal">
       <div class="modal-box">

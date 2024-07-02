@@ -17,6 +17,7 @@ import {
   selectSelectedTrip,
 } from '../../store/trips/selectors';
 import { ItineraryCardComponent } from '../itinerary-card/itinerary-card.component';
+import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.component';
 
 @Component({
   selector: 'app-trip-details',
@@ -27,6 +28,7 @@ import { ItineraryCardComponent } from '../itinerary-card/itinerary-card.compone
     AsyncPipe,
     DatePipe,
     CurrencyPipe,
+    ItineraryFormComponent,
   ],
   templateUrl: './trip-details.component.html',
   styleUrl: './trip-details.component.scss',
@@ -38,8 +40,9 @@ export class TripDetailsComponent {
   trip$ = this.store.select(selectSelectedTrip);
   loading$ = this.store.select(selectLoadingState);
 
-  tripToUpdate = signal<Trip | null>(null);
-  activityToDelete = signal<ItineraryItem | null>(null);
+  tripToUpdate = signal<Trip>({} as Trip);
+  activityToDelete = signal<ItineraryItem>({} as ItineraryItem);
+  activityToEdit = signal<ItineraryItem>({} as ItineraryItem);
   tripId = signal<string>(this.activatedRoute.snapshot.params['id']);
 
   constructor(
@@ -56,6 +59,8 @@ export class TripDetailsComponent {
             tripId: this.tripId(),
           })
         );
+      } else {
+        this.tripToUpdate.set(trip);
       }
     });
   }
@@ -68,14 +73,13 @@ export class TripDetailsComponent {
     this.modalRef?.nativeElement.showModal();
   }
 
-  handleDeleteActivityClick(trip: Trip, selectedActivity: ItineraryItem) {
-    this.tripToUpdate.set(trip);
+  handleDeleteActivityClick(selectedActivity: ItineraryItem) {
     this.activityToDelete.set(selectedActivity);
     this.openModal();
   }
 
   deleteActivity() {
-    if (this.tripToUpdate()?.docId) {
+    if (this.tripToUpdate()?.docId && this.tripToUpdate()?.docId !== '') {
       const newActivities = this.tripToUpdate()?.itinerary?.filter(
         act => act.id !== this.activityToDelete()?.id
       );
@@ -103,6 +107,31 @@ export class TripDetailsComponent {
           panelClass: ['snackbar-error'],
         }
       );
+    }
+  }
+
+  setActivityToEdit(activity: ItineraryItem) {
+    this.activityToEdit.set(activity);
+  }
+
+  cleatActivityToEdit() {
+    this.activityToEdit.set({} as ItineraryItem);
+  }
+
+  updateActivity(activity: ItineraryItem) {
+    if (this.tripToUpdate()?.docId && this.tripToUpdate()?.docId !== '') {
+      const newActivities = this.tripToUpdate().itinerary?.map(act =>
+        act.id === activity.id ? activity : act
+      );
+      this.store.dispatch(
+        updateTrip({
+          trip: {
+            ...this.tripToUpdate(),
+            itinerary: newActivities,
+          },
+        })
+      );
+      this.activityToEdit.set({} as ItineraryItem);
     }
   }
 
