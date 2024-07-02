@@ -66,8 +66,9 @@ export class HomeComponent {
     this.router.navigate(['/trip', id]);
   }
 
-  onSwipeRight(trip: string) {
-    console.log('Edit', trip);
+  onSwipeRight(id: string) {
+    this.store.dispatch(setSelectedTripId({ tripId: id }));
+    this.router.navigate(['/edit', id]);
   }
 
   onSwipeLeft(trip: string) {

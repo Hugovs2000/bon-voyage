@@ -1,12 +1,12 @@
 import { CurrencyPipe } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   EventEmitter,
-  InputSignal,
+  Input,
   Output,
   ViewChild,
-  input,
 } from '@angular/core';
 import { GeoPoint, Timestamp } from '@angular/fire/firestore';
 import {
@@ -38,13 +38,28 @@ import { filterConfig } from '../../utils/filterCalendar';
   ],
   templateUrl: './itinerary-form.component.html',
   styleUrl: './itinerary-form.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ItineraryFormComponent {
-  inputActivity: InputSignal<ItineraryItem> = input<ItineraryItem>(
-    {} as ItineraryItem
-  );
+  @Input() set activity(activity: ItineraryItem) {
+    if (activity) {
+      this.activityForm.setValue({
+        id: activity.id ?? '',
+        title: activity.title ?? '',
+        startDate: activity.startDate.toDate() ?? new Date(),
+        endDate: activity.endDate.toDate() ?? new Date(),
+        cost: activity.cost ?? 0,
+        currency: activity.currency ?? 'ZAR',
+        startLocation: activity.startLocation ?? new GeoPoint(0, 0),
+        endLocation: activity.endLocation ?? new GeoPoint(0, 0),
+        notes: activity.notes ?? '',
+        tag: activity.tag ?? '',
+      });
+    }
+  }
 
   @Output() outputActivity = new EventEmitter<ItineraryItem>();
+  @Output() cancelClicked = new EventEmitter();
 
   @ViewChild('tagModal')
   tagModalRef: ElementRef<HTMLDialogElement> | null = null;
@@ -53,44 +68,48 @@ export class ItineraryFormComponent {
   currencies = currencies;
 
   activityForm = new FormGroup({
-    title: new FormControl(
-      this.inputActivity().title ?? '',
+    id: new FormControl(''),
+    title: new FormControl('', Validators.required),
+    startDate: new FormControl<Date | Timestamp>(
+      new Date(),
       Validators.required
     ),
-    startDate: new FormControl<Date | Timestamp | null>(
-      this.inputActivity().startDate ?? Timestamp.now(),
-      Validators.required
-    ),
-    endDate: new FormControl<Date | Timestamp | null>(
-      this.inputActivity().endDate ?? Timestamp.now(),
-      Validators.required
-    ),
-    cost: new FormControl(this.inputActivity().cost ?? 0, [
-      Validators.required,
-      Validators.min(0),
-    ]),
-    currency: new FormControl(
-      this.inputActivity().currency ?? '',
-      Validators.required
-    ),
-    startLocation: new FormControl(
-      this.inputActivity().startLocation ?? new GeoPoint(0, 0)
-    ),
-    endLocation: new FormControl(
-      this.inputActivity().endLocation ?? new GeoPoint(0, 0)
-    ),
-    notes: new FormControl(this.inputActivity().notes ?? ''),
-    tag: new FormControl(this.inputActivity().tag ?? ''),
+    endDate: new FormControl<Date | Timestamp>(new Date(), Validators.required),
+    cost: new FormControl(0, [Validators.required, Validators.min(0)]),
+    currency: new FormControl('', Validators.required),
+    startLocation: new FormControl(new GeoPoint(0, 0)),
+    endLocation: new FormControl(new GeoPoint(0, 0)),
+    notes: new FormControl(''),
+    tag: new FormControl(''),
   });
 
   addActivity() {
     if (this.activityForm.valid) {
-      const activity = {
-        ...this.activityForm.value,
-        id: uuid(),
-      } as ItineraryItem;
-      this.outputActivity.emit(activity);
-      this.activityForm.reset();
+      if (this.activityForm.value.startDate instanceof Date) {
+        this.activityForm.value.startDate = Timestamp.fromDate(
+          this.activityForm.value.startDate
+        );
+      }
+      if (this.activityForm.value.endDate instanceof Date) {
+        this.activityForm.value.endDate = Timestamp.fromDate(
+          this.activityForm.value.endDate
+        );
+      }
+
+      if (this.activityForm.value.id === '') {
+        const activity = {
+          ...this.activityForm.value,
+          id: uuid(),
+        } as ItineraryItem;
+        this.outputActivity.emit(activity);
+        this.clearForm();
+      } else {
+        const activity = {
+          ...this.activityForm.value,
+        } as ItineraryItem;
+        this.outputActivity.emit(activity);
+        this.clearForm();
+      }
     }
   }
 
@@ -108,6 +127,14 @@ export class ItineraryFormComponent {
   }
 
   clearForm() {
+    const tempId = this.activityForm.value.id ?? '';
     this.activityForm.reset();
+    this.activityForm.patchValue({
+      id: tempId,
+    });
+  }
+
+  cancelEdit() {
+    this.cancelClicked.emit();
   }
 }

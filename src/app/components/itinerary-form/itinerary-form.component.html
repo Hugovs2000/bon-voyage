@@ -1,6 +1,10 @@
 <div class="card card-compact mb-2 w-full bg-gray-300 shadow-xl md:w-96">
   <div class="card-body">
-    <h2 class="card-title">Create an Activity!</h2>
+    <h2 class="card-title">
+      {{
+        activityForm.value.id !== '' ? 'Edit Activity!' : 'Create an Activity!'
+      }}
+    </h2>
     <button
       type="button"
       class="absolute right-4 top-4 flex items-center gap-1 text-blue-700"
@@ -58,17 +62,15 @@
 
       <mat-form-field hideRequiredMarker="true" class="w-full">
         <mat-label>Enter a date range</mat-label>
-        <mat-date-range-input [dateFilter]="filter" [rangePicker]="picker">
+        <mat-date-range-input
+          [dateFilter]="filter"
+          [rangePicker]="picker"
+          [formGroup]="activityForm">
           <input
             matStartDate
-            [value]="activityForm.value.startDate"
             formControlName="startDate"
             placeholder="Start date" />
-          <input
-            matEndDate
-            [value]="activityForm.value.endDate"
-            formControlName="endDate"
-            placeholder="End date" />
+          <input matEndDate formControlName="endDate" placeholder="End date" />
         </mat-date-range-input>
         <mat-datepicker-toggle
           matIconSuffix
@@ -124,15 +126,24 @@
       </mat-form-field>
 
       <div class="flex w-full justify-end gap-2">
-        <button type="button" class="btn btn-error" (click)="clearForm()">
-          Clear
-        </button>
+        @if (activityForm.value.id !== '') {
+          <button type="button" class="btn btn-error" (click)="cancelEdit()">
+            Cancel
+          </button>
+        } @else {
+          <button type="button" class="btn btn-error" (click)="clearForm()">
+            Clear
+          </button>
+        }
+
         <button
           type="button"
           class="btn w-fit self-end border-none bg-warning"
           (click)="addActivity()"
           [disabled]="!activityForm.valid">
-          Add activity
+          {{
+            activityForm.value.id !== '' ? 'Update activity' : 'Add activity'
+          }}
         </button>
       </div>
     </div>
