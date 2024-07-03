@@ -24,16 +24,16 @@ export interface ItineraryItem {
   tag: string;
 }
 
-export interface ExchangeRates {
+export interface ExchangeRatesDTO {
   meta: Meta;
-  data: Data;
+  data: CurrencySet;
 }
 
 export interface Meta {
   last_updated_at: string;
 }
 
-export interface Data {
+export interface CurrencySet {
   [key: string]: Currency;
 }
 

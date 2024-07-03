@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ExchangeRates, Trip } from '../../models/trips';
+import { ExchangeRatesDTO, Trip } from '../../models/trips';
 
 export const getAllTrips = createAction('[Trips] GetAllTrips');
 
@@ -55,5 +55,5 @@ export const getExchangeRates = createAction(
 
 export const getExchangeRatesComplete = createAction(
   '[Trips] GetExchangeRatesComplete',
-  props<{ exchangeRates: ExchangeRates }>()
+  props<{ exchangeRates: ExchangeRatesDTO }>()
 );

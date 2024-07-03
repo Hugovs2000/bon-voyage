@@ -8,8 +8,6 @@ import { Store } from '@ngrx/store';
 import { ItineraryItem, Trip } from '../../models/trips';
 import {
   deleteTrip,
-  getAllTrips,
-  getExchangeRates,
   setSelectedTripId,
   updateTrip,
 } from '../../store/trips/actions';
@@ -46,9 +44,9 @@ export class TripDetailsComponent {
   loading$ = this.store.select(selectLoadingState);
   exchangeRates$ = this.store.select(selectExchangeRates);
 
-  tripToUpdate = signal<Trip>({} as Trip);
-  activityToDelete = signal<ItineraryItem>({} as ItineraryItem);
-  activityToEdit = signal<ItineraryItem>({} as ItineraryItem);
+  tripToUpdate = signal<Trip | null>(null);
+  activityToDelete = signal<ItineraryItem | null>(null);
+  activityToEdit = signal<ItineraryItem | null>(null);
   tripId = signal<string>(this.activatedRoute.snapshot.params['id']);
 
   constructor(
@@ -57,14 +55,8 @@ export class TripDetailsComponent {
     private router: Router,
     private snackBar: MatSnackBar
   ) {
-    this.exchangeRates$.pipe(takeUntilDestroyed()).subscribe(rates => {
-      if (!rates || Object.keys(rates.data).length === 0) {
-        this.store.dispatch(getExchangeRates({ baseCurrency: 'ZAR' }));
-      }
-    });
     this.trip$.pipe(takeUntilDestroyed()).subscribe(trip => {
       if (!trip) {
-        this.store.dispatch(getAllTrips());
         this.store.dispatch(
           setSelectedTripId({
             tripId: this.tripId(),
@@ -131,12 +123,12 @@ export class TripDetailsComponent {
   }
 
   clearActivityToEdit() {
-    this.activityToEdit.set({} as ItineraryItem);
+    this.activityToEdit.set(null);
   }
 
   updateActivity(activity: ItineraryItem) {
     if (this.tripToUpdate()?.docId && this.tripToUpdate()?.docId !== '') {
-      const newActivities = this.tripToUpdate().itinerary?.map(act =>
+      const newActivities = this.tripToUpdate()?.itinerary?.map(act =>
         act.id === activity.id ? activity : act
       );
       this.store.dispatch(
@@ -144,10 +136,10 @@ export class TripDetailsComponent {
           trip: {
             ...this.tripToUpdate(),
             itinerary: newActivities,
-          },
+          } as Trip,
         })
       );
-      this.activityToEdit.set({} as ItineraryItem);
+      this.activityToEdit.set(null);
     }
   }
 
@@ -157,8 +149,8 @@ export class TripDetailsComponent {
         updateTrip({
           trip: {
             ...this.tripToUpdate(),
-            itinerary: [...(this.tripToUpdate().itinerary ?? []), activity],
-          },
+            itinerary: [...(this.tripToUpdate()?.itinerary ?? []), activity],
+          } as Trip,
         })
       );
     }
@@ -173,6 +165,8 @@ export class TripDetailsComponent {
   }
 
   deleteTrip() {
-    this.store.dispatch(deleteTrip({ tripId: this.tripToUpdate()?.docId }));
+    this.store.dispatch(
+      deleteTrip({ tripId: this.tripToUpdate()?.docId ?? '' })
+    );
   }
 }

@@ -5,13 +5,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ExchangeRates, ItineraryItem, Trip } from '../../models/trips';
-import {
-  getAllTrips,
-  getExchangeRates,
-  setSelectedTripId,
-  updateTrip,
-} from '../../store/trips/actions';
+import { ExchangeRatesDTO, ItineraryItem, Trip } from '../../models/trips';
+import { setSelectedTripId, updateTrip } from '../../store/trips/actions';
 import { TripState } from '../../store/trips/reducer';
 import {
   selectExchangeRates,
@@ -39,13 +34,13 @@ export class ItineraryDetailsComponent {
   activityId = signal<string>(
     this.activatedRoute.snapshot.params['itineraryId']
   );
-  tripToUpdate = signal<Trip>({} as Trip);
-  activity = signal<ItineraryItem>({} as ItineraryItem);
+  tripToUpdate = signal<Trip | null>(null);
+  activity = signal<ItineraryItem | null>(null);
   newStartDate = signal<Date>(new Date());
   newEndDate = signal<Date>(new Date());
   duration = signal<number>(0);
   costInZAR = signal<number>(0);
-  rates = signal<ExchangeRates>({} as ExchangeRates);
+  rates = signal<ExchangeRatesDTO | null>(null);
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -53,16 +48,11 @@ export class ItineraryDetailsComponent {
     private snackBar: MatSnackBar,
     private router: Router
   ) {
-    this.exchangeRates$.pipe(takeUntilDestroyed()).subscribe(rates => {
-      if (!rates || Object.keys(rates.data).length === 0) {
-        this.store.dispatch(getExchangeRates({ baseCurrency: 'ZAR' }));
-      } else {
-        this.rates.set(rates);
-      }
+    this.exchangeRates$.pipe(takeUntilDestroyed()).subscribe(exchangeRates => {
+      this.rates.set(exchangeRates ?? null);
     });
     this.selectedTrip$.pipe(takeUntilDestroyed()).subscribe(trip => {
       if (!trip) {
-        this.store.dispatch(getAllTrips());
         this.store.dispatch(
           setSelectedTripId({
             tripId: this.tripId(),
@@ -86,7 +76,11 @@ export class ItineraryDetailsComponent {
           );
           if (activity.currency && activity.cost && this.rates()) {
             this.costInZAR.set(
-              exchange(activity.currency, activity.cost, this.rates())
+              exchange(
+                activity.currency,
+                activity.cost,
+                this.rates() ?? undefined
+              )
             );
           }
         } else {

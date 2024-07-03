@@ -21,15 +21,15 @@
       </button>
     </div>
   </div>
-  @if (inputActivity().title) {
-    <div class="flex justify-center text-2xl">{{ inputActivity().title }}</div>
+  @if (inputActivity()?.title) {
+    <div class="flex justify-center text-2xl">{{ inputActivity()?.title }}</div>
   }
 
   <div class="flex justify-end">
     <div>
       {{
-        inputActivity().cost
-          | currency: inputActivity().currency : 'symbol-narrow'
+        inputActivity()?.cost
+          | currency: inputActivity()?.currency : 'symbol-narrow'
       }}
     </div>
   </div>

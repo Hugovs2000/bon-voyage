@@ -28,12 +28,12 @@
               (editClicked)="setActivityToEdit(activity)"
               (deleteClicked)="handleDeleteActivityClick(activity)" />
             @if (
-              activityToEdit().id &&
-              activityToEdit().id !== '' &&
-              activityToEdit().id === activity.id
+              activityToEdit()?.id &&
+              activityToEdit()?.id !== '' &&
+              activityToEdit()?.id === activity.id
             ) {
               <app-itinerary-form
-                [activity]="activityToEdit()"
+                [activity]="activityToEdit() ?? undefined"
                 (cancelClicked)="clearActivityToEdit()"
                 (outputActivity)="updateActivity($event)" />
             }

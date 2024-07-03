@@ -1,14 +1,19 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { Router, RouterOutlet } from '@angular/router';
 
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { Store } from '@ngrx/store';
 import { LandingComponent } from './components/landing/landing.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { AuthService } from './services/auth.service';
+import { getAllTrips, getExchangeRates } from './store/trips/actions';
+import { TripState } from './store/trips/reducer';
+import { selectBaseCurrency } from './store/trips/selectors';
 
 @Component({
   selector: 'app-root',
@@ -28,8 +33,22 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent {
   title = 'bon-voyage';
-  router = inject(Router);
-  authService = inject(AuthService);
+
+  constructor(
+    private store: Store<TripState>,
+    private router: Router,
+    protected authService: AuthService
+  ) {
+    this.store
+      .select(selectBaseCurrency)
+      .pipe(takeUntilDestroyed())
+      .subscribe(baseCurrency => {
+        this.store.dispatch(
+          getExchangeRates({ baseCurrency: baseCurrency ?? 'ZAR' })
+        );
+      });
+    this.store.dispatch(getAllTrips());
+  }
 
   signOut() {
     this.authService.logUserOut();

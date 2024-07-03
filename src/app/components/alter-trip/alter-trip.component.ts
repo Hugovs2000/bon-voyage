@@ -28,7 +28,6 @@ import { ItineraryItem, Trip } from '../../models/trips';
 import { AuthService } from '../../services/auth.service';
 import {
   createNewTrip,
-  getAllTrips,
   setSelectedTripId,
   updateTrip,
 } from '../../store/trips/actions';
@@ -60,7 +59,6 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
 export class AlterTripComponent implements OnInit {
   @Input() set id(id: string) {
     if (id) {
-      this.store.dispatch(getAllTrips());
       this.store.dispatch(setSelectedTripId({ tripId: id }));
     } else {
       this.store.dispatch(setSelectedTripId({ tripId: '' }));
@@ -70,9 +68,9 @@ export class AlterTripComponent implements OnInit {
   @ViewChild('confirmModal')
   confirmModal: ElementRef<HTMLDialogElement> | null = null;
 
-  selectedTrip = signal<Trip>({} as Trip);
-  activityToDelete = signal<ItineraryItem>({} as ItineraryItem);
-  activityToEdit = signal<ItineraryItem>({} as ItineraryItem);
+  selectedTrip = signal<Trip | null>(null);
+  activityToDelete = signal<ItineraryItem | null>(null);
+  activityToEdit = signal<ItineraryItem | null>(null);
 
   private destroyRef = inject(DestroyRef);
   private store = inject(Store<TripState>);
@@ -120,9 +118,9 @@ export class AlterTripComponent implements OnInit {
     this.itinerary.push(activity);
   }
 
-  removeActivity(activity: ItineraryItem) {
+  removeActivity(activity?: ItineraryItem) {
     this.confirmModal?.nativeElement.close();
-    this.itinerary = this.itinerary.filter(act => act.id !== activity.id);
+    this.itinerary = this.itinerary.filter(act => act.id !== activity?.id);
   }
 
   setActivityToEdit(activity: ItineraryItem) {
@@ -132,11 +130,11 @@ export class AlterTripComponent implements OnInit {
   updateActivity(activity: ItineraryItem) {
     this.removeActivity(activity);
     this.addActivity(activity);
-    this.activityToEdit.set({} as ItineraryItem);
+    this.activityToEdit.set(null);
   }
 
   cancelEdit() {
-    this.activityToEdit.set({} as ItineraryItem);
+    this.activityToEdit.set(null);
   }
 
   openConfirmModal(activity: ItineraryItem) {
@@ -145,13 +143,13 @@ export class AlterTripComponent implements OnInit {
   }
 
   confirmDelete() {
-    this.removeActivity(this.activityToDelete());
-    this.activityToDelete.set({} as ItineraryItem);
+    this.removeActivity(this.activityToDelete() ?? undefined);
+    this.activityToDelete.set(null);
   }
 
   closeConfirmModal() {
     this.confirmModal?.nativeElement.close();
-    this.activityToDelete.set({} as ItineraryItem);
+    this.activityToDelete.set(null);
   }
 
   onSubmit() {
@@ -168,11 +166,11 @@ export class AlterTripComponent implements OnInit {
           activity.endDate = Timestamp.fromDate(activity.endDate);
         }
       }
-      if (this.selectedTrip().docId && this.selectedTrip().docId !== '') {
+      if (this.selectedTrip()?.docId && this.selectedTrip()?.docId !== '') {
         const trip = {
           ...this.tripForm.value,
           itinerary: this.itinerary,
-          docId: this.selectedTrip().docId,
+          docId: this.selectedTrip()?.docId,
         } as Trip;
 
         this.store.dispatch(updateTrip({ trip }));

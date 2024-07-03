@@ -1,17 +1,17 @@
 import { CdkDragRelease, DragDropModule } from '@angular/cdk/drag-drop';
 import { AsyncPipe } from '@angular/common';
-import { Component, ElementRef, ViewChild, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  inject,
+  signal,
+} from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { SwipeDirective } from '../../directives/swipe.directive';
-import {
-  deleteTrip,
-  getAllTrips,
-  getExchangeRates,
-  setSelectedTripId,
-} from '../../store/trips/actions';
+import { deleteTrip, setSelectedTripId } from '../../store/trips/actions';
 import { TripState } from '../../store/trips/reducer';
 import {
   selectBaseCurrency,
@@ -35,6 +35,9 @@ import { TripCardComponent } from '../trip-card/trip-card.component';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
+  store = inject(Store<TripState>);
+  router = inject(Router);
+
   trips$ = this.store.select(selectTrips);
   selectedTrip$ = this.store.select(selectSelectedTrip);
   loading$ = this.store.select(selectLoadingState);
@@ -44,18 +47,6 @@ export class HomeComponent {
 
   @ViewChild('confirmModal')
   modalRef: ElementRef<HTMLDialogElement> | null = null;
-
-  constructor(
-    private store: Store<TripState>,
-    private router: Router
-  ) {
-    this.baseCurrency$.pipe(takeUntilDestroyed()).subscribe(baseCurrency => {
-      this.store.dispatch(
-        getExchangeRates({ baseCurrency: baseCurrency ?? 'ZAR' })
-      );
-    });
-    this.store.dispatch(getAllTrips());
-  }
 
   resetPosition(event: CdkDragRelease) {
     event.source.reset();

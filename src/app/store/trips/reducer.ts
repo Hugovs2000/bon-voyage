@@ -1,6 +1,6 @@
 import { isDevMode } from '@angular/core';
 import { ActionReducer, createReducer, MetaReducer, on } from '@ngrx/store';
-import { ExchangeRates, Trip } from '../../models/trips';
+import { ExchangeRatesDTO, Trip } from '../../models/trips';
 import {
   createNewTrip,
   createNewTripComplete,
@@ -21,20 +21,13 @@ export interface TripState {
   trips: Trip[];
   isLoading: boolean;
   selectedTripId?: string;
-  exchangeRates?: ExchangeRates;
-  baseCurrency?: string;
+  exchangeRates?: ExchangeRatesDTO;
+  baseCurrency: string;
 }
 
 const initialState: TripState = {
   trips: [],
   isLoading: false,
-  selectedTripId: '',
-  exchangeRates: {
-    meta: {
-      last_updated_at: '',
-    },
-    data: {},
-  },
   baseCurrency: 'ZAR',
 };
 

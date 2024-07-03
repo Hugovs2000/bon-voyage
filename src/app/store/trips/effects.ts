@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { EMPTY, catchError, map, retry, switchMap } from 'rxjs';
+import { catchError, map, of, retry, switchMap } from 'rxjs';
 import { Trip } from '../../models/trips';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
@@ -33,16 +33,12 @@ export class TripsEffects {
             if (data.empty) {
               return getAllTripsComplete({ trips: [] });
             }
-            const trips = data.docs
-              .filter(
-                doc => (doc.data() as Trip).userId === this.authService.userId
-              )
-              .map(doc => {
-                return {
-                  ...(doc.data() as Trip),
-                  docId: doc.id,
-                };
-              });
+            const trips = data.docs.map(doc => {
+              return {
+                ...(doc.data() as Trip),
+                docId: doc.id,
+              };
+            });
             return getAllTripsComplete({ trips: trips });
           })
           .catch(() => {
@@ -194,7 +190,7 @@ export class TripsEffects {
                 panelClass: ['snackbar'],
               }
             );
-            return EMPTY;
+            return of(setLoadingState({ isLoading: false }));
           })
         )
       )

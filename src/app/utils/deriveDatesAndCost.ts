@@ -1,8 +1,8 @@
-import { ExchangeRates, Trip } from '../models/trips';
+import { ExchangeRatesDTO, Trip } from '../models/trips';
 
 export const deriveDatesAndCost = (
   trip: Trip,
-  exchangeRates: ExchangeRates
+  exchangeRates?: ExchangeRatesDTO
 ) => {
   let startDate = new Date(8640000000000000);
   let endDate = new Date(-8640000000000000);
@@ -24,7 +24,7 @@ export const deriveDatesAndCost = (
       totalTripCost += exchange(
         activity.currency ?? 'ZAR',
         activity.cost ?? 0,
-        exchangeRates
+        exchangeRates ?? undefined
       );
     });
   }
@@ -57,7 +57,7 @@ export const deriveDatesAndCost = (
 
 export const deriveDuration = (startDate: Date, endDate: Date) => {
   return (
-    Math.floor(
+    Math.ceil(
       Math.abs(endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
     ) + 1
   );
@@ -66,19 +66,39 @@ export const deriveDuration = (startDate: Date, endDate: Date) => {
 export const exchange = (
   costCurrency: string,
   cost: number,
-  exchangeRates: ExchangeRates
+  exchangeRates?: ExchangeRatesDTO
 ) => {
   switch (costCurrency) {
     case 'ZAR':
-      return cost / exchangeRates.data['ZAR'].value;
+      let outputZAR = cost;
+      if (exchangeRates?.data?.['ZAR'].value) {
+        outputZAR = cost / exchangeRates.data['ZAR'].value;
+      }
+      return outputZAR;
     case 'USD':
-      return cost / exchangeRates.data['USD'].value;
+      let outputUSD = cost;
+      if (exchangeRates?.data?.['USD'].value) {
+        outputUSD = cost / exchangeRates.data['USD'].value;
+      }
+      return outputUSD;
     case 'EUR':
-      return cost / exchangeRates.data['EUR'].value;
+      let outputEUR = cost;
+      if (exchangeRates?.data?.['EUR'].value) {
+        outputEUR = cost / exchangeRates.data['EUR'].value;
+      }
+      return outputEUR;
     case 'GBP':
-      return cost / exchangeRates.data['GBP'].value;
+      let outputGBP = cost;
+      if (exchangeRates?.data?.['GBP'].value) {
+        outputGBP = cost / exchangeRates.data['GBP'].value;
+      }
+      return outputGBP;
     case 'AUD':
-      return cost / exchangeRates.data['AUD'].value;
+      let outputAUD = cost;
+      if (exchangeRates?.data?.['AUD'].value) {
+        outputAUD = cost / exchangeRates.data['AUD'].value;
+      }
+      return outputAUD;
     default:
       return cost;
   }
