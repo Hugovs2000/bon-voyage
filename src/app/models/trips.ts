@@ -24,6 +24,24 @@ export interface ItineraryItem {
   tag: string;
 }
 
+export interface ExchangeRates {
+  meta: Meta;
+  data: Data;
+}
+
+export interface Meta {
+  last_updated_at: string;
+}
+
+export interface Data {
+  [key: string]: Currency;
+}
+
+export interface Currency {
+  code: string;
+  value: number;
+}
+
 export const currencies = [
   { value: 'ZAR' },
   { value: 'GBP' },

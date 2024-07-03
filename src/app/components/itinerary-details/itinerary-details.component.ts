@@ -5,14 +5,16 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ItineraryItem, Trip } from '../../models/trips';
+import { ExchangeRates, ItineraryItem, Trip } from '../../models/trips';
 import {
   getAllTrips,
+  getExchangeRates,
   setSelectedTripId,
   updateTrip,
 } from '../../store/trips/actions';
 import { TripState } from '../../store/trips/reducer';
 import {
+  selectExchangeRates,
   selectLoadingState,
   selectSelectedTrip,
 } from '../../store/trips/selectors';
@@ -31,6 +33,7 @@ export class ItineraryDetailsComponent {
 
   selectedTrip$ = this.store.select(selectSelectedTrip);
   loading$ = this.store.select(selectLoadingState);
+  exchangeRates$ = this.store.select(selectExchangeRates);
 
   tripId = signal<string>(this.activatedRoute.snapshot.params['id']);
   activityId = signal<string>(
@@ -42,6 +45,7 @@ export class ItineraryDetailsComponent {
   newEndDate = signal<Date>(new Date());
   duration = signal<number>(0);
   costInZAR = signal<number>(0);
+  rates = signal<ExchangeRates>({} as ExchangeRates);
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -49,6 +53,13 @@ export class ItineraryDetailsComponent {
     private snackBar: MatSnackBar,
     private router: Router
   ) {
+    this.exchangeRates$.pipe(takeUntilDestroyed()).subscribe(rates => {
+      if (!rates || Object.keys(rates.data).length === 0) {
+        this.store.dispatch(getExchangeRates({ baseCurrency: 'ZAR' }));
+      } else {
+        this.rates.set(rates);
+      }
+    });
     this.selectedTrip$.pipe(takeUntilDestroyed()).subscribe(trip => {
       if (!trip) {
         this.store.dispatch(getAllTrips());
@@ -73,8 +84,10 @@ export class ItineraryDetailsComponent {
           this.duration.set(
             deriveDuration(this.newStartDate(), this.newEndDate())
           );
-          if (activity.currency && activity.cost) {
-            this.costInZAR.set(exchange(activity.currency, activity.cost));
+          if (activity.currency && activity.cost && this.rates()) {
+            this.costInZAR.set(
+              exchange(activity.currency, activity.cost, this.rates())
+            );
           }
         } else {
           this.snackBar.open(

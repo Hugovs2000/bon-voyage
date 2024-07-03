@@ -1,6 +1,9 @@
-import { Trip } from '../models/trips';
+import { ExchangeRates, Trip } from '../models/trips';
 
-export const deriveDatesAndCost = (trip: Trip) => {
+export const deriveDatesAndCost = (
+  trip: Trip,
+  exchangeRates: ExchangeRates
+) => {
   let startDate = new Date(8640000000000000);
   let endDate = new Date(-8640000000000000);
   let totalTripCost = 0;
@@ -18,7 +21,11 @@ export const deriveDatesAndCost = (trip: Trip) => {
         endDate = newEndDate;
       }
 
-      totalTripCost += exchange(activity.currency ?? 'ZAR', activity.cost ?? 0);
+      totalTripCost += exchange(
+        activity.currency ?? 'ZAR',
+        activity.cost ?? 0,
+        exchangeRates
+      );
     });
   }
 
@@ -56,18 +63,22 @@ export const deriveDuration = (startDate: Date, endDate: Date) => {
   );
 };
 
-export const exchange = (currency: string, cost: number) => {
-  switch (currency) {
+export const exchange = (
+  costCurrency: string,
+  cost: number,
+  exchangeRates: ExchangeRates
+) => {
+  switch (costCurrency) {
     case 'ZAR':
-      return cost;
+      return cost / exchangeRates.data['ZAR'].value;
     case 'USD':
-      return cost / 0.0544658672;
+      return cost / exchangeRates.data['USD'].value;
     case 'EUR':
-      return cost / 0.050721892;
+      return cost / exchangeRates.data['EUR'].value;
     case 'GBP':
-      return cost / 0.0430759725;
+      return cost / exchangeRates.data['GBP'].value;
     case 'AUD':
-      return cost / 0.0818589465;
+      return cost / exchangeRates.data['AUD'].value;
     default:
       return cost;
   }

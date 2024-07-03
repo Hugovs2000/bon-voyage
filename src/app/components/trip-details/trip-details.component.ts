@@ -9,11 +9,13 @@ import { ItineraryItem, Trip } from '../../models/trips';
 import {
   deleteTrip,
   getAllTrips,
+  getExchangeRates,
   setSelectedTripId,
   updateTrip,
 } from '../../store/trips/actions';
 import { TripState } from '../../store/trips/reducer';
 import {
+  selectExchangeRates,
   selectLoadingState,
   selectSelectedTrip,
 } from '../../store/trips/selectors';
@@ -42,6 +44,7 @@ export class TripDetailsComponent {
 
   trip$ = this.store.select(selectSelectedTrip);
   loading$ = this.store.select(selectLoadingState);
+  exchangeRates$ = this.store.select(selectExchangeRates);
 
   tripToUpdate = signal<Trip>({} as Trip);
   activityToDelete = signal<ItineraryItem>({} as ItineraryItem);
@@ -54,6 +57,11 @@ export class TripDetailsComponent {
     private router: Router,
     private snackBar: MatSnackBar
   ) {
+    this.exchangeRates$.pipe(takeUntilDestroyed()).subscribe(rates => {
+      if (!rates || Object.keys(rates.data).length === 0) {
+        this.store.dispatch(getExchangeRates({ baseCurrency: 'ZAR' }));
+      }
+    });
     this.trip$.pipe(takeUntilDestroyed()).subscribe(trip => {
       if (!trip) {
         this.store.dispatch(getAllTrips());

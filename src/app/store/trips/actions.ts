@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Trip } from '../../models/trips';
+import { ExchangeRates, Trip } from '../../models/trips';
 
 export const getAllTrips = createAction('[Trips] GetAllTrips');
 
@@ -46,4 +46,14 @@ export const deleteTripComplete = createAction(
 export const setLoadingState = createAction(
   '[Trips] SetLoadingState',
   props<{ isLoading: boolean }>()
+);
+
+export const getExchangeRates = createAction(
+  '[Trips] GetExchangeRates',
+  props<{ baseCurrency: string }>()
+);
+
+export const getExchangeRatesComplete = createAction(
+  '[Trips] GetExchangeRatesComplete',
+  props<{ exchangeRates: ExchangeRates }>()
 );

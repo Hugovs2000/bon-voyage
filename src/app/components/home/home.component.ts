@@ -1,6 +1,7 @@
 import { CdkDragRelease, DragDropModule } from '@angular/cdk/drag-drop';
 import { AsyncPipe } from '@angular/common';
 import { Component, ElementRef, ViewChild, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -8,10 +9,12 @@ import { SwipeDirective } from '../../directives/swipe.directive';
 import {
   deleteTrip,
   getAllTrips,
+  getExchangeRates,
   setSelectedTripId,
 } from '../../store/trips/actions';
 import { TripState } from '../../store/trips/reducer';
 import {
+  selectBaseCurrency,
   selectLoadingState,
   selectSelectedTrip,
   selectTrips,
@@ -35,6 +38,7 @@ export class HomeComponent {
   trips$ = this.store.select(selectTrips);
   selectedTrip$ = this.store.select(selectSelectedTrip);
   loading$ = this.store.select(selectLoadingState);
+  baseCurrency$ = this.store.select(selectBaseCurrency);
 
   selectedTripId = signal('');
 
@@ -45,6 +49,11 @@ export class HomeComponent {
     private store: Store<TripState>,
     private router: Router
   ) {
+    this.baseCurrency$.pipe(takeUntilDestroyed()).subscribe(baseCurrency => {
+      this.store.dispatch(
+        getExchangeRates({ baseCurrency: baseCurrency ?? 'ZAR' })
+      );
+    });
     this.store.dispatch(getAllTrips());
   }
 
