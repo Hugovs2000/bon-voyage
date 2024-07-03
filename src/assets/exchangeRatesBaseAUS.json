@@ -1,0 +1,10 @@
+{
+  "meta": { "last_updated_at": "2024-07-02T23:59:59Z" },
+  "data": {
+    "AUD": { "code": "AUD", "value": 1 },
+    "EUR": { "code": "EUR", "value": 0.6202943501 },
+    "GBP": { "code": "GBP", "value": 0.5254979609 },
+    "USD": { "code": "USD", "value": 0.6668754881 },
+    "ZAR": { "code": "ZAR", "value": 12.402331619 }
+  }
+}
