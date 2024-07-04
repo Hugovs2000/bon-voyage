@@ -49,13 +49,14 @@
       </div>
 
       <div class="flex gap-2 self-end">
-        <button
+        <a
+          type="button"
           class="btn mt-4 w-fit bg-error text-base"
           type="button"
-          (click)="returnHome()">
+          routerLink="/home">
           <mat-icon>cancel</mat-icon>
           Cancel
-        </button>
+        </a>
         <button
           class="btn mt-4 w-fit bg-success text-base"
           type="submit"

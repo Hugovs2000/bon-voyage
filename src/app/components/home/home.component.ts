@@ -8,7 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { SwipeDirective } from '../../directives/swipe.directive';
 import { deleteTrip, setSelectedTripId } from '../../store/trips/actions';
@@ -30,6 +30,7 @@ import { TripCardComponent } from '../trip-card/trip-card.component';
     SwipeDirective,
     DragDropModule,
     MatProgressSpinnerModule,
+    RouterLink,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -81,9 +82,5 @@ export class HomeComponent {
       this.store.dispatch(deleteTrip({ tripId: this.selectedTripId() }));
       this.closeModal();
     }
-  }
-
-  handleAddTripClick() {
-    this.router.navigate(['/new-trip']);
   }
 }

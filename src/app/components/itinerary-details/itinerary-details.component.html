@@ -40,9 +40,12 @@
         <button class="btn btn-error" (click)="handleDeleteClick()">
           Delete
         </button>
-        <button class="btn btn-success" (click)="handleDoneClick()">
+        <a
+          type="button"
+          class="btn btn-success"
+          [routerLink]="['/trip', tripId()]">
           Done
-        </button>
+        </a>
       </div>
     </div>
     <dialog #confirmModal class="modal">
@@ -66,7 +69,9 @@
       <p class="text-wrap text-center">
         Oops! Something went wrong. Please return to the trip.
       </p>
-      <button (click)="handleDoneClick()" class="btn btn-link">Return</button>
+      <a type="button" class="btn btn-link" [routerLink]="['/trip', tripId()]">
+        Return
+      </a>
     </div>
   }
 }

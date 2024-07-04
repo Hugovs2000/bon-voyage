@@ -3,7 +3,7 @@ import { Component, ElementRef, ViewChild, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ItineraryItem, Trip } from '../../models/trips';
 import {
@@ -30,6 +30,7 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
     DatePipe,
     CurrencyPipe,
     ItineraryFormComponent,
+    RouterLink,
   ],
   templateUrl: './trip-details.component.html',
   styleUrl: './trip-details.component.scss',
@@ -128,14 +129,13 @@ export class TripDetailsComponent {
 
   updateActivity(activity: ItineraryItem) {
     if (this.tripToUpdate()?.docId && this.tripToUpdate()?.docId !== '') {
-      const newActivities = this.tripToUpdate()?.itinerary?.map(act =>
-        act.id === activity.id ? activity : act
-      );
       this.store.dispatch(
         updateTrip({
           trip: {
             ...this.tripToUpdate(),
-            itinerary: newActivities,
+            itinerary: this.tripToUpdate()?.itinerary?.map(act =>
+              act.id === activity.id ? activity : act
+            ),
           } as Trip,
         })
       );
@@ -154,14 +154,6 @@ export class TripDetailsComponent {
         })
       );
     }
-  }
-
-  returnHome() {
-    this.router.navigate(['/home']);
-  }
-
-  editTrip() {
-    this.router.navigate(['edit/', this.tripToUpdate()?.docId]);
   }
 
   deleteTrip() {

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
@@ -20,6 +20,7 @@ import { selectBaseCurrency } from './store/trips/selectors';
   standalone: true,
   imports: [
     RouterOutlet,
+    RouterLink,
     AngularFirestoreModule,
     LandingComponent,
     LoginComponent,
@@ -53,15 +54,5 @@ export class AppComponent {
   signOut() {
     this.authService.logUserOut();
     this.router.navigate(['']);
-  }
-
-  navToLogin() {
-    this.router.navigate(['log-in']);
-  }
-  navToSignup() {
-    this.router.navigate(['sign-up']);
-  }
-  navToHome() {
-    this.router.navigate(['home']);
   }
 }

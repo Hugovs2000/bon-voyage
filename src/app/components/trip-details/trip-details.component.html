@@ -52,8 +52,13 @@
       <button class="btn btn-error" (click)="confirmTripDelete()">
         Delete
       </button>
-      <button class="btn btn-warning" (click)="editTrip()">Edit</button>
-      <button class="btn btn-success" (click)="returnHome()">Done</button>
+      <a
+        type="button"
+        class="btn btn-warning"
+        [routerLink]="['/edit', this.tripToUpdate()?.docId]">
+        Edit
+      </a>
+      <a type="button" class="btn btn-success" routerLink="/home">Done</a>
     </div>
     <dialog #confirmDeleteActivityModal class="modal">
       <div class="modal-box">
@@ -90,7 +95,7 @@
       <p class="text-wrap text-center">
         Oops! Something went wrong. Please return home.
       </p>
-      <button (click)="returnHome()" class="btn btn-link">Return Home</button>
+      <a type="button" routerLink="/home" class="btn btn-link">Return Home</a>
     </div>
   }
 }

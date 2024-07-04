@@ -3,7 +3,7 @@ import { Component, ElementRef, ViewChild, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ExchangeRatesDTO, ItineraryItem, Trip } from '../../models/trips';
 import { setSelectedTripId, updateTrip } from '../../store/trips/actions';
@@ -18,7 +18,13 @@ import { deriveDuration, exchange } from '../../utils/deriveDatesAndCost';
 @Component({
   selector: 'app-itinerary-details',
   standalone: true,
-  imports: [AsyncPipe, CurrencyPipe, DatePipe, MatProgressSpinnerModule],
+  imports: [
+    AsyncPipe,
+    CurrencyPipe,
+    DatePipe,
+    MatProgressSpinnerModule,
+    RouterLink,
+  ],
   templateUrl: './itinerary-details.component.html',
   styleUrl: './itinerary-details.component.scss',
 })
@@ -103,10 +109,6 @@ export class ItineraryDetailsComponent {
 
   openModal() {
     this.modalRef?.nativeElement.showModal();
-  }
-
-  handleDoneClick() {
-    this.router.navigate(['/trip', this.tripId()]);
   }
 
   handleDeleteClick() {
