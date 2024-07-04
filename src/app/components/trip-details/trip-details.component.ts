@@ -5,6 +5,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 import { ItineraryItem, Trip } from '../../models/trips';
 import {
   deleteTrip,
@@ -30,6 +31,7 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
     DatePipe,
     CurrencyPipe,
     ItineraryFormComponent,
+    NzCalendarModule,
   ],
   templateUrl: './trip-details.component.html',
   styleUrl: './trip-details.component.scss',

@@ -13,6 +13,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideEffects } from '@ngrx/effects';
 import { provideState, provideStore } from '@ngrx/store';
+import { en_US, provideNzI18n } from 'ng-zorro-antd/i18n';
 import { environment } from '../environments/environment.development';
 import { routes } from './app.routes';
 import { TripsEffects } from './store/trips/effects';
@@ -20,6 +21,7 @@ import { debug, tripsFeatureKey, tripsReducers } from './store/trips/reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideNzI18n(en_US),
     provideRouter(routes, withComponentInputBinding()),
     provideNativeDateAdapter(),
     importProvidersFrom(
