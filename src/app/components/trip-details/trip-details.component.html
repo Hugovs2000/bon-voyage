@@ -6,7 +6,26 @@
   @if (trip$ | async; as trip) {
     <div class="flex flex-col gap-2 p-4">
       <h1 class="text-2xl font-bold">{{ trip.title }}</h1>
-      <nz-calendar [nzFullscreen]="false"></nz-calendar>
+      <nz-calendar [nzFullscreen]="false" [nzValue]="trip.startDate">
+        <ul *nzDateFullCell="let date">
+          @if (date && trip.startDate && trip.endDate) {
+            @if (
+              getDateWithoutTime(date).valueOf() >=
+                getDateWithoutTime(trip.startDate).valueOf() &&
+              getDateWithoutTime(date).valueOf() <=
+                getDateWithoutTime(trip.endDate).valueOf()
+            ) {
+              <li class="rounded-full bg-warning">
+                {{ date.getDate() }}
+              </li>
+            } @else {
+              <li class="rounded-full">
+                {{ date.getDate() }}
+              </li>
+            }
+          }
+        </ul>
+      </nz-calendar>
       <div>
         <p>Start Date: {{ trip.startDate | date }}</p>
         <p>End Date: {{ trip.endDate | date }}</p>

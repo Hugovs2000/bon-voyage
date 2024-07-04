@@ -43,6 +43,15 @@ $bon-voyage-theme: mat.define-light-theme(
 @import '../node_modules/ng-zorro-antd/ng-zorro-antd.min.css';
 @import '../node_modules/ng-zorro-antd/calendar/style/index.min.css';
 
+.ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner {
+  color: black;
+  background: #3b83f694;
+  border-radius: 100%;
+}
+.ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before {
+  border-radius: 100%;
+}
+
 html,
 body {
   height: 100%;
