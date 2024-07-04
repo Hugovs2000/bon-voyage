@@ -82,11 +82,7 @@ export class ItineraryDetailsComponent {
           );
           if (activity.currency && activity.cost && this.rates()) {
             this.costInZAR.set(
-              exchange(
-                activity.currency,
-                activity.cost,
-                this.rates() ?? undefined
-              )
+              exchange(activity.currency, activity.cost, this.rates())
             );
           }
         } else {

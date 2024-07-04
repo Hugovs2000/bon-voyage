@@ -118,7 +118,7 @@ export class AlterTripComponent implements OnInit {
     this.itinerary.push(activity);
   }
 
-  removeActivity(activity?: ItineraryItem) {
+  removeActivity(activity: ItineraryItem | null) {
     this.confirmModal?.nativeElement.close();
     this.itinerary = this.itinerary.filter(act => act.id !== activity?.id);
   }
@@ -143,7 +143,7 @@ export class AlterTripComponent implements OnInit {
   }
 
   confirmDelete() {
-    this.removeActivity(this.activityToDelete() ?? undefined);
+    this.removeActivity(this.activityToDelete());
     this.activityToDelete.set(null);
   }
 

@@ -2,7 +2,7 @@ import { ExchangeRatesDTO, Trip } from '../models/trips';
 
 export const deriveDatesAndCost = (
   trip: Trip,
-  exchangeRates?: ExchangeRatesDTO
+  exchangeRates: ExchangeRatesDTO | null
 ) => {
   let startDate = new Date(8640000000000000);
   let endDate = new Date(-8640000000000000);
@@ -24,7 +24,7 @@ export const deriveDatesAndCost = (
       totalTripCost += exchange(
         activity.currency ?? 'ZAR',
         activity.cost ?? 0,
-        exchangeRates ?? undefined
+        exchangeRates
       );
     });
   }
@@ -66,7 +66,7 @@ export const deriveDuration = (startDate: Date, endDate: Date) => {
 export const exchange = (
   costCurrency: string,
   cost: number,
-  exchangeRates?: ExchangeRatesDTO
+  exchangeRates: ExchangeRatesDTO | null
 ) => {
   switch (costCurrency) {
     case 'ZAR':

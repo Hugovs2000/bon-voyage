@@ -24,7 +24,7 @@
             <app-itinerary-card
               class="cursor-pointer"
               [inputActivity]="activity"
-              (itineraryClicked)="handleActivityClick(activity.id)"
+              (itineraryClicked)="handleActivityClick(activity.id ?? '')"
               (editClicked)="setActivityToEdit(activity)"
               (deleteClicked)="handleDeleteActivityClick(activity)" />
             @if (
@@ -33,7 +33,7 @@
               activityToEdit()?.id === activity.id
             ) {
               <app-itinerary-form
-                [activity]="activityToEdit() ?? undefined"
+                [activity]="activityToEdit()"
                 (cancelClicked)="clearActivityToEdit()"
                 (outputActivity)="updateActivity($event)" />
             }

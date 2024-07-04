@@ -104,7 +104,7 @@ export class TripDetailsComponent {
     }
   }
 
-  handleActivityClick(id: string | undefined) {
+  handleActivityClick(id: string) {
     if (id) {
       this.router.navigate([`trip/${this.tripId()}/itinerary/`, id]);
     } else {

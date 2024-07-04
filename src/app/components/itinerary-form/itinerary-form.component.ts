@@ -41,7 +41,7 @@ import { filterConfig } from '../../utils/filterCalendar';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ItineraryFormComponent {
-  @Input() set activity(activity: ItineraryItem | undefined) {
+  @Input() set activity(activity: ItineraryItem | null) {
     if (activity) {
       this.activityForm.setValue({
         id: activity.id ?? '',
