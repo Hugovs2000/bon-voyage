@@ -129,13 +129,14 @@ export class TripDetailsComponent {
 
   updateActivity(activity: ItineraryItem) {
     if (this.tripToUpdate()?.docId && this.tripToUpdate()?.docId !== '') {
+      const newActivities = this.tripToUpdate()?.itinerary?.map(act =>
+        act.id === activity.id ? activity : act
+      );
       this.store.dispatch(
         updateTrip({
           trip: {
             ...this.tripToUpdate(),
-            itinerary: this.tripToUpdate()?.itinerary?.map(act =>
-              act.id === activity.id ? activity : act
-            ),
+            itinerary: newActivities ?? ([] as ItineraryItem[]),
           } as Trip,
         })
       );

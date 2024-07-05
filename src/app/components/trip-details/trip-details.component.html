@@ -27,11 +27,7 @@
               (itineraryClicked)="handleActivityClick(activity.id ?? '')"
               (editClicked)="setActivityToEdit(activity)"
               (deleteClicked)="handleDeleteActivityClick(activity)" />
-            @if (
-              activityToEdit()?.id &&
-              activityToEdit()?.id !== '' &&
-              activityToEdit()?.id === activity.id
-            ) {
+            @if (activityToEdit()?.id && activityToEdit()?.id === activity.id) {
               <app-itinerary-form
                 [activity]="activityToEdit()"
                 (cancelClicked)="clearActivityToEdit()"

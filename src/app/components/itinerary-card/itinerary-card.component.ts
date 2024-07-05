@@ -29,15 +29,8 @@ export class ItineraryCardComponent implements OnInit {
   newEndDate: Date = new Date();
 
   ngOnInit(): void {
-    if (this.inputActivity()?.startDate && this.inputActivity()?.endDate) {
-      if (this.inputActivity()?.startDate) {
-        this.newStartDate =
-          this.inputActivity()?.startDate.toDate() ?? new Date();
-      }
-      if (this.inputActivity()?.endDate) {
-        this.newEndDate = this.inputActivity()?.endDate.toDate() ?? new Date();
-      }
-    }
+    this.newStartDate = this.inputActivity()?.startDate.toDate() ?? new Date();
+    this.newEndDate = this.inputActivity()?.endDate.toDate() ?? new Date();
   }
 
   handleItineraryClick(event: Event) {

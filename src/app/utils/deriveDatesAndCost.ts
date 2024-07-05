@@ -68,38 +68,34 @@ export const exchange = (
   cost: number,
   exchangeRates: ExchangeRatesDTO | null
 ) => {
+  let outputCost = cost;
   switch (costCurrency) {
     case 'ZAR':
-      let outputZAR = cost;
       if (exchangeRates?.data?.['ZAR'].value) {
-        outputZAR = cost / exchangeRates.data['ZAR'].value;
+        outputCost = cost / exchangeRates.data['ZAR'].value;
       }
-      return outputZAR;
+      return outputCost;
     case 'USD':
-      let outputUSD = cost;
       if (exchangeRates?.data?.['USD'].value) {
-        outputUSD = cost / exchangeRates.data['USD'].value;
+        outputCost = cost / exchangeRates.data['USD'].value;
       }
-      return outputUSD;
+      return outputCost;
     case 'EUR':
-      let outputEUR = cost;
       if (exchangeRates?.data?.['EUR'].value) {
-        outputEUR = cost / exchangeRates.data['EUR'].value;
+        outputCost = cost / exchangeRates.data['EUR'].value;
       }
-      return outputEUR;
+      return outputCost;
     case 'GBP':
-      let outputGBP = cost;
       if (exchangeRates?.data?.['GBP'].value) {
-        outputGBP = cost / exchangeRates.data['GBP'].value;
+        outputCost = cost / exchangeRates.data['GBP'].value;
       }
-      return outputGBP;
+      return outputCost;
     case 'AUD':
-      let outputAUD = cost;
       if (exchangeRates?.data?.['AUD'].value) {
-        outputAUD = cost / exchangeRates.data['AUD'].value;
+        outputCost = cost / exchangeRates.data['AUD'].value;
       }
-      return outputAUD;
+      return outputCost;
     default:
-      return cost;
+      return outputCost;
   }
 };
