@@ -17,7 +17,8 @@
         <p>Start Date: {{ newStartDate() | date }}</p>
         <p>End Date: {{ newEndDate() | date }}</p>
         <p>
-          Duration: {{ duration() }} {{ duration() === 1 ? 'day' : 'days' }}
+          Duration: {{ activity()?.duration ?? 0 }}
+          {{ activity()?.duration === 1 ? 'day' : 'days' }}
         </p>
         <p>
           Cost:
@@ -25,10 +26,12 @@
             activity()?.cost | currency: activity()?.currency : 'symbol-narrow'
           }}
         </p>
-        @if (activity()?.currency !== 'ZAR') {
+        @if (activity()?.currency !== 'ZAR' && activity()?.costInBaseCurrency) {
           <p>
             Cost in Rand (ZAR):
-            {{ costInZAR() | currency: 'ZAR' : 'symbol-narrow' }}
+            {{
+              activity()?.costInBaseCurrency | currency: 'ZAR' : 'symbol-narrow'
+            }}
           </p>
         }
         @if (activity()?.notes) {

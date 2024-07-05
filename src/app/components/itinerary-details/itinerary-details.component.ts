@@ -13,7 +13,6 @@ import {
   selectLoadingState,
   selectSelectedTrip,
 } from '../../store/trips/selectors';
-import { deriveDuration, exchange } from '../../utils/deriveDatesAndCost';
 
 @Component({
   selector: 'app-itinerary-details',
@@ -44,8 +43,6 @@ export class ItineraryDetailsComponent {
   activity = signal<ItineraryItem | null>(null);
   newStartDate = signal<Date>(new Date());
   newEndDate = signal<Date>(new Date());
-  duration = signal<number>(0);
-  costInZAR = signal<number>(0);
   rates = signal<ExchangeRatesDTO | null>(null);
 
   constructor(
@@ -76,14 +73,6 @@ export class ItineraryDetailsComponent {
           }
           if (activity.endDate) {
             this.newEndDate.set(activity.endDate.toDate());
-          }
-          this.duration.set(
-            deriveDuration(this.newStartDate(), this.newEndDate())
-          );
-          if (activity.currency && activity.cost && this.rates()) {
-            this.costInZAR.set(
-              exchange(activity.currency, activity.cost, this.rates())
-            );
           }
         } else {
           this.snackBar.open(

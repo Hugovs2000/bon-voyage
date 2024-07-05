@@ -1,4 +1,4 @@
-import { ExchangeRatesDTO, Trip } from '../models/trips';
+import { ExchangeRatesDTO, ItineraryItem, Trip } from '../models/trips';
 
 export const deriveDatesAndCost = (
   trip: Trip,
@@ -7,9 +7,10 @@ export const deriveDatesAndCost = (
   let startDate = new Date(8640000000000000);
   let endDate = new Date(-8640000000000000);
   let totalTripCost = 0;
+  const updatedActivities: ItineraryItem[] = [];
 
   if (trip.itinerary && trip.itinerary.length > 0) {
-    trip.itinerary.forEach(activity => {
+    trip.itinerary.map(activity => {
       const newStartDate = activity.startDate.toDate();
       const newEndDate = activity.endDate.toDate();
 
@@ -21,11 +22,19 @@ export const deriveDatesAndCost = (
         endDate = newEndDate;
       }
 
-      totalTripCost += exchange(
+      const costInBaseCurrency = exchange(
         activity.currency ?? 'ZAR',
         activity.cost ?? 0,
         exchangeRates
       );
+
+      totalTripCost += costInBaseCurrency;
+
+      updatedActivities.push({
+        ...activity,
+        duration: deriveDuration(newStartDate, newEndDate),
+        costInBaseCurrency: costInBaseCurrency,
+      });
     });
   }
 
@@ -37,6 +46,7 @@ export const deriveDatesAndCost = (
     endDate = new Date();
     return {
       ...trip,
+      itinerary: updatedActivities,
       startDate: startDate,
       endDate: endDate,
       duration: 1,
@@ -48,6 +58,7 @@ export const deriveDatesAndCost = (
 
   return {
     ...trip,
+    itinerary: updatedActivities,
     startDate: startDate,
     endDate: endDate,
     duration: duration,
@@ -56,6 +67,8 @@ export const deriveDatesAndCost = (
 };
 
 export const deriveDuration = (startDate: Date, endDate: Date) => {
+  startDate.setHours(0, 0, 0, 0);
+  endDate.setHours(0, 0, 0, 0);
   return (
     Math.ceil(
       Math.abs(endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)

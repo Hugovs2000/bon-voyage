@@ -16,8 +16,10 @@ export interface ItineraryItem {
   title: string;
   startDate: Timestamp;
   endDate: Timestamp;
+  duration?: number;
   cost?: number;
   currency?: string;
+  costInBaseCurrency?: number;
   startLocation?: GeoPoint;
   endLocation?: GeoPoint;
   notes?: string;
