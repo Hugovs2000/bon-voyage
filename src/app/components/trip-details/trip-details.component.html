@@ -15,8 +15,7 @@
               getDateWithoutTime(date).valueOf() <=
                 getDateWithoutTime(trip.endDate).valueOf()
             ) {
-              <li
-                class="mb-1 ml-auto mr-auto h-6 w-6 rounded-full bg-warning px-1">
+              <li class="mx-auto mb-1 h-6 w-6 rounded-full bg-warning px-1">
                 {{ date.getDate() }}
               </li>
               @if (trip.itinerary && trip.itinerary.length > 0) {
