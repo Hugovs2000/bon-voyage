@@ -44,7 +44,7 @@ $bon-voyage-theme: mat.define-light-theme(
 @import '../node_modules/ng-zorro-antd/calendar/style/index.min.css';
 
 .ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner {
-  color: #3b83f6;
+  color: black;
   background: none;
   text-decoration: underline;
   font-weight: bold;
