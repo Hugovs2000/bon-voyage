@@ -13,6 +13,7 @@
           </div>
         }
       </h1>
+      <app-map [inputActivity]="activity()"></app-map>
       <div>
         <p>Start Date: {{ newStartDate() | date }}</p>
         <p>End Date: {{ newEndDate() | date }}</p>

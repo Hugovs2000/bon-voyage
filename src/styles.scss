@@ -40,6 +40,8 @@ $bon-voyage-theme: mat.define-light-theme(
 @tailwind components;
 @tailwind utilities;
 
+@import '../node_modules/leaflet/dist/leaflet.css';
+
 html,
 body {
   height: 100%;

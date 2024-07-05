@@ -13,6 +13,7 @@ import {
   selectLoadingState,
   selectSelectedTrip,
 } from '../../store/trips/selectors';
+import { MapComponent } from '../map/map.component';
 
 @Component({
   selector: 'app-itinerary-details',
@@ -23,6 +24,7 @@ import {
     DatePipe,
     MatProgressSpinnerModule,
     RouterLink,
+    MapComponent,
   ],
   templateUrl: './itinerary-details.component.html',
   styleUrl: './itinerary-details.component.scss',
