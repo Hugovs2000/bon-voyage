@@ -16,12 +16,32 @@ export interface ItineraryItem {
   title: string;
   startDate: Timestamp;
   endDate: Timestamp;
+  duration?: number;
   cost?: number;
   currency?: string;
+  costInBaseCurrency?: number;
   startLocation?: GeoPoint;
   endLocation?: GeoPoint;
   notes?: string;
   tag: string;
+}
+
+export interface ExchangeRatesDTO {
+  meta: Meta;
+  data: CurrencySet;
+}
+
+export interface Meta {
+  last_updated_at: string;
+}
+
+export interface CurrencySet {
+  [key: string]: Currency;
+}
+
+export interface Currency {
+  code: string;
+  value: number;
 }
 
 export const currencies = [
@@ -29,4 +49,5 @@ export const currencies = [
   { value: 'GBP' },
   { value: 'USD' },
   { value: 'EUR' },
+  { value: 'AUD' },
 ];

@@ -13,6 +13,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideEffects } from '@ngrx/effects';
 import { provideState, provideStore } from '@ngrx/store';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { en_US, provideNzI18n } from 'ng-zorro-antd/i18n';
 import { environment } from '../environments/environment.development';
 import { routes } from './app.routes';
@@ -39,5 +40,6 @@ export const appConfig: ApplicationConfig = {
     ),
     provideState({ name: tripsFeatureKey, reducer: tripsReducers }),
     provideEffects(TripsEffects),
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
 };

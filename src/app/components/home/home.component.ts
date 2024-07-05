@@ -1,17 +1,20 @@
 import { CdkDragRelease, DragDropModule } from '@angular/cdk/drag-drop';
 import { AsyncPipe } from '@angular/common';
-import { Component, ElementRef, ViewChild, signal } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  inject,
+  signal,
+} from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { SwipeDirective } from '../../directives/swipe.directive';
-import {
-  deleteTrip,
-  getAllTrips,
-  setSelectedTripId,
-} from '../../store/trips/actions';
+import { deleteTrip, setSelectedTripId } from '../../store/trips/actions';
 import { TripState } from '../../store/trips/reducer';
 import {
+  selectBaseCurrency,
   selectLoadingState,
   selectSelectedTrip,
   selectTrips,
@@ -27,26 +30,24 @@ import { TripCardComponent } from '../trip-card/trip-card.component';
     SwipeDirective,
     DragDropModule,
     MatProgressSpinnerModule,
+    RouterLink,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
+  store = inject(Store<TripState>);
+  router = inject(Router);
+
   trips$ = this.store.select(selectTrips);
   selectedTrip$ = this.store.select(selectSelectedTrip);
   loading$ = this.store.select(selectLoadingState);
+  baseCurrency$ = this.store.select(selectBaseCurrency);
 
   selectedTripId = signal('');
 
   @ViewChild('confirmModal')
   modalRef: ElementRef<HTMLDialogElement> | null = null;
-
-  constructor(
-    private store: Store<TripState>,
-    private router: Router
-  ) {
-    this.store.dispatch(getAllTrips());
-  }
 
   resetPosition(event: CdkDragRelease) {
     event.source.reset();
@@ -81,9 +82,5 @@ export class HomeComponent {
       this.store.dispatch(deleteTrip({ tripId: this.selectedTripId() }));
       this.closeModal();
     }
-  }
-
-  handleAddTripClick() {
-    this.router.navigate(['/new-trip']);
   }
 }

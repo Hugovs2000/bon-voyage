@@ -12,7 +12,7 @@ import { MatCardContent, MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../../environments/environment.development';
 import { AuthService } from '../../services/auth.service';
 import { ValidationService } from '../../services/validation.service';
@@ -29,6 +29,7 @@ import { ValidationService } from '../../services/validation.service';
     MatIconModule,
     MatCardModule,
     MatCardContent,
+    RouterLink,
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss',
@@ -92,9 +93,5 @@ export class SignupComponent {
           }
         )
       );
-  }
-
-  navToLogIn() {
-    this.router.navigate(['log-in']);
   }
 }

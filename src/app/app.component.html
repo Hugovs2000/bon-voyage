@@ -4,12 +4,13 @@
       <button class="btn btn-ghost -ml-2 px-2" aria-label="Menu button">
         <mat-icon>menu</mat-icon>
       </button>
-      <button
+      <a
+        type="button"
         class="btn btn-ghost gap-0 p-0 text-xl text-blue-800 md:px-4 md:text-2xl"
-        (click)="navToHome()">
+        routerLink="/home">
         Bon
         <span class="text-blue-400">Voyage</span>
-      </button>
+      </a>
     </div>
     <div class="flex items-center gap-0 md:gap-4">
       @if (authService.isLoggedIn()) {
@@ -20,18 +21,20 @@
           Log Out
         </button>
       } @else {
-        <button
+        <a
+          type="button"
           class="btn btn-ghost h-8 min-h-8 text-sm"
           aria-label="Log in button"
-          (click)="navToLogin()">
+          routerLink="/log-in">
           Log In
-        </button>
-        <button
+        </a>
+        <a
+          type="button"
           class="btn h-8 min-h-8 bg-blue-400"
           aria-label="Sign up button"
-          (click)="navToSignup()">
+          routerLink="/sign-up">
           Sign Up
-        </button>
+        </a>
       }
     </div>
   </mat-toolbar>

@@ -12,7 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -27,6 +27,7 @@ import { AuthService } from '../../services/auth.service';
     MatDividerModule,
     MatCardModule,
     MatCardContent,
+    RouterLink,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -85,9 +86,5 @@ export class LoginComponent {
           }
         )
       );
-  }
-
-  navToSignUp() {
-    this.router.navigate(['sign-up']);
   }
 }

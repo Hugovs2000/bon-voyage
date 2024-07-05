@@ -9,12 +9,14 @@ import {
   signOut,
   UserCredential,
 } from '@angular/fire/auth';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private _auth = inject(Auth);
+  private snackBar = inject(MatSnackBar);
   isLoggedIn = signal(!!localStorage.getItem('user'));
 
   get userId() {
@@ -50,7 +52,16 @@ export class AuthService {
         this.isLoggedIn.set(false);
         localStorage.removeItem('user');
       })
-      .catch(error => console.error(error));
+      .catch(() =>
+        this.snackBar.open(
+          'There was a problem trying to log you out. Please try again.',
+          'Close',
+          {
+            duration: 5000,
+            panelClass: ['snackbar-error'],
+          }
+        )
+      );
   }
 
   constructor() {

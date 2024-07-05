@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { switchMap } from 'rxjs';
+import { catchError, map, of, retry, switchMap } from 'rxjs';
 import { Trip } from '../../models/trips';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
@@ -14,6 +14,8 @@ import {
   deleteTripComplete,
   getAllTrips,
   getAllTripsComplete,
+  getExchangeRates,
+  getExchangeRatesComplete,
   setLoadingState,
   updateTrip,
   updateTripComplete,
@@ -31,16 +33,12 @@ export class TripsEffects {
             if (data.empty) {
               return getAllTripsComplete({ trips: [] });
             }
-            const trips = data.docs
-              .filter(
-                doc => (doc.data() as Trip).userId === this.authService.userId
-              )
-              .map(doc => {
-                return {
-                  ...(doc.data() as Trip),
-                  docId: doc.id,
-                };
-              });
+            const trips = data.docs.map(doc => {
+              return {
+                ...(doc.data() as Trip),
+                docId: doc.id,
+              };
+            });
             return getAllTripsComplete({ trips: trips });
           })
           .catch(() => {
@@ -156,6 +154,45 @@ export class TripsEffects {
             );
             return setLoadingState({ isLoading: false });
           })
+      )
+    )
+  );
+
+  getExchangeRates$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(getExchangeRates.type),
+      switchMap((action: { type: string; baseCurrency: string }) =>
+        this.apiService.getCurrencies(action.baseCurrency).pipe(
+          retry(3),
+          map(data => {
+            if (data) {
+              return getExchangeRatesComplete({
+                exchangeRates: data,
+              });
+            } else {
+              this.snackBar.open(
+                'Apologies, could not retrieve exchange rates.',
+                'Close',
+                {
+                  duration: 5000,
+                  panelClass: ['snackbar'],
+                }
+              );
+              return setLoadingState({ isLoading: false });
+            }
+          }),
+          catchError(() => {
+            this.snackBar.open(
+              'Apologies, could not retrieve exchange rates.',
+              'Close',
+              {
+                duration: 5000,
+                panelClass: ['snackbar'],
+              }
+            );
+            return of(setLoadingState({ isLoading: false }));
+          })
+        )
       )
     )
   );
