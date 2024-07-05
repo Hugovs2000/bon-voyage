@@ -7,7 +7,7 @@
     <div class="flex flex-col gap-2 p-4">
       <h1 class="text-2xl font-bold">{{ trip.title }}</h1>
       <nz-calendar [nzFullscreen]="false" [nzValue]="trip.startDate">
-        <ul *nzDateFullCell="let date">
+        <ul *nzDateFullCell="let date" class="max-h-14 overflow-hidden">
           @if (date && trip.startDate && trip.endDate) {
             @if (
               getDateWithoutTime(date).valueOf() >=
@@ -15,9 +15,28 @@
               getDateWithoutTime(date).valueOf() <=
                 getDateWithoutTime(trip.endDate).valueOf()
             ) {
-              <li class="rounded-full bg-warning">
+              <li
+                class="mb-1 ml-auto mr-auto h-6 w-6 rounded-full bg-warning px-1">
                 {{ date.getDate() }}
               </li>
+              @if (trip.itinerary && trip.itinerary.length > 0) {
+                @for (activity of trip.itinerary; track activity) {
+                  @if (
+                    activity.startDate &&
+                    getDateWithoutTime(
+                      activity.startDate.toDate()
+                    ).valueOf() === getDateWithoutTime(date).valueOf()
+                  ) {
+                    <li>
+                      <nz-badge
+                        [nzStatus]="'warning'"
+                        class="w-11 overflow-hidden text-ellipsis text-nowrap md:w-28">
+                        {{ activity.title }}
+                      </nz-badge>
+                    </li>
+                  }
+                }
+              }
             } @else {
               <li class="rounded-full">
                 {{ date.getDate() }}
