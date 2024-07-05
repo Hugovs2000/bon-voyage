@@ -18,9 +18,8 @@ import { ItineraryItem } from '../../models/trips';
   styleUrl: './itinerary-card.component.scss',
 })
 export class ItineraryCardComponent implements OnInit {
-  inputActivity: InputSignal<ItineraryItem> = input<ItineraryItem>(
-    {} as ItineraryItem
-  );
+  inputActivity: InputSignal<ItineraryItem | null> =
+    input<ItineraryItem | null>(null);
 
   @Output() deleteClicked = new EventEmitter();
   @Output() editClicked = new EventEmitter();
@@ -30,18 +29,8 @@ export class ItineraryCardComponent implements OnInit {
   newEndDate: Date = new Date();
 
   ngOnInit(): void {
-    if (
-      this.inputActivity() &&
-      this.inputActivity().startDate &&
-      this.inputActivity().endDate
-    ) {
-      if (this.inputActivity().startDate) {
-        this.newStartDate = this.inputActivity().startDate.toDate();
-      }
-      if (this.inputActivity().endDate) {
-        this.newEndDate = this.inputActivity().endDate.toDate();
-      }
-    }
+    this.newStartDate = this.inputActivity()?.startDate.toDate() ?? new Date();
+    this.newEndDate = this.inputActivity()?.endDate.toDate() ?? new Date();
   }
 
   handleItineraryClick(event: Event) {

@@ -4,9 +4,9 @@
   </div>
 } @else {
   <div class="p-4">
-    @if (selectedTrip().docId && selectedTrip().docId !== '') {
+    @if (selectedTrip()?.docId && selectedTrip()?.docId !== '') {
       <h1 class="text-xl font-extrabold">
-        Edit Trip: {{ selectedTrip().title }}
+        Edit Trip: {{ selectedTrip()?.title }}
       </h1>
     } @else {
       <h1 class="text-xl font-extrabold">Create a new trip!</h1>
@@ -19,7 +19,7 @@
         <mat-label>Title:</mat-label>
         <input
           type="text"
-          [value]="selectedTrip().title"
+          [value]="selectedTrip()?.title"
           matInput
           placeholder="E.g. Trip to Paris..."
           formControlName="title" />
@@ -32,7 +32,7 @@
           [inputActivity]="activity"
           (editClicked)="setActivityToEdit(activity)"
           (deleteClicked)="openConfirmModal(activity)" />
-        @if (activityToEdit().id && activityToEdit().id === activity.id) {
+        @if (activityToEdit()?.id && activityToEdit()?.id === activity.id) {
           <div class="flex flex-wrap gap-4">
             <app-itinerary-form
               class="w-full"
@@ -49,13 +49,14 @@
       </div>
 
       <div class="flex gap-2 self-end">
-        <button
+        <a
+          type="button"
           class="btn mt-4 w-fit bg-error text-base"
           type="button"
-          (click)="returnHome()">
+          routerLink="/home">
           <mat-icon>cancel</mat-icon>
           Cancel
-        </button>
+        </a>
         <button
           class="btn mt-4 w-fit bg-success text-base"
           type="submit"

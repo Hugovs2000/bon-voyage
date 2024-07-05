@@ -3,17 +3,17 @@ import { Component, ElementRef, ViewChild, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ItineraryItem, Trip } from '../../models/trips';
 import {
   deleteTrip,
-  getAllTrips,
   setSelectedTripId,
   updateTrip,
 } from '../../store/trips/actions';
 import { TripState } from '../../store/trips/reducer';
 import {
+  selectExchangeRates,
   selectLoadingState,
   selectSelectedTrip,
 } from '../../store/trips/selectors';
@@ -30,6 +30,7 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
     DatePipe,
     CurrencyPipe,
     ItineraryFormComponent,
+    RouterLink,
   ],
   templateUrl: './trip-details.component.html',
   styleUrl: './trip-details.component.scss',
@@ -42,10 +43,11 @@ export class TripDetailsComponent {
 
   trip$ = this.store.select(selectSelectedTrip);
   loading$ = this.store.select(selectLoadingState);
+  exchangeRates$ = this.store.select(selectExchangeRates);
 
-  tripToUpdate = signal<Trip>({} as Trip);
-  activityToDelete = signal<ItineraryItem>({} as ItineraryItem);
-  activityToEdit = signal<ItineraryItem>({} as ItineraryItem);
+  tripToUpdate = signal<Trip | null>(null);
+  activityToDelete = signal<ItineraryItem | null>(null);
+  activityToEdit = signal<ItineraryItem | null>(null);
   tripId = signal<string>(this.activatedRoute.snapshot.params['id']);
 
   constructor(
@@ -56,7 +58,6 @@ export class TripDetailsComponent {
   ) {
     this.trip$.pipe(takeUntilDestroyed()).subscribe(trip => {
       if (!trip) {
-        this.store.dispatch(getAllTrips());
         this.store.dispatch(
           setSelectedTripId({
             tripId: this.tripId(),
@@ -103,7 +104,7 @@ export class TripDetailsComponent {
     }
   }
 
-  handleActivityClick(id: string | undefined) {
+  handleActivityClick(id: string) {
     if (id) {
       this.router.navigate([`trip/${this.tripId()}/itinerary/`, id]);
     } else {
@@ -123,23 +124,23 @@ export class TripDetailsComponent {
   }
 
   clearActivityToEdit() {
-    this.activityToEdit.set({} as ItineraryItem);
+    this.activityToEdit.set(null);
   }
 
   updateActivity(activity: ItineraryItem) {
     if (this.tripToUpdate()?.docId && this.tripToUpdate()?.docId !== '') {
-      const newActivities = this.tripToUpdate().itinerary?.map(act =>
+      const newActivities = this.tripToUpdate()?.itinerary?.map(act =>
         act.id === activity.id ? activity : act
       );
       this.store.dispatch(
         updateTrip({
           trip: {
             ...this.tripToUpdate(),
-            itinerary: newActivities,
-          },
+            itinerary: newActivities ?? ([] as ItineraryItem[]),
+          } as Trip,
         })
       );
-      this.activityToEdit.set({} as ItineraryItem);
+      this.activityToEdit.set(null);
     }
   }
 
@@ -149,22 +150,16 @@ export class TripDetailsComponent {
         updateTrip({
           trip: {
             ...this.tripToUpdate(),
-            itinerary: [...(this.tripToUpdate().itinerary ?? []), activity],
-          },
+            itinerary: [...(this.tripToUpdate()?.itinerary ?? []), activity],
+          } as Trip,
         })
       );
     }
   }
 
-  returnHome() {
-    this.router.navigate(['/home']);
-  }
-
-  editTrip() {
-    this.router.navigate(['edit/', this.tripToUpdate()?.docId]);
-  }
-
   deleteTrip() {
-    this.store.dispatch(deleteTrip({ tripId: this.tripToUpdate()?.docId }));
+    this.store.dispatch(
+      deleteTrip({ tripId: this.tripToUpdate()?.docId ?? '' })
+    );
   }
 }

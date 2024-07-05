@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   Firestore,
@@ -8,13 +9,16 @@ import {
   getDocs,
   updateDoc,
 } from '@angular/fire/firestore';
-import { Trip } from '../models/trips';
+import { ExchangeRatesDTO, Trip } from '../models/trips';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private firestore: Firestore) {}
+  constructor(
+    private firestore: Firestore,
+    private http: HttpClient
+  ) {}
 
   getTrips() {
     return getDocs(collection(this.firestore, 'trips'));
@@ -32,5 +36,34 @@ export class ApiService {
     return updateDoc(doc(this.firestore, 'trips', tripId), {
       ...trip,
     });
+  }
+
+  getCurrencies(baseCurrency: string) {
+    switch (baseCurrency) {
+      case 'USD':
+        return this.http.get<ExchangeRatesDTO>(
+          `assets/exchangeRatesBaseUSD.json`
+        );
+      case 'GBP':
+        return this.http.get<ExchangeRatesDTO>(
+          `assets/exchangeRatesBaseGBP.json`
+        );
+      case 'EUR':
+        return this.http.get<ExchangeRatesDTO>(
+          `assets/exchangeRatesBaseEUR.json`
+        );
+      case 'AUD':
+        return this.http.get<ExchangeRatesDTO>(
+          `assets/exchangeRatesBaseAUD.json`
+        );
+      default:
+        return this.http.get<ExchangeRatesDTO>(
+          `assets/exchangeRatesBaseZAR.json`
+        );
+    }
+    // Replace the switch statement with the following code in prod:
+    // return this.http.get<ExchangeRatesDTO>(
+    //   `https://api.currencyapi.com/v3/latest?apikey=${environment.currencyApiKey}&currencies=EUR%2CUSD%2CGBP%2CAUD%2CZAR&base_currency=${baseCurrency}`
+    // );
   }
 }
