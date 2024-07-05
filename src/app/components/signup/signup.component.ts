@@ -13,7 +13,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, RouterLink } from '@angular/router';
-import { environment } from '../../../environments/environment.development';
 import { AuthService } from '../../services/auth.service';
 import { ValidationService } from '../../services/validation.service';
 
@@ -47,7 +46,9 @@ export class SignupComponent {
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [
         Validators.required,
-        Validators.pattern(environment.passwordRegex),
+        Validators.pattern(
+          /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/
+        ),
       ]),
       confirmPassword: new FormControl('', [Validators.required]),
     },
