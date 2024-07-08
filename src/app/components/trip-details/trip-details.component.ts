@@ -5,6 +5,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 import { ItineraryItem, Trip } from '../../models/trips';
 import {
   deleteTrip,
@@ -31,6 +33,8 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
     CurrencyPipe,
     ItineraryFormComponent,
     RouterLink,
+    NzCalendarModule,
+    NzBadgeModule,
   ],
   templateUrl: './trip-details.component.html',
   styleUrl: './trip-details.component.scss',
@@ -67,6 +71,11 @@ export class TripDetailsComponent {
         this.tripToUpdate.set(trip);
       }
     });
+  }
+
+  getDateWithoutTime(date: Date): Date {
+    date.setHours(0, 0, 0, 0);
+    return date;
   }
 
   closeModal() {
