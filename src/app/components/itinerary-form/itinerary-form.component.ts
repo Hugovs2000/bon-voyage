@@ -7,6 +7,7 @@ import {
   Input,
   Output,
   ViewChild,
+  signal,
 } from '@angular/core';
 import { GeoPoint, Timestamp } from '@angular/fire/firestore';
 import {
@@ -20,9 +21,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { LatLng } from 'leaflet';
 import { v4 as uuid } from 'uuid';
-import { ItineraryItem, currencies } from '../../models/trips';
+import { ItineraryItem, LeafletPosition, currencies } from '../../models/trips';
 import { filterConfig } from '../../utils/filterCalendar';
+import { MapComponent } from '../map/map.component';
 
 @Component({
   selector: 'app-itinerary-form',
@@ -35,6 +38,7 @@ import { filterConfig } from '../../utils/filterCalendar';
     MatSelectModule,
     CurrencyPipe,
     MatIconModule,
+    MapComponent,
   ],
   templateUrl: './itinerary-form.component.html',
   styleUrl: './itinerary-form.component.scss',
@@ -43,6 +47,20 @@ import { filterConfig } from '../../utils/filterCalendar';
 export class ItineraryFormComponent {
   @Input() set activity(activity: ItineraryItem | null) {
     if (activity) {
+      this.locations.set([
+        {
+          position: new LatLng(
+            activity.startLocation?.latitude ?? 0,
+            activity.startLocation?.longitude ?? 0
+          ),
+        },
+        {
+          position: new LatLng(
+            activity.endLocation?.latitude ?? 0,
+            activity.endLocation?.longitude ?? 0
+          ),
+        },
+      ]);
       this.activityForm.setValue({
         id: activity.id ?? '',
         title: activity.title ?? '',
@@ -63,6 +81,10 @@ export class ItineraryFormComponent {
 
   @ViewChild('tagModal')
   tagModalRef: ElementRef<HTMLDialogElement> | null = null;
+  @ViewChild('mapModal')
+  mapModalRef: ElementRef<HTMLDialogElement> | null = null;
+
+  locations = signal<LeafletPosition[] | null>(null);
 
   filter = filterConfig;
   currencies = currencies;
@@ -126,12 +148,48 @@ export class ItineraryFormComponent {
     this.tagModalRef?.nativeElement.close();
   }
 
+  openMapModal() {
+    this.mapModalRef?.nativeElement.showModal();
+  }
+
+  closeMapModal() {
+    this.mapModalRef?.nativeElement.close();
+  }
+
   clearForm() {
     const tempId = this.activityForm.value.id ?? '';
     this.activityForm.reset();
     this.activityForm.patchValue({
       id: tempId,
     });
+  }
+
+  locationsChanged(locations: LeafletPosition[]) {
+    if (locations.length > 1) {
+      this.activityForm.patchValue({
+        startLocation: new GeoPoint(
+          locations[0].position.lat,
+          locations[0].position.lng
+        ),
+        endLocation: new GeoPoint(
+          locations[1].position.lat,
+          locations[1].position.lng
+        ),
+      });
+    } else if (locations.length === 1) {
+      this.activityForm.patchValue({
+        startLocation: new GeoPoint(
+          locations[0].position.lat,
+          locations[0].position.lng
+        ),
+        endLocation: new GeoPoint(0, 0),
+      });
+    } else {
+      this.activityForm.patchValue({
+        startLocation: new GeoPoint(0, 0),
+        endLocation: new GeoPoint(0, 0),
+      });
+    }
   }
 
   cancelEdit() {

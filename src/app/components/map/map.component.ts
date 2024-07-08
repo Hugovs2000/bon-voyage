@@ -1,4 +1,4 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import * as Leaflet from 'leaflet';
 import { ItineraryItem, LeafletPosition } from '../../models/trips';
@@ -18,46 +18,46 @@ export class MapComponent {
       this.initialMarkers = [
         {
           position: Leaflet.latLng(
-            activity.startLocation?.latitude ?? 0,
-            activity.startLocation?.longitude ?? 0
+            activity.startLocation?.latitude ?? -22.952702901741162,
+            activity.startLocation?.longitude ?? 14.517059326171877
           ),
         },
         {
           position: Leaflet.latLng(
-            activity.endLocation?.latitude ?? 0,
-            activity.endLocation?.longitude ?? 0
+            activity.endLocation?.latitude ?? -22.952702901741162,
+            activity.endLocation?.longitude ?? 14.517059326171877
           ),
         },
       ];
       this.options = {
         ...this.options,
+        zoom: 12,
         center: Leaflet.latLng(
-          activity.startLocation?.latitude ?? 0,
-          activity.startLocation?.longitude ?? 0
+          activity.startLocation?.latitude ?? -22.952702901741162,
+          activity.startLocation?.longitude ?? 14.517059326171877
         ),
       };
       this.title.set(activity.title);
     } else {
       this.options = {
         ...this.options,
-        center: Leaflet.latLng(0, 0),
       };
     }
   }
+  @Input() set inputLocations(locations: LeafletPosition[] | null) {
+    if (locations) {
+      this.initialMarkers = locations;
+    }
+  }
+  @Output() locationsChanged = new EventEmitter<LeafletPosition[]>();
 
   title = signal('Activity Location');
   activity = signal<ItineraryItem | null>(null);
 
   map: Leaflet.Map | null = null;
   markers: Leaflet.Marker[] = [];
-  initialMarkers: LeafletPosition[] = [
-    {
-      position: Leaflet.latLng(0, 0),
-    },
-    {
-      position: Leaflet.latLng(0, 0),
-    },
-  ];
+  locations: LeafletPosition[] = [];
+  initialMarkers: LeafletPosition[] = [];
   options = {
     layers: [
       Leaflet.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -65,22 +65,30 @@ export class MapComponent {
         maxZoom: 20,
       }),
     ],
-    zoom: 12,
-    center: Leaflet.latLng(0, 0),
+    zoom: 4,
+    center: Leaflet.latLng(-22.952702901741162, 14.517059326171877),
   };
 
   initMarkers() {
-    for (const marker of this.initialMarkers) {
-      if (this.map) {
-        const generatedMarker = this.generateMarker(marker);
+    if (this.map) {
+      for (const marker of this.initialMarkers) {
+        const generatedMarker = this.generateMarker(marker, false);
         generatedMarker.addTo(this.map).bindPopup(this.title());
         this.markers.push(generatedMarker);
+        this.locations.push({ position: generatedMarker.getLatLng() });
+      }
+      const bounds = Leaflet.latLngBounds(this.markers.map(m => m.getLatLng()));
+      if (bounds.isValid()) {
+        this.map.flyToBounds(bounds);
       }
     }
   }
 
-  generateMarker(data: LeafletPosition) {
-    return Leaflet.marker(data.position, { draggable: false });
+  generateMarker(data: LeafletPosition, isDraggable: boolean) {
+    return Leaflet.marker(data.position, { draggable: isDraggable }).on(
+      'click',
+      click => this.removeMarker(click)
+    );
   }
 
   onMapReady(map: Leaflet.Map) {
@@ -88,12 +96,31 @@ export class MapComponent {
     this.initMarkers();
   }
 
-  mapClicked(position: Leaflet.LeafletMouseEvent) {
-    if (this.map) {
-      if (!this.activity()) {
-        const marker = this.generateMarker({ position: position.latlng });
-        marker.addTo(this.map).bindPopup(this.title());
+  removeMarker(position: Leaflet.LeafletMouseEvent) {
+    if (this.map && !this.activity()) {
+      for (const marker of this.markers) {
+        if (
+          marker.getLatLng().lat === position.latlng.lat &&
+          marker.getLatLng().lng === position.latlng.lng
+        ) {
+          this.map.removeLayer(marker);
+          this.markers = this.markers.filter(m => m !== marker);
+          this.locations = this.locations.filter(
+            l => l.position !== marker.getLatLng()
+          );
+          this.locationsChanged.emit(this.locations);
+        }
       }
+    }
+  }
+
+  mapClicked(position: Leaflet.LeafletMouseEvent) {
+    if (this.map && !this.activity() && this.markers.length < 2) {
+      const marker = this.generateMarker({ position: position.latlng }, false);
+      marker.addTo(this.map);
+      this.markers.push(marker);
+      this.locations.push({ position: marker.getLatLng() });
+      this.locationsChanged.emit(this.locations);
     }
   }
 }
