@@ -14,27 +14,31 @@ Leaflet.Icon.Default.imagePath = 'assets/';
 export class MapComponent {
   @Input() set inputActivity(activity: ItineraryItem | null) {
     if (activity) {
+      let zoomLevel = 1;
       this.activity.set(activity);
-      this.initialMarkers = [
-        {
-          position: Leaflet.latLng(
-            activity.startLocation?.latitude ?? -22.952702901741162,
-            activity.startLocation?.longitude ?? 14.517059326171877
-          ),
-        },
-        {
-          position: Leaflet.latLng(
-            activity.endLocation?.latitude ?? -22.952702901741162,
-            activity.endLocation?.longitude ?? 14.517059326171877
-          ),
-        },
-      ];
+      if (activity.startLocation && activity.endLocation) {
+        this.initialMarkers = [
+          {
+            position: Leaflet.latLng(
+              activity.startLocation?.latitude,
+              activity.startLocation?.longitude
+            ),
+          },
+          {
+            position: Leaflet.latLng(
+              activity.endLocation?.latitude,
+              activity.endLocation?.longitude
+            ),
+          },
+        ];
+        zoomLevel = 12;
+      }
       this.options = {
         ...this.options,
-        zoom: 12,
+        zoom: zoomLevel,
         center: Leaflet.latLng(
-          activity.startLocation?.latitude ?? -22.952702901741162,
-          activity.startLocation?.longitude ?? 14.517059326171877
+          activity.startLocation?.latitude ?? 0,
+          activity.startLocation?.longitude ?? 0
         ),
       };
       this.title.set(activity.title);
@@ -65,8 +69,8 @@ export class MapComponent {
         maxZoom: 20,
       }),
     ],
-    zoom: 4,
-    center: Leaflet.latLng(-22.952702901741162, 14.517059326171877),
+    zoom: 1,
+    center: Leaflet.latLng(0, 0),
   };
 
   initMarkers() {

@@ -68,8 +68,8 @@ export class ItineraryFormComponent {
         endDate: activity.endDate.toDate() ?? new Date(),
         cost: activity.cost ?? 0,
         currency: activity.currency ?? 'ZAR',
-        startLocation: activity.startLocation ?? new GeoPoint(0, 0),
-        endLocation: activity.endLocation ?? new GeoPoint(0, 0),
+        startLocation: activity.startLocation ?? null,
+        endLocation: activity.endLocation ?? null,
         notes: activity.notes ?? '',
         tag: activity.tag ?? '',
       });
@@ -99,8 +99,8 @@ export class ItineraryFormComponent {
     endDate: new FormControl<Date | Timestamp>(new Date(), Validators.required),
     cost: new FormControl(0, [Validators.required, Validators.min(0)]),
     currency: new FormControl('', Validators.required),
-    startLocation: new FormControl(new GeoPoint(0, 0)),
-    endLocation: new FormControl(new GeoPoint(0, 0)),
+    startLocation: new FormControl<GeoPoint | null>(null),
+    endLocation: new FormControl<GeoPoint | null>(null),
     notes: new FormControl(''),
     tag: new FormControl(''),
   });
@@ -182,12 +182,12 @@ export class ItineraryFormComponent {
           locations[0].position.lat,
           locations[0].position.lng
         ),
-        endLocation: new GeoPoint(0, 0),
+        endLocation: null,
       });
     } else {
       this.activityForm.patchValue({
-        startLocation: new GeoPoint(0, 0),
-        endLocation: new GeoPoint(0, 0),
+        startLocation: null,
+        endLocation: null,
       });
     }
   }
