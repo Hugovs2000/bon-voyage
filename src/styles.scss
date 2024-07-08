@@ -42,6 +42,19 @@ $bon-voyage-theme: mat.define-light-theme(
 
 @import '../node_modules/leaflet/dist/leaflet.css';
 
+@import '../node_modules/ng-zorro-antd/ng-zorro-antd.min.css';
+@import '../node_modules/ng-zorro-antd/calendar/style/index.min.css';
+
+.ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner {
+  color: black;
+  background: none;
+  text-decoration: underline;
+  font-weight: bold;
+}
+.ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before {
+  border-radius: 100%;
+}
+
 html,
 body {
   height: 100%;
@@ -79,4 +92,8 @@ body {
 
 .mat-mdc-form-field-error-wrapper {
   padding: 0 0 !important;
+}
+
+td {
+  vertical-align: top;
 }
