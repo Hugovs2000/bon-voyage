@@ -28,7 +28,7 @@
               ✕
             </button>
           </form>
-          <h3 class="text-lg font-bold">Create Tag!</h3>
+          <h3 class="text-lg font-bold">Create a Tag!</h3>
           <mat-form-field hideRequiredMarker="true" class="mt-2 w-full">
             <mat-label>Tag:</mat-label>
             <input
@@ -79,12 +79,14 @@
         <mat-error>Please enter a valid date range</mat-error>
       </mat-form-field>
 
-      <!-- TODO: Implement map -->
-      <!-- <div class="mb-4 flex flex-col">
-        <button type="button" class="btn mb-2 w-fit self-center bg-white">
+      <div class="mb-4 flex flex-col">
+        <button
+          type="button"
+          class="btn mb-2 w-fit self-center bg-white"
+          (click)="openMapModal()">
           Choose location on map
         </button>
-      </div> -->
+      </div>
 
       <div class="flex items-center gap-2">
         <mat-form-field hideRequiredMarker="true">
@@ -149,4 +151,29 @@
     </div>
   </div>
   <div class="card-actions justify-end"></div>
+  <dialog #mapModal class="modal">
+    <div class="modal-box">
+      <form method="dialog" class="flex justify-end">
+        <button
+          type="button"
+          class="btn btn-circle btn-ghost btn-sm"
+          (click)="closeMapModal()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </form>
+      <h3 class="text-lg font-bold">Choose a start and end location.</h3>
+      <app-map
+        (locationsChanged)="locationsChanged($event)"
+        [inputLocations]="locations()"></app-map>
+      <p class="py-4">Tap on the ✕ to close.</p>
+      <form method="dialog" class="flex justify-end">
+        <button
+          type="button"
+          class="btn btn-success btn-sm"
+          (click)="closeMapModal()">
+          Done
+        </button>
+      </form>
+    </div>
+  </dialog>
 </div>

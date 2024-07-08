@@ -1,4 +1,5 @@
 import { GeoPoint, Timestamp } from '@angular/fire/firestore';
+import { LatLng } from 'leaflet';
 
 export interface Trip {
   docId: string;
@@ -51,3 +52,7 @@ export const currencies = [
   { value: 'EUR' },
   { value: 'AUD' },
 ];
+
+export interface LeafletPosition {
+  position: LatLng;
+}

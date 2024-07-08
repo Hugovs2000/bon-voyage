@@ -13,6 +13,9 @@
           </div>
         }
       </h1>
+      @if (activity()?.startLocation || activity()?.endLocation) {
+        <app-map [inputActivity]="activity()"></app-map>
+      }
       <div>
         <p>Start Date: {{ newStartDate() | date }}</p>
         <p>End Date: {{ newEndDate() | date }}</p>

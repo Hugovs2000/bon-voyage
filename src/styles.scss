@@ -40,6 +40,8 @@ $bon-voyage-theme: mat.define-light-theme(
 @tailwind components;
 @tailwind utilities;
 
+@import '../node_modules/leaflet/dist/leaflet.css';
+
 @import '../node_modules/ng-zorro-antd/ng-zorro-antd.min.css';
 @import '../node_modules/ng-zorro-antd/calendar/style/index.min.css';
 
