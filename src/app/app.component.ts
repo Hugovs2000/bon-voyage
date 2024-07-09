@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 
+import { AsyncPipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,6 +15,9 @@ import { AuthService } from './services/auth.service';
 import { getAllTrips, getExchangeRates } from './store/trips/actions';
 import { TripState } from './store/trips/reducer';
 import { selectBaseCurrency } from './store/trips/selectors';
+import { logOut } from './store/user/actions';
+import { UserState } from './store/user/reducer';
+import { selectIsLoggedIn } from './store/user/selectors';
 
 @Component({
   selector: 'app-root',
@@ -28,31 +32,36 @@ import { selectBaseCurrency } from './store/trips/selectors';
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
+    AsyncPipe,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
   title = 'bon-voyage';
+  isLoggedIn$ = this.userStore.select(selectIsLoggedIn);
 
   constructor(
-    private store: Store<TripState>,
-    private router: Router,
+    private tripStore: Store<TripState>,
+    private userStore: Store<UserState>,
     protected authService: AuthService
   ) {
-    this.store
+    this.tripStore
       .select(selectBaseCurrency)
       .pipe(takeUntilDestroyed())
       .subscribe(baseCurrency => {
-        this.store.dispatch(
+        this.tripStore.dispatch(
           getExchangeRates({ baseCurrency: baseCurrency ?? 'ZAR' })
         );
       });
-    this.store.dispatch(getAllTrips());
+    this.isLoggedIn$.pipe(takeUntilDestroyed()).subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        this.tripStore.dispatch(getAllTrips());
+      }
+    });
   }
 
   signOut() {
-    this.authService.logUserOut();
-    this.router.navigate(['']);
+    this.userStore.dispatch(logOut());
   }
 }

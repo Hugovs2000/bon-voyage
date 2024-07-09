@@ -11,9 +11,10 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { RouterLink } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { logInWithEmail, logInWithGoogle } from '../../store/user/actions';
+import { UserState } from '../../store/user/reducer';
 
 @Component({
   selector: 'app-login',
@@ -33,9 +34,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  authService = inject(AuthService);
-  router = inject(Router);
-  snackBar = inject(MatSnackBar);
+  store = inject(Store<UserState>);
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -49,42 +48,15 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.value.email && this.loginForm.value.password)
-      this.authService
-        .login(this.loginForm.value.email, this.loginForm.value.password)
-        .then(() => {
-          localStorage.setItem('user', this.authService.userId ?? 'true');
-          this.authService.isLoggedIn.set(true);
-          this.router.navigate(['home']);
+      this.store.dispatch(
+        logInWithEmail({
+          email: this.loginForm.value.email,
+          password: this.loginForm.value.password,
         })
-        .catch(() =>
-          this.snackBar.open(
-            'Could not log in. Invalid user credentials.',
-            'Close',
-            {
-              duration: 5000,
-              panelClass: ['snackbar-error'],
-            }
-          )
-        );
+      );
   }
 
   signInWithGoogle() {
-    this.authService
-      .byGoogle()
-      .then(() => {
-        localStorage.setItem('user', this.authService.userId ?? 'true');
-        this.authService.isLoggedIn.set(true);
-        this.router.navigate(['home']);
-      })
-      .catch(() =>
-        this.snackBar.open(
-          'Could not log in. An error occurred. Please try again.',
-          'Close',
-          {
-            duration: 5000,
-            panelClass: ['snackbar-error'],
-          }
-        )
-      );
+    this.store.dispatch(logInWithGoogle());
   }
 }

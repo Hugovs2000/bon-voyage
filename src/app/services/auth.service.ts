@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import {
   Auth,
   createUserWithEmailAndPassword,
@@ -9,19 +9,16 @@ import {
   signOut,
   UserCredential,
 } from '@angular/fire/auth';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private _auth = inject(Auth);
-  private snackBar = inject(MatSnackBar);
   isLoggedIn = signal(!!localStorage.getItem('user'));
 
   get userId() {
     if (localStorage.getItem('user')) {
-      return localStorage.getItem('user')?.valueOf();
+      return JSON.parse(localStorage.getItem('user')?.valueOf() ?? '').uid;
     }
     return this._auth.currentUser?.uid;
   }
@@ -47,28 +44,16 @@ export class AuthService {
   }
 
   logUserOut() {
-    return signOut(this._auth)
-      .then(() => {
-        this.isLoggedIn.set(false);
-        localStorage.removeItem('user');
-      })
-      .catch(() =>
-        this.snackBar.open(
-          'There was a problem trying to log you out. Please try again.',
-          'Close',
-          {
-            duration: 5000,
-            panelClass: ['snackbar-error'],
-          }
-        )
-      );
+    return signOut(this._auth);
   }
 
-  constructor() {
+  constructor(private _auth: Auth) {
     onAuthStateChanged(this._auth, user => {
       if (user?.uid) {
-        localStorage.setItem('user', user.uid);
         this.isLoggedIn.set(!!(user.uid && user.uid.length > 1));
+      } else {
+        localStorage.removeItem('user');
+        this.isLoggedIn.set(false);
       }
     });
   }

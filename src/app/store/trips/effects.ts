@@ -1,12 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { catchError, map, of, retry, switchMap } from 'rxjs';
 import { Trip } from '../../models/trips';
 import { ApiService } from '../../services/api.service';
-import { AuthService } from '../../services/auth.service';
+import { UserState } from '../user/reducer';
+import { selectUser } from '../user/selectors';
 import {
   createNewTrip,
   createNewTripComplete,
@@ -23,6 +26,8 @@ import {
 
 @Injectable()
 export class TripsEffects {
+  userId = signal('');
+
   getAllTrips$ = createEffect(() =>
     this.actions$.pipe(
       ofType(getAllTrips.type),
@@ -33,12 +38,14 @@ export class TripsEffects {
             if (data.empty) {
               return getAllTripsComplete({ trips: [] });
             }
-            const trips = data.docs.map(doc => {
-              return {
-                ...(doc.data() as Trip),
-                docId: doc.id,
-              };
-            });
+            const trips = data.docs
+              .filter(doc => (doc.data() as Trip).userId === this.userId())
+              .map(doc => {
+                return {
+                  ...(doc.data() as Trip),
+                  docId: doc.id,
+                };
+              });
             return getAllTripsComplete({ trips: trips });
           })
           .catch(() => {
@@ -200,8 +207,15 @@ export class TripsEffects {
   constructor(
     private actions$: Actions,
     private apiService: ApiService,
-    private authService: AuthService,
     private snackBar: MatSnackBar,
-    private router: Router
-  ) {}
+    private router: Router,
+    private userStore: Store<UserState>
+  ) {
+    this.userStore
+      .select(selectUser)
+      .pipe(takeUntilDestroyed())
+      .subscribe(user => {
+        this.userId.set(user.uid);
+      });
+  }
 }
