@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { RouterLink, RouterOutlet } from '@angular/router';
 
@@ -16,7 +16,7 @@ import { getAllTrips, getExchangeRates } from './store/trips/actions';
 import { TripState } from './store/trips/reducer';
 import { logOut } from './store/user/actions';
 import { UserState } from './store/user/reducer';
-import { selectUser } from './store/user/selectors';
+import { selectIsLoggedIn, selectUser } from './store/user/selectors';
 
 @Component({
   selector: 'app-root',
@@ -38,7 +38,7 @@ import { selectUser } from './store/user/selectors';
 })
 export class AppComponent {
   title = 'bon-voyage';
-  isLoggedIn = signal(false);
+  isLoggedIn$ = this.userStore.select(selectIsLoggedIn);
 
   constructor(
     private tripStore: Store<TripState>,
@@ -49,14 +49,11 @@ export class AppComponent {
       .select(selectUser)
       .pipe(takeUntilDestroyed())
       .subscribe(user => {
-        if (user && user.uid && user.baseCurrency) {
-          this.isLoggedIn.set(true);
+        if (user.uid && user.baseCurrency) {
           this.tripStore.dispatch(
             getExchangeRates({ baseCurrency: user.baseCurrency })
           );
           this.tripStore.dispatch(getAllTrips());
-        } else {
-          this.isLoggedIn.set(false);
         }
       });
   }
