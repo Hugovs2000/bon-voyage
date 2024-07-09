@@ -1,6 +1,11 @@
 import { isDevMode } from '@angular/core';
 import { ActionReducer, createReducer, MetaReducer, on } from '@ngrx/store';
-import { logInComplete, logInError, logOutComplete } from './actions';
+import {
+  logInComplete,
+  logInError,
+  logOutComplete,
+  setBaseCurrency,
+} from './actions';
 
 export const userFeatureKey = 'User';
 const localUser = localStorage.getItem('user')?.valueOf();
@@ -49,6 +54,9 @@ export const userReducers = createReducer(
       photoURL: null,
       baseCurrency: 'ZAR',
     };
+  }),
+  on(setBaseCurrency, (state, { baseCurrency }) => {
+    return { ...state, baseCurrency };
   })
 );
 

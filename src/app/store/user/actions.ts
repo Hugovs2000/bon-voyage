@@ -23,3 +23,8 @@ export const logInError = createAction('[User] LogInError');
 export const logOut = createAction('[User] LogOut');
 
 export const logOutComplete = createAction('[User] LogOutComplete');
+
+export const setBaseCurrency = createAction(
+  '[User] SetBaseCurrency',
+  props<{ baseCurrency: string }>()
+);
