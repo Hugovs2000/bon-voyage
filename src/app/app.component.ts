@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Store } from '@ngrx/store';
+import { EMPTY, switchMap } from 'rxjs';
 import { LandingComponent } from './components/landing/landing.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
@@ -16,7 +17,7 @@ import { getAllTrips, getExchangeRates } from './store/trips/actions';
 import { TripState } from './store/trips/reducer';
 import { logOut } from './store/user/actions';
 import { UserState } from './store/user/reducer';
-import { selectIsLoggedIn, selectUser } from './store/user/selectors';
+import { selectBaseCurrency, selectIsLoggedIn } from './store/user/selectors';
 
 @Component({
   selector: 'app-root',
@@ -45,14 +46,20 @@ export class AppComponent {
     private userStore: Store<UserState>,
     protected authService: AuthService
   ) {
-    userStore
-      .select(selectUser)
-      .pipe(takeUntilDestroyed())
-      .subscribe(user => {
-        if (user.uid && user.baseCurrency) {
-          this.tripStore.dispatch(
-            getExchangeRates({ baseCurrency: user.baseCurrency })
-          );
+    this.isLoggedIn$
+      .pipe(
+        takeUntilDestroyed(),
+        switchMap(isLoggedIn => {
+          if (isLoggedIn) {
+            return this.userStore.select(selectBaseCurrency);
+          } else {
+            return EMPTY;
+          }
+        })
+      )
+      .subscribe(baseCurrency => {
+        if (baseCurrency) {
+          this.tripStore.dispatch(getExchangeRates({ baseCurrency }));
           this.tripStore.dispatch(getAllTrips());
         }
       });
