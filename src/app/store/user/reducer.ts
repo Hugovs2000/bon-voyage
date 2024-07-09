@@ -11,6 +11,7 @@ export interface UserState {
   email: string | null;
   phoneNumber: string | null;
   photoURL: string | null;
+  baseCurrency: string;
 }
 
 const initialState: UserState = localUser
@@ -20,6 +21,7 @@ const initialState: UserState = localUser
       email: JSON.parse(localUser).email,
       phoneNumber: JSON.parse(localUser).phoneNumber,
       photoURL: JSON.parse(localUser).photoURL,
+      baseCurrency: 'ZAR',
     }
   : {
       uid: null,
@@ -27,6 +29,7 @@ const initialState: UserState = localUser
       email: null,
       phoneNumber: null,
       photoURL: null,
+      baseCurrency: 'ZAR',
     };
 
 export const userReducers = createReducer(
@@ -44,6 +47,7 @@ export const userReducers = createReducer(
       email: null,
       phoneNumber: null,
       photoURL: null,
+      baseCurrency: 'ZAR',
     };
   })
 );

@@ -18,3 +18,7 @@ export const selectIsLoggedIn = createSelector(selectFeature, state => {
     return false;
   }
 });
+
+export const selectBaseCurrency = createSelector(selectFeature, state => {
+  return state.baseCurrency;
+});

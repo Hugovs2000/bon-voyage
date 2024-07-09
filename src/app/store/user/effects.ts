@@ -30,6 +30,7 @@ export class UserEffects {
               phoneNumber: user.user.phoneNumber ?? null,
               photoURL: user.user.photoURL ?? null,
               uid: user.user.uid ?? null,
+              baseCurrency: 'ZAR',
             };
             localStorage.setItem('user', JSON.stringify(userObj));
             this.router.navigate(['home']);
@@ -65,6 +66,7 @@ export class UserEffects {
               phoneNumber: user.user.phoneNumber ?? null,
               photoURL: user.user.photoURL ?? null,
               uid: user.user.uid ?? null,
+              baseCurrency: 'ZAR',
             };
             localStorage.setItem('user', JSON.stringify(userObj));
             this.router.navigate(['home']);
@@ -100,6 +102,7 @@ export class UserEffects {
               phoneNumber: user.user.phoneNumber ?? null,
               photoURL: user.user.photoURL ?? null,
               uid: user.user.uid ?? null,
+              baseCurrency: 'ZAR',
             };
             localStorage.setItem('user', JSON.stringify(userObj));
             this.router.navigate(['home']);

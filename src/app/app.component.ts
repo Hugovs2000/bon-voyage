@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { RouterLink, RouterOutlet } from '@angular/router';
 
@@ -14,10 +14,9 @@ import { SignupComponent } from './components/signup/signup.component';
 import { AuthService } from './services/auth.service';
 import { getAllTrips, getExchangeRates } from './store/trips/actions';
 import { TripState } from './store/trips/reducer';
-import { selectBaseCurrency } from './store/trips/selectors';
 import { logOut } from './store/user/actions';
 import { UserState } from './store/user/reducer';
-import { selectIsLoggedIn } from './store/user/selectors';
+import { selectUser } from './store/user/selectors';
 
 @Component({
   selector: 'app-root',
@@ -39,26 +38,27 @@ import { selectIsLoggedIn } from './store/user/selectors';
 })
 export class AppComponent {
   title = 'bon-voyage';
-  isLoggedIn$ = this.userStore.select(selectIsLoggedIn);
+  isLoggedIn = signal(false);
 
   constructor(
     private tripStore: Store<TripState>,
     private userStore: Store<UserState>,
     protected authService: AuthService
   ) {
-    this.tripStore
-      .select(selectBaseCurrency)
+    userStore
+      .select(selectUser)
       .pipe(takeUntilDestroyed())
-      .subscribe(baseCurrency => {
-        this.tripStore.dispatch(
-          getExchangeRates({ baseCurrency: baseCurrency ?? 'ZAR' })
-        );
+      .subscribe(user => {
+        if (user && user.uid && user.baseCurrency) {
+          this.isLoggedIn.set(true);
+          this.tripStore.dispatch(
+            getExchangeRates({ baseCurrency: user.baseCurrency })
+          );
+          this.tripStore.dispatch(getAllTrips());
+        } else {
+          this.isLoggedIn.set(false);
+        }
       });
-    this.isLoggedIn$.pipe(takeUntilDestroyed()).subscribe(isLoggedIn => {
-      if (isLoggedIn) {
-        this.tripStore.dispatch(getAllTrips());
-      }
-    });
   }
 
   signOut() {

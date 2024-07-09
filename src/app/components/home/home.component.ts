@@ -14,11 +14,12 @@ import { SwipeDirective } from '../../directives/swipe.directive';
 import { deleteTrip, setSelectedTripId } from '../../store/trips/actions';
 import { TripState } from '../../store/trips/reducer';
 import {
-  selectBaseCurrency,
   selectLoadingState,
   selectSelectedTrip,
   selectTrips,
 } from '../../store/trips/selectors';
+import { UserState } from '../../store/user/reducer';
+import { selectBaseCurrency } from '../../store/user/selectors';
 import { TripCardComponent } from '../trip-card/trip-card.component';
 
 @Component({
@@ -36,13 +37,14 @@ import { TripCardComponent } from '../trip-card/trip-card.component';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  store = inject(Store<TripState>);
+  tripStore = inject(Store<TripState>);
+  userStore = inject(Store<UserState>);
   router = inject(Router);
 
-  trips$ = this.store.select(selectTrips);
-  selectedTrip$ = this.store.select(selectSelectedTrip);
-  loading$ = this.store.select(selectLoadingState);
-  baseCurrency$ = this.store.select(selectBaseCurrency);
+  trips$ = this.tripStore.select(selectTrips);
+  selectedTrip$ = this.tripStore.select(selectSelectedTrip);
+  loading$ = this.tripStore.select(selectLoadingState);
+  baseCurrency$ = this.userStore.select(selectBaseCurrency);
 
   selectedTripId = signal('');
 
@@ -63,12 +65,12 @@ export class HomeComponent {
   }
 
   handleTripClick(id: string) {
-    this.store.dispatch(setSelectedTripId({ tripId: id }));
+    this.tripStore.dispatch(setSelectedTripId({ tripId: id }));
     this.router.navigate(['/trip', id]);
   }
 
   onSwipeRight(id: string) {
-    this.store.dispatch(setSelectedTripId({ tripId: id }));
+    this.tripStore.dispatch(setSelectedTripId({ tripId: id }));
     this.router.navigate(['/edit', id]);
   }
 
@@ -79,7 +81,7 @@ export class HomeComponent {
 
   deleteTrip() {
     if (this.selectedTripId() !== '') {
-      this.store.dispatch(deleteTrip({ tripId: this.selectedTripId() }));
+      this.tripStore.dispatch(deleteTrip({ tripId: this.selectedTripId() }));
       this.closeModal();
     }
   }
