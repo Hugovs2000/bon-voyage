@@ -29,13 +29,19 @@
             activity()?.cost | currency: activity()?.currency : 'symbol-narrow'
           }}
         </p>
-        @if (activity()?.currency !== 'ZAR' && activity()?.costInBaseCurrency) {
-          <p>
-            Cost in Rand (ZAR):
-            {{
-              activity()?.costInBaseCurrency | currency: 'ZAR' : 'symbol-narrow'
-            }}
-          </p>
+        @if (baseCurrency$ | async; as baseCurrency) {
+          @if (
+            activity()?.currency !== baseCurrency &&
+            activity()?.costInBaseCurrency
+          ) {
+            <p>
+              Cost in ({{ baseCurrency }}):
+              {{
+                activity()?.costInBaseCurrency
+                  | currency: baseCurrency : 'symbol-narrow'
+              }}
+            </p>
+          }
         }
         @if (activity()?.notes) {
           <p class="mt-4">Notes:</p>

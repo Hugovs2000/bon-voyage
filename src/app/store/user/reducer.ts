@@ -26,7 +26,7 @@ const initialState: UserState = localUser
       email: JSON.parse(localUser).email,
       phoneNumber: JSON.parse(localUser).phoneNumber,
       photoURL: JSON.parse(localUser).photoURL,
-      baseCurrency: 'ZAR',
+      baseCurrency: JSON.parse(localUser).baseCurrency ?? 'ZAR',
     }
   : {
       uid: null,
@@ -42,9 +42,7 @@ export const userReducers = createReducer(
   on(logInComplete, (_, { user }) => {
     return user;
   }),
-  on(logInError, state => {
-    return { ...state };
-  }),
+  on(logInError, state => state),
   on(logOutComplete, () => {
     return {
       uid: null,
