@@ -14,7 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { ValidationService } from '../../services/validation.service';
+import { passwordMatch } from '../../utils/passwordMatch';
 
 @Component({
   selector: 'app-signup',
@@ -39,8 +39,6 @@ export class SignupComponent {
   snackBar = inject(MatSnackBar);
   hide = true;
 
-  validation = inject(ValidationService);
-
   signUpForm = new FormGroup(
     {
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -52,7 +50,7 @@ export class SignupComponent {
       ]),
       confirmPassword: new FormControl('', [Validators.required]),
     },
-    this.validation.passwordMatch('password', 'confirmPassword')
+    passwordMatch('password', 'confirmPassword')
   );
 
   onSubmit() {
