@@ -215,7 +215,7 @@ export class TripsEffects {
       .select(selectUser)
       .pipe(takeUntilDestroyed())
       .subscribe(user => {
-        this.userId.set(user.uid);
+        this.userId.set(user.uid ?? '');
       });
   }
 }

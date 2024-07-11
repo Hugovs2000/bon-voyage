@@ -32,7 +32,7 @@ export class UserEffects {
               uid: user.user.uid ?? null,
               baseCurrency: 'ZAR',
             };
-            localStorage.setItem('user', JSON.stringify(userObj));
+            sessionStorage.setItem('user', JSON.stringify(userObj));
             this.router.navigate(['home']);
             return logInComplete({
               user: userObj,
@@ -68,7 +68,7 @@ export class UserEffects {
               uid: user.user.uid ?? null,
               baseCurrency: 'ZAR',
             };
-            localStorage.setItem('user', JSON.stringify(userObj));
+            sessionStorage.setItem('user', JSON.stringify(userObj));
             this.router.navigate(['home']);
             return logInComplete({
               user: userObj,
@@ -104,7 +104,7 @@ export class UserEffects {
               uid: user.user.uid ?? null,
               baseCurrency: 'ZAR',
             };
-            localStorage.setItem('user', JSON.stringify(userObj));
+            sessionStorage.setItem('user', JSON.stringify(userObj));
             this.router.navigate(['home']);
             return logInComplete({
               user: userObj,
@@ -132,7 +132,7 @@ export class UserEffects {
         this.authService
           .logUserOut()
           .then(() => {
-            localStorage.removeItem('user');
+            sessionStorage.removeItem('user');
             this.router.navigate(['']);
             return logOutComplete();
           })

@@ -1,24 +1,24 @@
 import { Injectable, signal } from '@angular/core';
 import {
   Auth,
-  createUserWithEmailAndPassword,
   GoogleAuthProvider,
+  UserCredential,
+  createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  UserCredential,
 } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  isLoggedIn = signal(!!localStorage.getItem('user'));
+  isLoggedIn = signal(!!sessionStorage.getItem('user'));
 
   get userId() {
-    if (localStorage.getItem('user')) {
-      return JSON.parse(localStorage.getItem('user')?.valueOf() ?? '').uid;
+    if (sessionStorage.getItem('user')) {
+      return JSON.parse(sessionStorage.getItem('user')?.valueOf() ?? '').uid;
     }
     return this._auth.currentUser?.uid;
   }
@@ -52,7 +52,7 @@ export class AuthService {
       if (user?.uid) {
         this.isLoggedIn.set(!!(user.uid && user.uid.length > 1));
       } else {
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
         this.isLoggedIn.set(false);
       }
     });

@@ -8,7 +8,7 @@ import {
 } from './actions';
 
 export const userFeatureKey = 'User';
-const localUser = localStorage.getItem('user')?.valueOf();
+const localUser = sessionStorage.getItem('user')?.valueOf();
 
 export interface UserState {
   uid: string | null;
