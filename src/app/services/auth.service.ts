@@ -3,6 +3,7 @@ import {
   Auth,
   GoogleAuthProvider,
   UserCredential,
+  browserSessionPersistence,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -18,10 +19,12 @@ import { UserState } from '../store/user/reducer';
 })
 export class AuthService {
   byGoogle(): Promise<UserCredential> {
+    this._auth.setPersistence(browserSessionPersistence);
     return signInWithPopup(this._auth, new GoogleAuthProvider());
   }
 
   signup(email: string, password: string): Promise<UserCredential> {
+    this._auth.setPersistence(browserSessionPersistence);
     return createUserWithEmailAndPassword(
       this._auth,
       email.trim(),
@@ -30,6 +33,7 @@ export class AuthService {
   }
 
   login(email: string, password: string): Promise<UserCredential> {
+    this._auth.setPersistence(browserSessionPersistence);
     return signInWithEmailAndPassword(
       this._auth,
       email.trim(),
