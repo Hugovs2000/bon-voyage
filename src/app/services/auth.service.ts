@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
   Auth,
   GoogleAuthProvider,
@@ -9,20 +9,12 @@ import {
   signInWithPopup,
   signOut,
 } from '@angular/fire/auth';
+import { UserState } from '../store/user/reducer';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  isLoggedIn = signal(!!sessionStorage.getItem('user'));
-
-  get userId() {
-    if (sessionStorage.getItem('user')) {
-      return JSON.parse(sessionStorage.getItem('user')?.valueOf() ?? '').uid;
-    }
-    return this._auth.currentUser?.uid;
-  }
-
   byGoogle(): Promise<UserCredential> {
     return signInWithPopup(this._auth, new GoogleAuthProvider());
   }
@@ -50,10 +42,19 @@ export class AuthService {
   constructor(private _auth: Auth) {
     onAuthStateChanged(this._auth, user => {
       if (user?.uid) {
-        this.isLoggedIn.set(!!(user.uid && user.uid.length > 1));
+        if (!sessionStorage.getItem('user')) {
+          const userObj: UserState = {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            phoneNumber: user.phoneNumber,
+            baseCurrency: 'ZAR',
+          };
+          sessionStorage.setItem('user', JSON.stringify(userObj));
+        }
       } else {
         sessionStorage.removeItem('user');
-        this.isLoggedIn.set(false);
       }
     });
   }

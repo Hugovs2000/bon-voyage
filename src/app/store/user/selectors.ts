@@ -14,6 +14,10 @@ export const selectIsLoggedIn = createSelector(selectFeature, state => {
   return true;
 });
 
+export const selectUserId = createSelector(selectFeature, state => {
+  return state.uid;
+});
+
 export const selectBaseCurrency = createSelector(selectFeature, state => {
   return state.baseCurrency;
 });
