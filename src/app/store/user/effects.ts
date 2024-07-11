@@ -3,9 +3,10 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { switchMap } from 'rxjs';
+import { EMPTY, of, switchMap } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import {
+  getUserFromStorage,
   logInComplete,
   logInError,
   logInWithEmail,
@@ -17,6 +18,23 @@ import {
 
 @Injectable()
 export class UserEffects {
+  getUserFromStorage$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(getUserFromStorage.type),
+      switchMap(() => {
+        if (sessionStorage.getItem('user')) {
+          return of(
+            logInComplete({
+              user: JSON.parse(sessionStorage.getItem('user') ?? ''),
+            })
+          );
+        } else {
+          return EMPTY;
+        }
+      })
+    )
+  );
+
   logUserInWithEmail$ = createEffect(() =>
     this.actions$.pipe(
       ofType(logInWithEmail),

@@ -9,6 +9,8 @@ import {
   signInWithPopup,
   signOut,
 } from '@angular/fire/auth';
+import { Store } from '@ngrx/store';
+import { getUserFromStorage } from '../store/user/actions';
 import { UserState } from '../store/user/reducer';
 
 @Injectable({
@@ -39,7 +41,10 @@ export class AuthService {
     return signOut(this._auth);
   }
 
-  constructor(private _auth: Auth) {
+  constructor(
+    private _auth: Auth,
+    private userStore: Store<UserState>
+  ) {
     onAuthStateChanged(this._auth, user => {
       if (user?.uid) {
         if (!sessionStorage.getItem('user')) {
@@ -52,6 +57,7 @@ export class AuthService {
             baseCurrency: 'ZAR',
           };
           sessionStorage.setItem('user', JSON.stringify(userObj));
+          this.userStore.dispatch(getUserFromStorage());
         }
       } else {
         sessionStorage.removeItem('user');

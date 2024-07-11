@@ -8,7 +8,6 @@ import {
 } from './actions';
 
 export const userFeatureKey = 'User';
-const localUser = sessionStorage.getItem('user')?.valueOf();
 
 export interface UserState {
   uid: string | null;
@@ -19,23 +18,14 @@ export interface UserState {
   baseCurrency: string;
 }
 
-const initialState: UserState = localUser
-  ? {
-      uid: JSON.parse(localUser).uid,
-      displayName: JSON.parse(localUser).displayName,
-      email: JSON.parse(localUser).email,
-      phoneNumber: JSON.parse(localUser).phoneNumber,
-      photoURL: JSON.parse(localUser).photoURL,
-      baseCurrency: JSON.parse(localUser).baseCurrency ?? 'ZAR',
-    }
-  : {
-      uid: null,
-      displayName: null,
-      email: null,
-      phoneNumber: null,
-      photoURL: null,
-      baseCurrency: 'ZAR',
-    };
+const initialState: UserState = {
+  uid: null,
+  displayName: null,
+  email: null,
+  phoneNumber: null,
+  photoURL: null,
+  baseCurrency: 'ZAR',
+};
 
 export const userReducers = createReducer(
   initialState,

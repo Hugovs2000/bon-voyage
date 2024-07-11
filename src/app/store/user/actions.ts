@@ -1,6 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 import { UserState } from './reducer';
 
+export const getUserFromStorage = createAction('[User] GetUserFromStorage');
+
 export const logInWithEmail = createAction(
   '[User] LogInWithEmail',
   props<{ email: string; password: string }>()

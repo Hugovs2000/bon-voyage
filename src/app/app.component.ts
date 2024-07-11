@@ -15,7 +15,7 @@ import { SignupComponent } from './components/signup/signup.component';
 import { AuthService } from './services/auth.service';
 import { getAllTrips, getExchangeRates } from './store/trips/actions';
 import { TripState } from './store/trips/reducer';
-import { logOut } from './store/user/actions';
+import { getUserFromStorage, logOut } from './store/user/actions';
 import { UserState } from './store/user/reducer';
 import { selectBaseCurrency, selectIsLoggedIn } from './store/user/selectors';
 
@@ -46,6 +46,7 @@ export class AppComponent {
     private userStore: Store<UserState>,
     protected authService: AuthService
   ) {
+    this.userStore.dispatch(getUserFromStorage());
     this.isLoggedIn$
       .pipe(
         takeUntilDestroyed(),
