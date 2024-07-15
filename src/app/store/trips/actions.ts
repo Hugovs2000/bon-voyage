@@ -48,10 +48,7 @@ export const setLoadingState = createAction(
   props<{ isLoading: boolean }>()
 );
 
-export const getExchangeRates = createAction(
-  '[Trips] GetExchangeRates',
-  props<{ baseCurrency: string }>()
-);
+export const getExchangeRates = createAction('[Trips] GetExchangeRates');
 
 export const getExchangeRatesComplete = createAction(
   '[Trips] GetExchangeRatesComplete',

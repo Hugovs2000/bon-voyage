@@ -27,6 +27,7 @@ import {
 @Injectable()
 export class TripsEffects {
   userId = signal('');
+  baseCurrency = signal('ZAR');
 
   getAllTrips$ = createEffect(() =>
     this.actions$.pipe(
@@ -168,8 +169,8 @@ export class TripsEffects {
   getExchangeRates$ = createEffect(() =>
     this.actions$.pipe(
       ofType(getExchangeRates.type),
-      switchMap((action: { type: string; baseCurrency: string }) =>
-        this.apiService.getCurrencies(action.baseCurrency).pipe(
+      switchMap(() =>
+        this.apiService.getCurrencies(this.baseCurrency()).pipe(
           retry(3),
           map(data => {
             if (data) {
@@ -216,6 +217,7 @@ export class TripsEffects {
       .pipe(takeUntilDestroyed())
       .subscribe(user => {
         this.userId.set(user.uid ?? '');
+        this.baseCurrency.set(user.baseCurrency ?? 'ZAR');
       });
   }
 }
