@@ -8,10 +8,7 @@ export const selectUser = createSelector(selectFeature, state => {
 });
 
 export const selectIsLoggedIn = createSelector(selectFeature, state => {
-  if (!state.uid) {
-    return false;
-  }
-  return true;
+  return !!state.uid;
 });
 
 export const selectUserId = createSelector(selectFeature, state => {

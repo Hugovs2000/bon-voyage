@@ -1,7 +1,7 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -9,7 +9,7 @@ import { catchError, map, of, retry, switchMap } from 'rxjs';
 import { Trip } from '../../models/trips';
 import { ApiService } from '../../services/api.service';
 import { UserState } from '../user/reducer';
-import { selectUser } from '../user/selectors';
+import { selectBaseCurrency, selectUserId } from '../user/selectors';
 import {
   createNewTrip,
   createNewTripComplete,
@@ -26,8 +26,10 @@ import {
 
 @Injectable()
 export class TripsEffects {
-  userId = signal('');
-  baseCurrency = signal('ZAR');
+  userId = toSignal(this.userStore.select(selectUserId), { initialValue: '' });
+  baseCurrency = toSignal(this.userStore.select(selectBaseCurrency), {
+    initialValue: 'ZAR',
+  });
 
   getAllTrips$ = createEffect(() =>
     this.actions$.pipe(
@@ -211,13 +213,5 @@ export class TripsEffects {
     private snackBar: MatSnackBar,
     private router: Router,
     private userStore: Store<UserState>
-  ) {
-    this.userStore
-      .select(selectUser)
-      .pipe(takeUntilDestroyed())
-      .subscribe(user => {
-        this.userId.set(user.uid ?? '');
-        this.baseCurrency.set(user.baseCurrency ?? 'ZAR');
-      });
-  }
+  ) {}
 }

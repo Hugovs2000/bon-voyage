@@ -7,9 +7,10 @@ import {
   Input,
   OnInit,
   ViewChild,
+  inject,
   signal,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Timestamp } from '@angular/fire/firestore';
 import {
   FormControl,
@@ -57,6 +58,9 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlterTripComponent implements OnInit {
+  private store = inject(Store<TripState>);
+  private destroyRef = inject(DestroyRef);
+
   @Input() set id(id: string) {
     if (id) {
       this.store.dispatch(setSelectedTripId({ tripId: id }));
@@ -69,12 +73,12 @@ export class AlterTripComponent implements OnInit {
   confirmModal: ElementRef<HTMLDialogElement> | null = null;
 
   loading$ = this.store.select(selectLoadingState);
-  userId$ = this.store.select(selectUserId);
 
   selectedTrip = signal<Trip | null>(null);
   activityToDelete = signal<ItineraryItem | null>(null);
   activityToEdit = signal<ItineraryItem | null>(null);
-  userId = signal<string>('abc');
+
+  userId = toSignal(this.store.select(selectUserId), { initialValue: 'abc' });
 
   itinerary: ItineraryItem[] = [];
 
@@ -82,17 +86,6 @@ export class AlterTripComponent implements OnInit {
     title: new FormControl('', Validators.required),
     userId: new FormControl(this.userId(), Validators.required),
   });
-
-  constructor(
-    private store: Store<TripState>,
-    private destroyRef: DestroyRef
-  ) {
-    this.userId$.pipe(takeUntilDestroyed()).subscribe(id => {
-      if (id) {
-        this.userId.set(id);
-      }
-    });
-  }
 
   ngOnInit() {
     this.store
