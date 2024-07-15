@@ -41,14 +41,12 @@ export class TripsEffects {
             if (data.empty) {
               return getAllTripsComplete({ trips: [] });
             }
-            const trips = data.docs
-              .filter(doc => (doc.data() as Trip).userId === this.userId())
-              .map(doc => {
-                return {
-                  ...(doc.data() as Trip),
-                  docId: doc.id,
-                };
-              });
+            const trips = data.docs.map(doc => {
+              return {
+                ...(doc.data() as Trip),
+                docId: doc.id,
+              };
+            });
             return getAllTripsComplete({ trips: trips });
           })
           .catch(() => {
