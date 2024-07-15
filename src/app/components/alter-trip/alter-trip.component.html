@@ -5,11 +5,11 @@
 } @else {
   <div class="p-4">
     @if (selectedTrip()?.docId && selectedTrip()?.docId !== '') {
-      <h1 class="text-xl font-extrabold">
+      <h1 class="text-xl font-extrabold text-white">
         Edit Trip: {{ selectedTrip()?.title }}
       </h1>
     } @else {
-      <h1 class="text-xl font-extrabold">Create a new trip!</h1>
+      <h1 class="text-xl font-extrabold text-white">Create a new trip!</h1>
     }
     <form
       class="flex flex-col gap-2"
@@ -26,7 +26,7 @@
         <mat-error>Please enter a title</mat-error>
       </mat-form-field>
 
-      <h2 class="mb-2 text-lg font-semibold">Itinerary:</h2>
+      <h2 class="mb-2 text-lg font-semibold text-white">Itinerary:</h2>
       @for (activity of itinerary; track activity) {
         <app-itinerary-card
           [inputActivity]="activity"
@@ -51,14 +51,14 @@
       <div class="flex gap-2 self-end">
         <a
           type="button"
-          class="btn mt-4 w-fit bg-error text-base"
+          class="btn mt-4 w-fit border-0 bg-error text-base text-black"
           type="button"
           routerLink="/home">
           <mat-icon>cancel</mat-icon>
           Cancel
         </a>
         <button
-          class="btn mt-4 w-fit bg-success text-base"
+          class="btn mt-4 w-fit border-0 bg-success text-base text-black"
           type="submit"
           [disabled]="!tripForm.valid">
           <mat-icon>save</mat-icon>
@@ -67,7 +67,7 @@
       </div>
     </form>
     <dialog #confirmModal class="modal">
-      <div class="modal-box">
+      <div class="modal-box bg-neutral-800">
         <h3 class="text-lg font-bold">Hold on!</h3>
         <p class="py-4">Are you sure you would like to delete this activity?</p>
         <div class="modal-action">

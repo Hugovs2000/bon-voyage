@@ -4,8 +4,8 @@
   </div>
 } @else {
   @if (trip$ | async; as trip) {
-    <div class="flex flex-col gap-2 p-4">
-      <h1 class="text-2xl font-bold">{{ trip.title }}</h1>
+    <div class="flex flex-col gap-2 p-4 text-white">
+      <h1 class="text-2xl font-bold text-white">{{ trip.title }}</h1>
       <nz-calendar [nzFullscreen]="false" [nzValue]="trip.startDate">
         <ul *nzDateFullCell="let date" class="max-h-14 overflow-hidden">
           @if (date && trip.startDate && trip.endDate) {
@@ -59,7 +59,7 @@
         }
       </div>
       <div>
-        <h2 class="mb-2 text-xl font-bold">Itineraries:</h2>
+        <h2 class="mb-2 text-xl font-bold text-white">Itineraries:</h2>
         @if (trip.itinerary && trip.itinerary.length > 0) {
           @for (activity of trip.itinerary; track activity) {
             <app-itinerary-card

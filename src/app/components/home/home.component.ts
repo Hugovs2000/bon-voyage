@@ -7,6 +7,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -32,6 +33,7 @@ import { TripCardComponent } from '../trip-card/trip-card.component';
     DragDropModule,
     MatProgressSpinnerModule,
     RouterLink,
+    MatIconModule,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',

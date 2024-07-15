@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       height: {
-        calc: 'calc(100% - 1rem)',
+        calc: 'calc(100% - 1.5rem)',
       },
     },
   },

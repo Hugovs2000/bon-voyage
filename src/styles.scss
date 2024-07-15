@@ -19,7 +19,7 @@ $bon-voyage-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$bon-voyage-theme: mat.define-light-theme(
+$bon-voyage-theme: mat.define-dark-theme(
   (
     color: (
       primary: $bon-voyage-primary,
@@ -62,6 +62,7 @@ body {
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
+  background-color: transparent;
 }
 
 .mdc-button__label {
@@ -69,11 +70,27 @@ body {
 }
 
 :root {
-  --mdc-filled-text-field-container-color: white;
-  --mdc-icon-button-icon-color: black;
-  --mdc-filled-text-field-label-text-color: black;
-  --mdc-filled-text-field-container-shape: 8px;
+  --bg-color: #151515;
+  --bg-secondary-color: #262626;
+  --primary-color: #60a5fa;
 
+  --mdc-filled-text-field-container-color: var(--bg-color);
+  --mdc-filled-text-field-label-text-color: whitesmoke;
+  --mdc-filled-text-field-container-shape: 8px;
+  --mdc-filled-text-field-input-text-color: whitesmoke;
+  --mdc-filled-text-field-caret-color: var(--primary-color);
+  --mdc-filled-text-field-focus-active-indicator-color: var(--primary-color);
+  --mdc-outlined-text-field-caret-color: var(--primary-color);
+  --mdc-filled-text-field-focus-label-text-color: var(--primary-color);
+  --mdc-filled-text-field-hover-label-text-color: whitesmoke;
+  --mdc-icon-button-icon-color: whitesmoke;
+  --mat-select-enabled-arrow-color: whitesmoke;
+  --mat-toolbar-container-background-color: var(--bg-color);
+  --mat-select-enabled-trigger-text-color: whitesmoke;
+  --mdc-filled-text-field-active-indicator-color: whitesmoke;
+  --mdc-elevated-card-container-color: var(--bg-secondary-color);
+
+  background-color: var(--bg-color);
   .mat-mdc-snack-bar-container {
     &.snackbar-success {
       --mdc-snackbar-container-color: #4caf50;
@@ -83,9 +100,9 @@ body {
     }
     &.snackbar-error {
       --mdc-snackbar-container-color: #f53224;
-      --mat-mdc-snack-bar-button-color: white;
-      --mdc-snackbar-supporting-text-color: white;
-      --mat-snack-bar-button-color: white;
+      --mat-mdc-snack-bar-button-color: whitesmoke;
+      --mdc-snackbar-supporting-text-color: whitesmoke;
+      --mat-snack-bar-button-color: whitesmoke;
     }
   }
 }
@@ -96,4 +113,35 @@ body {
 
 td {
   vertical-align: top;
+}
+
+::-webkit-input-placeholder {
+  color: gray !important;
+}
+
+.modal-box {
+  background-color: var(--bg-secondary-color);
+  color: whitesmoke;
+  h1,
+  h2,
+  h3 {
+    color: whitesmoke;
+  }
+}
+
+a:hover {
+  color: whitesmoke;
+}
+
+button:hover {
+  color: whitesmoke;
+}
+
+.divider:before,
+.divider:after {
+  background-color: whitesmoke;
+}
+
+.btn:disabled {
+  background-color: #515151;
 }

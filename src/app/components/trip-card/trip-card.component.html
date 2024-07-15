@@ -1,5 +1,5 @@
 <div
-  class="mb-4 grid grid-rows-3 gap-2 rounded-xl border-2 border-blue-400 bg-blue-300 p-4">
+  class="mb-6 grid grid-rows-3 gap-2 rounded-xl bg-neutral-800 p-4 text-white shadow-md shadow-white/20">
   <div class="flex justify-between">
     @if (startDate() && endDate()) {
       <div>{{ startDate() | date }} - {{ endDate() | date }}</div>
@@ -9,7 +9,9 @@
     }
   </div>
   @if (tripTitle()) {
-    <div class="flex justify-center text-2xl">{{ tripTitle() }}</div>
+    <div class="flex justify-center text-2xl font-extrabold text-blue-400">
+      {{ tripTitle() }}
+    </div>
   }
 
   <div class="flex justify-end">

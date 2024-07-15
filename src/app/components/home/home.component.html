@@ -5,20 +5,24 @@
 } @else {
   @if (trips$ | async; as trips) {
     @if (trips.length > 0) {
-      <div class="flex flex-col items-center overflow-x-hidden p-4">
+      <div class="flex flex-col items-center overflow-x-hidden px-4 pb-24 pt-6">
         @for (trip of trips; track trip.docId) {
-          <div class="boundary relative flex w-[150%] justify-center">
+          <div class="boundary relative flex w-[125%] justify-center">
             <div
-              class="absolute z-[-1] flex h-calc w-3/5 overflow-hidden rounded-xl">
-              <div class="w-1/2 bg-green-500"></div>
-              <div class="w-1/2 bg-red-500"></div>
+              class="absolute z-0 flex h-calc w-9/12 overflow-hidden rounded-xl">
+              <div class="flex w-1/2 items-center justify-start bg-blue-800">
+                <mat-icon class="mx-5 scale-150 text-white">edit</mat-icon>
+              </div>
+              <div class="flex w-1/2 items-center justify-end bg-red-800">
+                <mat-icon class="mx-5 scale-150 text-white">delete</mat-icon>
+              </div>
             </div>
             <div
               swipe
               (left)="onSwipeLeft(trip.docId)"
               (right)="onSwipeRight(trip.docId)"
               (onClick)="handleTripClick(trip.docId)"
-              class="w-3/5 cursor-pointer"
+              class="z-10 w-9/12 cursor-pointer"
               cdkDrag
               cdkDragLockAxis="x"
               (cdkDragReleased)="resetPosition($event)"
@@ -39,9 +43,9 @@
         }
         <a
           type="button"
-          class="btn btn-circle fixed bottom-4 right-4 border-2 border-blue-500"
+          class="btn fixed bottom-10 right-6 z-20 h-fit w-fit rounded-full bg-neutral-800 p-4 shadow-md shadow-white/20"
           routerLink="/new-trip">
-          +
+          <mat-icon class="text-green-400">add</mat-icon>
         </a>
       </div>
       <dialog #confirmModal class="modal">
@@ -66,9 +70,9 @@
       </div>
       <a
         type="button"
-        class="btn btn-circle fixed bottom-4 right-4 border-2 border-blue-500"
+        class="btn fixed bottom-10 right-6 z-20 h-fit w-fit rounded-full bg-neutral-800 p-4 shadow-md shadow-white/20"
         routerLink="/new-trip">
-        +
+        <mat-icon class="text-green-400">add</mat-icon>
       </a>
     }
   }

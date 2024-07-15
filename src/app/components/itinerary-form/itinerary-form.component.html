@@ -1,13 +1,14 @@
-<div class="card card-compact mb-2 w-full bg-gray-300 shadow-xl md:w-96">
+<div
+  class="card card-compact mb-2 w-full bg-neutral-800 text-white shadow-md shadow-white/20 md:w-96">
   <div class="card-body">
-    <h2 class="card-title">
+    <h2 class="card-title text-white">
       {{
         activityForm.value.id !== '' ? 'Edit Activity!' : 'Create an Activity!'
       }}
     </h2>
     <button
       type="button"
-      class="absolute right-4 top-4 flex items-center gap-1 text-blue-700"
+      class="absolute right-4 top-4 flex items-center gap-1 text-blue-400"
       (click)="openTagModal()">
       @if (activityForm.value.tag && activityForm.value.tag !== '') {
         {{ activityForm.value.tag }}
