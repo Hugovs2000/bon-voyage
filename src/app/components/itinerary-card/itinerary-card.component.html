@@ -22,10 +22,12 @@
     </div>
   </div>
   @if (inputActivity()?.title) {
-    <div class="flex justify-center text-2xl">{{ inputActivity()?.title }}</div>
+    <div class="flex items-center justify-center text-2xl">
+      {{ inputActivity()?.title }}
+    </div>
   }
 
-  <div class="flex justify-end">
+  <div class="flex items-center justify-end">
     <div>
       {{
         inputActivity()?.cost

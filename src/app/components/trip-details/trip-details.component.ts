@@ -1,7 +1,6 @@
 import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, ElementRef, ViewChild, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -29,7 +28,6 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
   standalone: true,
   imports: [
     ItineraryCardComponent,
-    MatProgressSpinnerModule,
     AsyncPipe,
     DatePipe,
     CurrencyPipe,

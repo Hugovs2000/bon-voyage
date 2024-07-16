@@ -1,6 +1,10 @@
 @if (loading$ | async; as loading) {
-  <div class="flex h-full w-full items-center justify-center pb-14">
-    <mat-spinner></mat-spinner>
+  <div class="absolute flex h-screen w-full flex-col gap-4 p-6">
+    <div class="skeleton h-10 w-1/2 rounded-lg"></div>
+    <div class="skeleton h-80 w-full rounded-lg"></div>
+    @for (item of [].constructor(3); track item) {
+      <div class="skeleton h-8 w-1/2 rounded-lg"></div>
+    }
   </div>
 } @else {
   @if (activity()) {

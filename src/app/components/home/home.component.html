@@ -1,6 +1,9 @@
 @if ((loading$ | async) ?? false) {
-  <div class="flex h-full w-full items-center justify-center pb-14">
-    <mat-spinner></mat-spinner>
+  <div class="absolute flex h-screen w-full flex-col gap-4 p-6">
+    @for (item of [].constructor(3); track item) {
+      <div
+        class="skeleton h-36 w-full rounded-lg shadow-md shadow-white/20"></div>
+    }
   </div>
 } @else {
   @if (trips$ | async; as trips) {
@@ -69,8 +72,15 @@
         </div>
       </dialog>
     } @else {
-      <div class="flex flex-col items-center overflow-x-hidden p-4">
-        No trips
+      <div
+        class="absolute top-0 z-[-1] flex h-screen w-screen flex-col items-center justify-center overflow-x-hidden">
+        <img
+          ngSrc="/assets/tripNotFound.svg"
+          alt="Angular logo"
+          width="128"
+          height="128" />
+        <p class="text-center text-white">You currently have no trips.</p>
+        <p class="text-center text-white">Tap the + to create a new trip.</p>
       </div>
       <a
         type="button"

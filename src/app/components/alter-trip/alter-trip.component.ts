@@ -21,7 +21,6 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ItineraryItem, Trip } from '../../models/trips';
@@ -49,7 +48,6 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
     ItineraryCardComponent,
     ItineraryFormComponent,
     MatInputModule,
-    MatProgressSpinnerModule,
     MatIconModule,
     RouterLink,
   ],

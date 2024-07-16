@@ -1,7 +1,6 @@
 import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, ElementRef, ViewChild, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -19,14 +18,7 @@ import { MapComponent } from '../map/map.component';
 @Component({
   selector: 'app-itinerary-details',
   standalone: true,
-  imports: [
-    AsyncPipe,
-    CurrencyPipe,
-    DatePipe,
-    MatProgressSpinnerModule,
-    RouterLink,
-    MapComponent,
-  ],
+  imports: [AsyncPipe, CurrencyPipe, DatePipe, RouterLink, MapComponent],
   templateUrl: './itinerary-details.component.html',
   styleUrl: './itinerary-details.component.scss',
 })

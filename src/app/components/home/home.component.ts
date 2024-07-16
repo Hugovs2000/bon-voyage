@@ -1,5 +1,5 @@
 import { CdkDragRelease, DragDropModule } from '@angular/cdk/drag-drop';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
 import {
   Component,
   ElementRef,
@@ -8,7 +8,6 @@ import {
   signal,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { SwipeDirective } from '../../directives/swipe.directive';
@@ -31,9 +30,9 @@ import { TripCardComponent } from '../trip-card/trip-card.component';
     AsyncPipe,
     SwipeDirective,
     DragDropModule,
-    MatProgressSpinnerModule,
     RouterLink,
     MatIconModule,
+    NgOptimizedImage,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',

@@ -1,21 +1,27 @@
 @if ((loading$ | async) ?? false) {
-  <div class="flex h-full w-full items-center justify-center pb-14">
-    <mat-spinner></mat-spinner>
+  <div class="absolute flex h-screen w-full flex-col gap-4 p-6">
+    <div class="skeleton h-10 w-1/2 rounded-lg"></div>
+    <div class="skeleton h-14 w-full rounded-lg"></div>
+    <div class="skeleton h-10 w-1/2 rounded-lg"></div>
+    <div
+      class="skeleton h-36 w-full rounded-lg shadow-md shadow-white/20"></div>
+    <div
+      class="skeleton h-96 w-full rounded-lg shadow-md shadow-white/20"></div>
   </div>
 } @else {
   <div class="p-4">
     @if (selectedTrip()?.docId && selectedTrip()?.docId !== '') {
-      <h1 class="text-xl font-extrabold text-white">
+      <h1 class="text-2xl font-extrabold text-white">
         Edit Trip: {{ selectedTrip()?.title }}
       </h1>
     } @else {
-      <h1 class="text-xl font-extrabold text-white">Create a new trip!</h1>
+      <h1 class="text-2xl font-extrabold text-white">Create a new trip!</h1>
     }
     <form
       class="flex flex-col gap-2"
       [formGroup]="tripForm"
       (ngSubmit)="onSubmit()">
-      <mat-form-field hideRequiredMarker="true" class="md:w-96">
+      <mat-form-field hideRequiredMarker="true" class="mt-2 md:w-96">
         <mat-label>Title:</mat-label>
         <input
           type="text"

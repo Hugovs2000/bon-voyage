@@ -145,3 +145,15 @@ button:hover {
 .btn:disabled {
   background-color: #515151;
 }
+
+.skeleton {
+  background-color: var(--bg-secondary-color);
+  background-image: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 40%,
+    #3c3c3c,
+    transparent 60%,
+    transparent 100%
+  );
+}
