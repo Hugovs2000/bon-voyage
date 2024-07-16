@@ -10,7 +10,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Timestamp } from '@angular/fire/firestore';
 import {
   FormControl,
@@ -25,7 +25,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ItineraryItem, Trip } from '../../models/trips';
-import { AuthService } from '../../services/auth.service';
 import {
   createNewTrip,
   setSelectedTripId,
@@ -36,6 +35,7 @@ import {
   selectLoadingState,
   selectSelectedTrip,
 } from '../../store/trips/selectors';
+import { selectUserId } from '../../store/user/selectors';
 import { ItineraryCardComponent } from '../itinerary-card/itinerary-card.component';
 import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.component';
 
@@ -58,6 +58,9 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlterTripComponent implements OnInit {
+  private store = inject(Store<TripState>);
+  private destroyRef = inject(DestroyRef);
+
   @Input() set id(id: string) {
     if (id) {
       this.store.dispatch(setSelectedTripId({ tripId: id }));
@@ -69,24 +72,19 @@ export class AlterTripComponent implements OnInit {
   @ViewChild('confirmModal')
   confirmModal: ElementRef<HTMLDialogElement> | null = null;
 
+  loading$ = this.store.select(selectLoadingState);
+
   selectedTrip = signal<Trip | null>(null);
   activityToDelete = signal<ItineraryItem | null>(null);
   activityToEdit = signal<ItineraryItem | null>(null);
 
-  private destroyRef = inject(DestroyRef);
-  private store = inject(Store<TripState>);
-  private authService = inject(AuthService);
-
-  loading$ = this.store.select(selectLoadingState);
+  userId = toSignal(this.store.select(selectUserId), { initialValue: 'abc' });
 
   itinerary: ItineraryItem[] = [];
 
   tripForm = new FormGroup({
     title: new FormControl('', Validators.required),
-    userId: new FormControl(
-      this.authService.userId ?? 'abc',
-      Validators.required
-    ),
+    userId: new FormControl(this.userId(), Validators.required),
   });
 
   ngOnInit() {

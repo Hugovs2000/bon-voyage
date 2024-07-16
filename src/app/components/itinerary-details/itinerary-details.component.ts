@@ -13,6 +13,7 @@ import {
   selectLoadingState,
   selectSelectedTrip,
 } from '../../store/trips/selectors';
+import { selectBaseCurrency } from '../../store/user/selectors';
 import { MapComponent } from '../map/map.component';
 
 @Component({
@@ -33,9 +34,10 @@ export class ItineraryDetailsComponent {
   @ViewChild('confirmModal')
   modalRef: ElementRef<HTMLDialogElement> | null = null;
 
-  selectedTrip$ = this.store.select(selectSelectedTrip);
-  loading$ = this.store.select(selectLoadingState);
-  exchangeRates$ = this.store.select(selectExchangeRates);
+  selectedTrip$ = this.tripStore.select(selectSelectedTrip);
+  loading$ = this.tripStore.select(selectLoadingState);
+  exchangeRates$ = this.tripStore.select(selectExchangeRates);
+  baseCurrency$ = this.userStore.select(selectBaseCurrency);
 
   tripId = signal<string>(this.activatedRoute.snapshot.params['id']);
   activityId = signal<string>(
@@ -49,7 +51,8 @@ export class ItineraryDetailsComponent {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private store: Store<TripState>,
+    private tripStore: Store<TripState>,
+    private userStore: Store<TripState>,
     private snackBar: MatSnackBar,
     private router: Router
   ) {
@@ -58,7 +61,7 @@ export class ItineraryDetailsComponent {
     });
     this.selectedTrip$.pipe(takeUntilDestroyed()).subscribe(trip => {
       if (!trip) {
-        this.store.dispatch(
+        this.tripStore.dispatch(
           setSelectedTripId({
             tripId: this.tripId(),
           })
@@ -107,7 +110,7 @@ export class ItineraryDetailsComponent {
       const newActivities = this.tripToUpdate()?.itinerary?.filter(
         act => act.id !== this.activityId()
       );
-      this.store.dispatch(
+      this.tripStore.dispatch(
         updateTrip({
           trip: {
             ...(this.tripToUpdate() ??

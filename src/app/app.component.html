@@ -13,7 +13,7 @@
       </a>
     </div>
     <div class="flex items-center gap-0 md:gap-4">
-      @if (authService.isLoggedIn()) {
+      @if (isLoggedIn$ | async) {
         <button
           class="btn btn-ghost h-8 min-h-8 text-sm text-blue-800"
           aria-label="Log in button"

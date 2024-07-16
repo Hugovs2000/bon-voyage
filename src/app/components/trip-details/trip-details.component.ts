@@ -19,6 +19,8 @@ import {
   selectLoadingState,
   selectSelectedTrip,
 } from '../../store/trips/selectors';
+import { UserState } from '../../store/user/reducer';
+import { selectBaseCurrency } from '../../store/user/selectors';
 import { ItineraryCardComponent } from '../itinerary-card/itinerary-card.component';
 import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.component';
 
@@ -45,9 +47,10 @@ export class TripDetailsComponent {
   @ViewChild('confirmDeleteTripModal')
   tripModalRef: ElementRef<HTMLDialogElement> | null = null;
 
-  trip$ = this.store.select(selectSelectedTrip);
-  loading$ = this.store.select(selectLoadingState);
-  exchangeRates$ = this.store.select(selectExchangeRates);
+  trip$ = this.tripStore.select(selectSelectedTrip);
+  loading$ = this.tripStore.select(selectLoadingState);
+  exchangeRates$ = this.tripStore.select(selectExchangeRates);
+  baseCurrency$ = this.userStore.select(selectBaseCurrency);
 
   tripToUpdate = signal<Trip | null>(null);
   activityToDelete = signal<ItineraryItem | null>(null);
@@ -56,13 +59,14 @@ export class TripDetailsComponent {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private store: Store<TripState>,
+    private tripStore: Store<TripState>,
+    private userStore: Store<UserState>,
     private router: Router,
     private snackBar: MatSnackBar
   ) {
     this.trip$.pipe(takeUntilDestroyed()).subscribe(trip => {
       if (!trip) {
-        this.store.dispatch(
+        this.tripStore.dispatch(
           setSelectedTripId({
             tripId: this.tripId(),
           })
@@ -101,7 +105,7 @@ export class TripDetailsComponent {
       const newActivities = this.tripToUpdate()?.itinerary?.filter(
         act => act.id !== this.activityToDelete()?.id
       );
-      this.store.dispatch(
+      this.tripStore.dispatch(
         updateTrip({
           trip: {
             ...(this.tripToUpdate() ??
@@ -141,7 +145,7 @@ export class TripDetailsComponent {
       const newActivities = this.tripToUpdate()?.itinerary?.map(act =>
         act.id === activity.id ? activity : act
       );
-      this.store.dispatch(
+      this.tripStore.dispatch(
         updateTrip({
           trip: {
             ...this.tripToUpdate(),
@@ -155,7 +159,7 @@ export class TripDetailsComponent {
 
   addActivity(activity: ItineraryItem) {
     if (this.tripToUpdate()?.docId && this.tripToUpdate()?.docId !== '') {
-      this.store.dispatch(
+      this.tripStore.dispatch(
         updateTrip({
           trip: {
             ...this.tripToUpdate(),
@@ -167,7 +171,7 @@ export class TripDetailsComponent {
   }
 
   deleteTrip() {
-    this.store.dispatch(
+    this.tripStore.dispatch(
       deleteTrip({ tripId: this.tripToUpdate()?.docId ?? '' })
     );
   }

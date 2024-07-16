@@ -19,6 +19,8 @@ import { environment } from '../environments/environment.development';
 import { routes } from './app.routes';
 import { TripsEffects } from './store/trips/effects';
 import { debug, tripsFeatureKey, tripsReducers } from './store/trips/reducer';
+import { UserEffects } from './store/user/effects';
+import { userFeatureKey, userReducers } from './store/user/reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -39,7 +41,8 @@ export const appConfig: ApplicationConfig = {
       }
     ),
     provideState({ name: tripsFeatureKey, reducer: tripsReducers }),
-    provideEffects(TripsEffects),
+    provideState({ name: userFeatureKey, reducer: userReducers }),
+    provideEffects(TripsEffects, UserEffects),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
 };

@@ -51,9 +51,12 @@
           Duration: {{ trip.duration }}
           {{ trip.duration === 1 ? 'day' : 'days' }}
         </p>
-        <p>
-          Total Cost: {{ trip.totalCost | currency: 'ZAR' : 'symbol-narrow' }}
-        </p>
+        @if (baseCurrency$ | async; as baseCurrency) {
+          <p>
+            Total Cost:
+            {{ trip.totalCost | currency: baseCurrency : 'symbol-narrow' }}
+          </p>
+        }
       </div>
       <div>
         <h2 class="mb-2 text-xl font-bold">Itineraries:</h2>

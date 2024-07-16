@@ -21,10 +21,6 @@ export const selectLoadingState = createSelector(
   state => state.isLoading
 );
 
-export const selectBaseCurrency = createSelector(selectFeature, state => {
-  return state.baseCurrency ?? 'ZAR';
-});
-
 export const selectExchangeRates = createSelector(
   selectFeature,
   state => state.exchangeRates
