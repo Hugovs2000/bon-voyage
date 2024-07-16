@@ -1,5 +1,6 @@
 @if ((loading$ | async) ?? false) {
-  <div class="absolute flex h-screen w-full flex-col gap-4 p-6">
+  <div
+    class="flex h-screen w-full flex-col gap-4 p-6 md:mx-auto md:max-w-xl md:self-center">
     <div class="skeleton h-10 w-1/2 rounded-lg"></div>
     <div class="skeleton h-14 w-full rounded-lg"></div>
     <div class="skeleton h-10 w-1/2 rounded-lg"></div>
@@ -9,7 +10,7 @@
       class="skeleton h-96 w-full rounded-lg shadow-md shadow-white/20"></div>
   </div>
 } @else {
-  <div class="p-4">
+  <div class="p-4 md:mx-auto md:max-w-xl">
     @if (selectedTrip()?.docId && selectedTrip()?.docId !== '') {
       <h1 class="text-2xl font-extrabold text-white">
         Edit Trip: {{ selectedTrip()?.title }}
@@ -21,7 +22,7 @@
       class="flex flex-col gap-2"
       [formGroup]="tripForm"
       (ngSubmit)="onSubmit()">
-      <mat-form-field hideRequiredMarker="true" class="mt-2 md:w-96">
+      <mat-form-field hideRequiredMarker="true" class="mt-2">
         <mat-label>Title:</mat-label>
         <input
           type="text"
@@ -64,7 +65,7 @@
           Cancel
         </a>
         <button
-          class="bg-green-1000 btn mt-4 w-fit border-0 text-base text-black"
+          class="btn mt-4 w-fit border-0 bg-green-1000 text-base text-black"
           type="submit"
           [disabled]="!tripForm.valid">
           <mat-icon>save</mat-icon>

@@ -1,5 +1,5 @@
 @if (loading$ | async; as loading) {
-  <div class="absolute flex h-screen w-full flex-col gap-4 p-6">
+  <div class="flex h-screen w-full flex-col gap-4 p-6 md:mx-auto md:max-w-xl">
     <div class="skeleton h-10 w-1/2 rounded-lg"></div>
     <div class="skeleton h-80 w-full rounded-lg"></div>
     @for (item of [].constructor(3); track item) {
@@ -8,7 +8,7 @@
   </div>
 } @else {
   @if (activity()) {
-    <div class="flex flex-col gap-2 p-4 text-white">
+    <div class="flex flex-col gap-2 p-4 text-white md:mx-auto md:max-w-xl">
       <h1 class="flex items-center gap-2 text-2xl font-bold text-white">
         {{ activity()?.title }}
         @if (activity()?.tag) {
@@ -52,7 +52,8 @@
           <p>{{ activity()?.notes }}</p>
         }
       </div>
-      <div class="fixed bottom-4 right-4 flex gap-2">
+      <div
+        class="bottom-0 flex w-full justify-end gap-2 pb-10 md:fixed md:max-w-xl md:px-6">
         <button
           class="btn border-0 bg-red-700 text-white"
           (click)="handleDeleteClick()">
@@ -60,7 +61,7 @@
         </button>
         <a
           type="button"
-          class="bg-green-1000 btn border-0"
+          class="btn border-0 bg-green-1000"
           [routerLink]="['/trip', tripId()]">
           Done
         </a>
