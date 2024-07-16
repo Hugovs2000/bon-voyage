@@ -6,6 +6,11 @@ module.exports = {
       height: {
         calc: 'calc(100% - 1.5rem)',
       },
+      colors: {
+        green: {
+          1000: '#12cf58',
+        },
+      },
     },
   },
   plugins: [require('daisyui')],

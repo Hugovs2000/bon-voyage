@@ -43,7 +43,7 @@
           <form method="dialog" class="flex justify-end">
             <button
               type="button"
-              class="btn btn-success btn-sm"
+              class="bg-green-1000 btn btn-sm border-0"
               (click)="closeTagModal()">
               Done
             </button>
@@ -83,7 +83,7 @@
       <div class="mb-4 flex flex-col">
         <button
           type="button"
-          class="btn mb-2 w-fit self-center bg-white"
+          class="btn mb-2 w-fit self-center border-0 bg-blue-400"
           (click)="openMapModal()">
           Choose location on map
         </button>
@@ -130,18 +130,24 @@
 
       <div class="flex w-full justify-end gap-2">
         @if (activityForm.value.id !== '') {
-          <button type="button" class="btn btn-error" (click)="cancelEdit()">
+          <button
+            type="button"
+            class="btn border-0 bg-red-700 text-white"
+            (click)="cancelEdit()">
             Cancel
           </button>
         } @else {
-          <button type="button" class="btn btn-error" (click)="clearForm()">
+          <button
+            type="button"
+            class="btn border-0 bg-red-700 text-white"
+            (click)="clearForm()">
             Clear
           </button>
         }
 
         <button
           type="button"
-          class="btn w-fit self-end border-none bg-warning"
+          class="btn w-fit self-end border-none bg-blue-700 text-white"
           (click)="addActivity()"
           [disabled]="!activityForm.valid">
           {{
@@ -170,7 +176,7 @@
       <form method="dialog" class="flex justify-end">
         <button
           type="button"
-          class="btn btn-success btn-sm"
+          class="bg-green-1000 btn btn-sm border-0"
           (click)="closeMapModal()">
           Done
         </button>

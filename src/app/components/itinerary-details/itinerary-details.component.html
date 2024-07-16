@@ -49,12 +49,14 @@
         }
       </div>
       <div class="fixed bottom-4 right-4 flex gap-2">
-        <button class="btn btn-error" (click)="handleDeleteClick()">
+        <button
+          class="btn border-0 bg-red-700 text-white"
+          (click)="handleDeleteClick()">
           Delete
         </button>
         <a
           type="button"
-          class="btn btn-success border-0"
+          class="bg-green-1000 btn border-0"
           [routerLink]="['/trip', tripId()]">
           Done
         </a>
@@ -66,10 +68,14 @@
         <p class="py-4">Are you sure you would like to delete this activity?</p>
         <div class="modal-action">
           <div class="flex gap-2">
-            <button class="btn btn-warning" (click)="closeModal()">
+            <button
+              class="btn border-0 bg-gray-700 text-white"
+              (click)="closeModal()">
               Cancel
             </button>
-            <button class="btn btn-error" (click)="deleteActivity()">
+            <button
+              class="btn border-0 bg-red-700 text-white"
+              (click)="deleteActivity()">
               Delete
             </button>
           </div>

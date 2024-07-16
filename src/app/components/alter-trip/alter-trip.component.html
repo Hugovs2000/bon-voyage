@@ -51,14 +51,14 @@
       <div class="flex gap-2 self-end">
         <a
           type="button"
-          class="btn mt-4 w-fit border-0 bg-error text-base text-black"
+          class="btn mt-4 w-fit border-0 bg-gray-700 text-base text-white"
           type="button"
           routerLink="/home">
           <mat-icon>cancel</mat-icon>
           Cancel
         </a>
         <button
-          class="btn mt-4 w-fit border-0 bg-success text-base text-black"
+          class="bg-green-1000 btn mt-4 w-fit border-0 text-base text-black"
           type="submit"
           [disabled]="!tripForm.valid">
           <mat-icon>save</mat-icon>
@@ -72,10 +72,14 @@
         <p class="py-4">Are you sure you would like to delete this activity?</p>
         <div class="modal-action">
           <div class="flex gap-2">
-            <button class="btn btn-warning" (click)="closeConfirmModal()">
+            <button
+              class="btn border-0 bg-gray-700 text-white"
+              (click)="closeConfirmModal()">
               Cancel
             </button>
-            <button class="btn btn-error" (click)="confirmDelete()">
+            <button
+              class="btn border-0 bg-red-600 text-white"
+              (click)="confirmDelete()">
               Delete
             </button>
           </div>
