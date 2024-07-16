@@ -37,7 +37,6 @@ import { selectIsLoggedIn } from './store/user/selectors';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'bon-voyage';
   isLoggedIn$ = this.userStore.select(selectIsLoggedIn);
 
   constructor(
