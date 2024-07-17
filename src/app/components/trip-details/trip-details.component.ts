@@ -1,6 +1,7 @@
 import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, ElementRef, ViewChild, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -37,6 +38,7 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
     NzCalendarModule,
     NzBadgeModule,
     NzStepsModule,
+    MatIconModule,
   ],
   templateUrl: './trip-details.component.html',
   styleUrl: './trip-details.component.scss',

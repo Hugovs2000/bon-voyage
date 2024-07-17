@@ -171,3 +171,15 @@ button:hover {
 .ant-picker-cell {
   color: #ffffff78;
 }
+
+.ant-steps-item-finish.durationStep
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title {
+  color: #ffffff78;
+}
+
+.ant-picker-calendar-mini .ant-picker-calendar-header {
+  padding-right: 0;
+  padding-left: 0;
+}
