@@ -10,7 +10,7 @@
   </div>
 } @else {
   @if (trip$ | async; as trip) {
-    <div class="flex flex-col gap-2 p-4 text-white md:mx-auto md:max-w-xl">
+    <div class="flex flex-col gap-4 p-6 text-white md:mx-auto md:max-w-xl">
       <h1 class="text-2xl font-bold text-white">{{ trip.title }}</h1>
       <nz-calendar [nzFullscreen]="false" [nzValue]="trip.startDate">
         <ul *nzDateFullCell="let date" class="max-h-14 overflow-hidden">
@@ -35,7 +35,7 @@
                     <li>
                       <nz-badge
                         [nzStatus]="'warning'"
-                        class="w-11 overflow-hidden text-ellipsis text-nowrap md:w-28">
+                        class="w-11 overflow-hidden text-ellipsis text-nowrap md:w-14">
                         {{ activity.title }}
                       </nz-badge>
                     </li>
@@ -50,16 +50,22 @@
           }
         </ul>
       </nz-calendar>
-      <div>
-        <p>Start Date: {{ trip.startDate | date }}</p>
-        <p>End Date: {{ trip.endDate | date }}</p>
-        <p>
-          Duration: {{ trip.duration }}
-          {{ trip.duration === 1 ? 'day' : 'days' }}
-        </p>
+      <div class="flex w-full">
+        <div class="flex min-w-fit flex-col items-start gap-1 text-nowrap">
+          <p class="flex items-center gap-2">
+            <nz-steps [nzCurrent]="3" nzDirection="vertical" nzProgressDot>
+              <nz-step [nzTitle]="(trip.startDate | date) ?? ''"></nz-step>
+              <nz-step
+                [nzTitle]="
+                  trip.duration + ' ' + (trip.duration === 1 ? 'day' : 'days')
+                "></nz-step>
+              <nz-step [nzTitle]="(trip.endDate | date) ?? ''"></nz-step>
+            </nz-steps>
+          </p>
+        </div>
         @if (baseCurrency$ | async; as baseCurrency) {
-          <p>
-            Total Cost:
+          <p
+            class="flex w-full items-center justify-center text-3xl md:justify-end md:pr-2">
             {{ trip.totalCost | currency: baseCurrency : 'symbol-narrow' }}
           </p>
         }

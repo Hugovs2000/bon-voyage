@@ -41,9 +41,7 @@ $bon-voyage-theme: mat.define-dark-theme(
 @tailwind utilities;
 
 @import '../node_modules/leaflet/dist/leaflet.css';
-
-@import '../node_modules/ng-zorro-antd/ng-zorro-antd.min.css';
-@import '../node_modules/ng-zorro-antd/calendar/style/index.min.css';
+@import '../node_modules/ng-zorro-antd/ng-zorro-antd.dark.css';
 
 .ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner {
   color: black;
@@ -156,4 +154,12 @@ button:hover {
     transparent 60%,
     transparent 100%
   );
+}
+
+.ant-picker-calendar .ant-picker-panel {
+  background: transparent;
+}
+
+.ant-picker-calendar {
+  background: transparent;
 }

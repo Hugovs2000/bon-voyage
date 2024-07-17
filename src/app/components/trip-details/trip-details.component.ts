@@ -6,6 +6,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzCalendarModule } from 'ng-zorro-antd/calendar';
+import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { ItineraryItem, Trip } from '../../models/trips';
 import {
   deleteTrip,
@@ -35,6 +36,7 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
     RouterLink,
     NzCalendarModule,
     NzBadgeModule,
+    NzStepsModule,
   ],
   templateUrl: './trip-details.component.html',
   styleUrl: './trip-details.component.scss',
