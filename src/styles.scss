@@ -44,10 +44,10 @@ $bon-voyage-theme: mat.define-dark-theme(
 @import '../node_modules/ng-zorro-antd/ng-zorro-antd.dark.css';
 
 .ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner {
-  color: black;
   background: none;
-  text-decoration: underline;
   font-weight: bold;
+  text-decoration: underline;
+  text-decoration-color: var(--bg-color);
 }
 .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before {
   border-radius: 100%;

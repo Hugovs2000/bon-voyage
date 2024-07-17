@@ -11,6 +11,9 @@ module.exports = {
           1000: '#12cf58',
         },
       },
+      scale: {
+        '101': '1.01',
+      },
     },
   },
   plugins: [require('daisyui')],

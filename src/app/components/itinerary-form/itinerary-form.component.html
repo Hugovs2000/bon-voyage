@@ -1,5 +1,5 @@
 <div
-  class="card card-compact mb-2 w-full bg-neutral-800 text-white shadow-md shadow-white/20">
+  class="card card-compact mb-4 w-full bg-neutral-800 text-white shadow-md shadow-white/20">
   <div class="card-body">
     <h2 class="card-title text-white">
       {{
@@ -15,7 +15,7 @@
         <mat-icon fontIcon="edit"></mat-icon>
       } @else {
         Add tag
-        <mat-icon fontIcon="add_circle"></mat-icon>
+        <mat-icon>add_circle</mat-icon>
       }
     </button>
     <div [formGroup]="activityForm">
@@ -83,14 +83,14 @@
       <div class="mb-4 flex flex-col">
         <button
           type="button"
-          class="btn mb-2 w-fit self-center border-0 bg-blue-400"
+          class="border-1 btn mb-2 w-fit self-center border-white/50 bg-transparent text-white"
           (click)="openMapModal()">
           Choose location on map
         </button>
       </div>
 
-      <div class="flex items-center gap-2">
-        <mat-form-field hideRequiredMarker="true">
+      <div class="flex w-full items-center gap-2">
+        <mat-form-field hideRequiredMarker="true" class="w-1/2">
           <mat-label>Cost:</mat-label>
           <input
             type="number"
@@ -99,7 +99,7 @@
             formControlName="cost" />
           <mat-error class="text-nowrap">Please enter a valid amount</mat-error>
         </mat-form-field>
-        <mat-form-field hideRequiredMarker="true">
+        <mat-form-field hideRequiredMarker="true" class="w-1/2">
           <mat-label>Currency</mat-label>
           <mat-select
             name="currency"
@@ -132,7 +132,7 @@
         @if (activityForm.value.id !== '') {
           <button
             type="button"
-            class="btn border-0 bg-red-700 text-white"
+            class="btn border-0 bg-gray-700 text-white"
             (click)="cancelEdit()">
             Cancel
           </button>

@@ -18,11 +18,13 @@
         <div class="flex gap-4">
           <a
             type="button"
-            class="flex items-center"
+            class="flex items-center transition-all ease-in-out hover:scale-110"
             [routerLink]="['/edit', this.tripToUpdate()?.docId]">
             <mat-icon>edit</mat-icon>
           </a>
-          <button (click)="confirmTripDelete()" class="flex items-center">
+          <button
+            (click)="confirmTripDelete()"
+            class="flex items-center transition-all ease-in-out hover:scale-110">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
@@ -120,8 +122,12 @@
       </div>
     </div>
     <div class="flex w-full justify-end gap-2 p-4 pt-0 md:mx-auto md:max-w-xl">
-      <a type="button" class="btn border-0 bg-green-1000" routerLink="/home">
-        Done
+      <a
+        type="button"
+        class="btn border-0 bg-green-1000"
+        routerLink="/home"
+        aria-label="Go Home">
+        Home
       </a>
     </div>
     <dialog #confirmDeleteActivityModal class="modal">
