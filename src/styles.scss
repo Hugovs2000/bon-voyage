@@ -156,10 +156,18 @@ button:hover {
   );
 }
 
+.ant-picker-calendar {
+  background: transparent;
+}
+
 .ant-picker-calendar .ant-picker-panel {
   background: transparent;
 }
 
-.ant-picker-calendar {
-  background: transparent;
+.ant-picker-cell-in-view {
+  color: #ffffffd9 !important;
+}
+
+.ant-picker-cell {
+  color: #ffffff78;
 }

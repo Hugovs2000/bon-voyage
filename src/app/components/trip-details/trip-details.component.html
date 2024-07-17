@@ -21,7 +21,8 @@
               getDateWithoutTime(date).valueOf() <=
                 getDateWithoutTime(trip.endDate).valueOf()
             ) {
-              <li class="mx-auto mb-1 h-6 w-6 rounded-full bg-blue-400 px-1">
+              <li
+                class="mx-auto mb-1 h-6 w-6 rounded-full bg-blue-400 px-1 text-black">
                 {{ date.getDate() }}
               </li>
               @if (trip.itinerary && trip.itinerary.length > 0) {
@@ -50,22 +51,27 @@
           }
         </ul>
       </nz-calendar>
-      <div class="flex w-full">
-        <div class="flex min-w-fit flex-col items-start gap-1 text-nowrap">
+      <div class="flex w-full md:justify-between">
+        <div class="flex w-1/2 flex-col items-start gap-1 text-nowrap">
           <p class="flex items-center gap-2">
-            <nz-steps [nzCurrent]="3" nzDirection="vertical" nzProgressDot>
-              <nz-step [nzTitle]="(trip.startDate | date) ?? ''"></nz-step>
+            <nz-steps [nzCurrent]="3" nzDirection="vertical">
+              <nz-step
+                [nzTitle]="(trip.startDate | date) ?? ''"
+                nzIcon="schedule"></nz-step>
               <nz-step
                 [nzTitle]="
                   trip.duration + ' ' + (trip.duration === 1 ? 'day' : 'days')
-                "></nz-step>
-              <nz-step [nzTitle]="(trip.endDate | date) ?? ''"></nz-step>
+                "
+                nzIcon="field-time"></nz-step>
+              <nz-step
+                [nzTitle]="(trip.endDate | date) ?? ''"
+                nzIcon="schedule"></nz-step>
             </nz-steps>
           </p>
         </div>
         @if (baseCurrency$ | async; as baseCurrency) {
           <p
-            class="flex w-full items-center justify-center text-3xl md:justify-end md:pr-2">
+            class="my-auto flex h-fit w-fit items-center justify-center rounded-md bg-blue-700/30 px-3 py-1 text-3xl">
             {{ trip.totalCost | currency: baseCurrency : 'symbol-narrow' }}
           </p>
         }
