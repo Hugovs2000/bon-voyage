@@ -9,61 +9,80 @@
 } @else {
   @if (activity()) {
     <div class="flex flex-col gap-2 p-4 text-white md:mx-auto md:max-w-xl">
-      <h1 class="flex items-center gap-2 text-2xl font-bold text-white">
-        {{ activity()?.title }}
-        @if (activity()?.tag) {
-          <div class="badge bg-blue-700 p-3 text-white">
-            {{ activity()?.tag }}
-          </div>
-        }
-      </h1>
-      @if (activity()?.startLocation || activity()?.endLocation) {
-        <app-map [inputActivity]="activity()"></app-map>
-      }
-      <div>
-        <p>Start Date: {{ newStartDate() | date }}</p>
-        <p>End Date: {{ newEndDate() | date }}</p>
-        <p>
-          Duration: {{ activity()?.duration ?? 0 }}
-          {{ activity()?.duration === 1 ? 'day' : 'days' }}
-        </p>
-        <p>
-          Cost:
-          {{
-            activity()?.cost | currency: activity()?.currency : 'symbol-narrow'
-          }}
-        </p>
+      <div class="flex items-center justify-between">
+        <h1 class="flex items-center gap-2 text-2xl font-bold text-white">
+          {{ activity()?.title }}
+          @if (activity()?.tag) {
+            <div class="badge border-0 bg-blue-700/40 p-3 text-white">
+              {{ activity()?.tag }}
+            </div>
+          }
+        </h1>
+        <div class="flex items-center gap-4">
+          <a
+            type="button"
+            class="flex items-center transition-all ease-in-out hover:scale-110"
+            [routerLink]="['/edit', tripId()]">
+            <mat-icon>edit</mat-icon>
+          </a>
+          <button
+            type="button"
+            class="flex items-center transition-all ease-in-out hover:scale-110"
+            (click)="handleDeleteClick()"
+            aria-label="Delete Activity">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+      <p class="mt-2 text-lg">
+        {{
+          activity()?.cost | currency: activity()?.currency : 'symbol-narrow'
+        }}
+
         @if (baseCurrency$ | async; as baseCurrency) {
           @if (
             activity()?.currency !== baseCurrency &&
             activity()?.costInBaseCurrency
           ) {
-            <p>
-              Cost in ({{ baseCurrency }}):
+            <span class="text-xs text-green-1000">
+              ±
               {{
                 activity()?.costInBaseCurrency
                   | currency: baseCurrency : 'symbol-narrow'
               }}
-            </p>
+            </span>
           }
         }
+      </p>
+
+      <app-map [inputActivity]="activity()"></app-map>
+
+      <div>
+        <nz-steps [nzCurrent]="3" nzDirection="vertical">
+          <nz-step
+            [nzTitle]="(newStartDate() | date) + ' - ' + (newEndDate() | date)"
+            nzIcon="schedule"></nz-step>
+          <nz-step
+            [nzTitle]="
+              activity()?.duration +
+              ' ' +
+              (activity()?.duration === 1 ? 'day' : 'days')
+            "
+            nzIcon="field-time"
+            class="durationStep"></nz-step>
+        </nz-steps>
         @if (activity()?.notes) {
-          <p class="mt-4">Notes:</p>
+          <p class="mt-2 text-xl font-bold">Notes:</p>
           <p>{{ activity()?.notes }}</p>
         }
       </div>
       <div
         class="bottom-0 flex w-full justify-end gap-2 pb-10 md:fixed md:max-w-xl md:px-6">
-        <button
-          class="btn border-0 bg-red-700 text-white"
-          (click)="handleDeleteClick()">
-          Delete
-        </button>
         <a
           type="button"
           class="btn border-0 bg-green-1000"
           [routerLink]="['/trip', tripId()]">
-          Done
+          Return
         </a>
       </div>
     </div>

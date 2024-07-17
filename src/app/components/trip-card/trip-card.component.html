@@ -1,20 +1,25 @@
 <div
-  class="mb-6 grid grid-rows-3 gap-2 rounded-xl bg-neutral-800 p-4 text-white shadow-md shadow-white/20">
-  <div class="flex justify-between">
-    @if (startDate() && endDate()) {
-      <div>{{ startDate() | date }} - {{ endDate() | date }}</div>
+  class="mb-4 flex flex-col gap-6 rounded-xl bg-neutral-800 p-4 text-white shadow-md shadow-white/20">
+  <div class="flex items-center justify-between">
+    @if (tripTitle()) {
+      <p class="text-2xl font-extrabold text-blue-400">
+        {{ tripTitle() }}
+      </p>
     }
     @if (duration()) {
-      <div>{{ duration() }} {{ duration() === 1 ? 'day' : 'days' }}</div>
+      <p class="text-lg">
+        {{ duration() }} {{ duration() === 1 ? 'day' : 'days' }}
+      </p>
     }
   </div>
-  @if (tripTitle()) {
-    <div class="flex justify-center text-2xl font-extrabold text-blue-400">
-      {{ tripTitle() }}
-    </div>
-  }
-
-  <div class="flex justify-end">
-    <div>{{ totalCost() | currency: currency() : 'symbol-narrow' }}</div>
+  <div class="flex items-center justify-between">
+    @if (startDate() && endDate()) {
+      <p>{{ startDate() | date }} - {{ endDate() | date }}</p>
+    }
+    @if (totalCost()) {
+      <p class="text-xl">
+        {{ totalCost() | currency: currency() : 'symbol-narrow' }}
+      </p>
+    }
   </div>
 </div>

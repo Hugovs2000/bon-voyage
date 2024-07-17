@@ -4,11 +4,14 @@ module.exports = {
   theme: {
     extend: {
       height: {
-        calc: 'calc(100% - 1.5rem)',
+        calc: 'calc(100% - 1rem)',
       },
       colors: {
         green: {
           1000: '#12cf58',
+        },
+        slate: {
+          1000: '#151515',
         },
       },
       scale: {

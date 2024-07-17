@@ -1,9 +1,11 @@
 import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, ElementRef, ViewChild, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { ExchangeRatesDTO, ItineraryItem, Trip } from '../../models/trips';
 import { setSelectedTripId, updateTrip } from '../../store/trips/actions';
 import { TripState } from '../../store/trips/reducer';
@@ -18,7 +20,15 @@ import { MapComponent } from '../map/map.component';
 @Component({
   selector: 'app-itinerary-details',
   standalone: true,
-  imports: [AsyncPipe, CurrencyPipe, DatePipe, RouterLink, MapComponent],
+  imports: [
+    AsyncPipe,
+    CurrencyPipe,
+    DatePipe,
+    RouterLink,
+    MapComponent,
+    MatIconModule,
+    NzStepsModule,
+  ],
   templateUrl: './itinerary-details.component.html',
   styleUrl: './itinerary-details.component.scss',
 })
