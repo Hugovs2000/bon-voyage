@@ -61,17 +61,15 @@
       <dialog #confirmModal class="modal">
         <div class="modal-box">
           <h3 class="text-2xl font-bold">Hold on!</h3>
-          @if (selectedTrip() !== null) {
-            <div class="py-4">
-              <p class="text-lg">
-                Are you sure you would like to delete
-                {{ selectedTrip()?.title }}?
-              </p>
-              <p class="pt-2">
-                You will be deleting the associated itineraries as well.
-              </p>
-            </div>
-          }
+          <div class="py-4">
+            <p class="text-lg">
+              Are you sure you would like to delete
+              {{ selectedTrip()?.title ?? 'this trip' }}?
+            </p>
+            <p class="pt-2">
+              You will be deleting the associated itineraries as well.
+            </p>
+          </div>
           <div class="modal-action">
             <div class="flex gap-2">
               <button
