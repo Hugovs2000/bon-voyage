@@ -50,7 +50,8 @@
                 getDateWithoutTime(trip.startDate).valueOf()
               ) {
                 @if (date | hasActivity: trip.itinerary ?? []) {
-                  <li class="tripStartDate rounded-full bg-blue-700">
+                  <li
+                    class="tripStartDate rounded-full bg-green-1000 text-black">
                     {{ date.getDate() }}
                   </li>
                 } @else {
@@ -63,7 +64,7 @@
                 getDateWithoutTime(trip.endDate).valueOf()
               ) {
                 @if (date | hasActivity: trip.itinerary ?? []) {
-                  <li class="tripEndDate rounded-full bg-blue-700">
+                  <li class="tripEndDate rounded-full bg-green-1000 text-black">
                     {{ date.getDate() }}
                   </li>
                 } @else {
@@ -73,7 +74,7 @@
                 }
               } @else {
                 @if (date | hasActivity: trip.itinerary ?? []) {
-                  <li class="tripDate rounded-full bg-blue-700">
+                  <li class="tripDate rounded-full bg-green-1000 text-black">
                     {{ date.getDate() }}
                   </li>
                 } @else {
