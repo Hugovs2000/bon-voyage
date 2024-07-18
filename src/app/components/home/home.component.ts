@@ -44,8 +44,6 @@ export class HomeComponent {
   loading$ = this.tripStore.select(selectLoadingState);
   baseCurrency$ = this.userStore.select(selectBaseCurrency);
 
-  // selectedTripId = signal('');
-
   @ViewChild('confirmModal')
   modalRef: ElementRef<HTMLDialogElement> | null = null;
 
