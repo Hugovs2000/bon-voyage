@@ -9,6 +9,7 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { ItineraryItem, Trip } from '../../models/trips';
+import { HasActivityPipe } from '../../pipes/has-activity.pipe';
 import {
   deleteTrip,
   setSelectedTripId,
@@ -39,6 +40,7 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
     NzBadgeModule,
     NzStepsModule,
     MatIconModule,
+    HasActivityPipe,
   ],
   templateUrl: './trip-details.component.html',
   styleUrl: './trip-details.component.scss',

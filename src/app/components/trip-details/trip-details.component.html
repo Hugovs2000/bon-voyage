@@ -45,26 +45,41 @@
               getDateWithoutTime(date).valueOf() <=
                 getDateWithoutTime(trip.endDate).valueOf()
             ) {
-              <li
-                class="mx-auto mb-1 h-6 w-6 rounded-full bg-blue-400 px-1 text-black">
-                {{ date.getDate() }}
-              </li>
-              @if (trip.itinerary && trip.itinerary.length > 0) {
-                @for (activity of trip.itinerary; track activity) {
-                  @if (
-                    activity.startDate &&
-                    getDateWithoutTime(
-                      activity.startDate.toDate()
-                    ).valueOf() === getDateWithoutTime(date).valueOf()
-                  ) {
-                    <li>
-                      <nz-badge
-                        [nzStatus]="'warning'"
-                        class="w-11 overflow-hidden text-ellipsis text-nowrap md:w-14">
-                        {{ activity.title }}
-                      </nz-badge>
-                    </li>
-                  }
+              @if (
+                getDateWithoutTime(date).valueOf() ===
+                getDateWithoutTime(trip.startDate).valueOf()
+              ) {
+                @if (date | hasActivity: trip.itinerary ?? []) {
+                  <li class="tripStartDate rounded-full bg-blue-700">
+                    {{ date.getDate() }}
+                  </li>
+                } @else {
+                  <li class="tripStartDate">
+                    {{ date.getDate() }}
+                  </li>
+                }
+              } @else if (
+                getDateWithoutTime(date).valueOf() ===
+                getDateWithoutTime(trip.endDate).valueOf()
+              ) {
+                @if (date | hasActivity: trip.itinerary ?? []) {
+                  <li class="tripEndDate rounded-full bg-blue-700">
+                    {{ date.getDate() }}
+                  </li>
+                } @else {
+                  <li class="tripEndDate">
+                    {{ date.getDate() }}
+                  </li>
+                }
+              } @else {
+                @if (date | hasActivity: trip.itinerary ?? []) {
+                  <li class="tripDate rounded-full bg-blue-700">
+                    {{ date.getDate() }}
+                  </li>
+                } @else {
+                  <li class="tripDate">
+                    {{ date.getDate() }}
+                  </li>
                 }
               }
             } @else {
