@@ -28,6 +28,9 @@ module.exports = {
       animation: {
         'bounce-x': 'bounce-x 1s ease-in-out',
       },
+      boxShadow: {
+        'inner-around': 'inset 0px 0px 30px 0px rgba(0, 0 , 0 , 0.5);',
+      },
     },
   },
   plugins: [require('daisyui')],
