@@ -37,12 +37,16 @@ export class HomeComponent {
   userStore = inject(Store<UserState>);
   router = inject(Router);
 
-  trips$ = this.tripStore.select(selectTrips);
+  trips = toSignal(this.tripStore.select(selectTrips), { initialValue: [] });
   selectedTrip = toSignal(this.tripStore.select(selectSelectedTrip), {
     initialValue: null,
   });
-  loading$ = this.tripStore.select(selectLoadingState);
-  baseCurrency$ = this.userStore.select(selectBaseCurrency);
+  loading = toSignal(this.tripStore.select(selectLoadingState), {
+    initialValue: false,
+  });
+  baseCurrency = toSignal(this.userStore.select(selectBaseCurrency), {
+    initialValue: 'ZAR',
+  });
 
   @ViewChild('confirmModal')
   modalRef: ElementRef<HTMLDialogElement> | null = null;
