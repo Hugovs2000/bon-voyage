@@ -19,12 +19,14 @@
           <a
             type="button"
             class="flex items-center transition-all ease-in-out hover:scale-110"
-            [routerLink]="['/edit', this.tripToUpdate()?.docId]">
+            [routerLink]="['/edit', this.tripToUpdate()?.docId]"
+            aria-label="Edit trip">
             <mat-icon>edit</mat-icon>
           </a>
           <button
             (click)="confirmTripDelete()"
-            class="flex items-center transition-all ease-in-out hover:scale-110">
+            class="flex items-center transition-all ease-in-out hover:scale-110"
+            aria-label="Delete trip">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
@@ -93,12 +95,14 @@
           <div class="flex gap-2">
             <button
               class="btn border-0 bg-gray-700 text-white"
-              (click)="closeModal()">
+              (click)="closeModal()"
+              aria-label="Cancel delete">
               Cancel
             </button>
             <button
               class="btn border-0 bg-red-700 text-white"
-              (click)="deleteActivity()">
+              (click)="deleteActivity()"
+              aria-label="Delete activity">
               Delete
             </button>
           </div>
@@ -121,12 +125,14 @@
           <div class="flex gap-2">
             <button
               class="btn border-0 bg-gray-700 text-white"
-              (click)="closeModal()">
+              (click)="closeModal()"
+              aria-label="Cancel delete">
               Cancel
             </button>
             <button
               class="btn border-0 bg-red-700 text-white"
-              (click)="deleteTrip()">
+              (click)="deleteTrip()"
+              aria-label="Delete trip">
               Delete
             </button>
           </div>
@@ -138,7 +144,13 @@
       <p class="text-wrap text-center">
         Oops! Something went wrong. Please return home.
       </p>
-      <a type="button" routerLink="/home" class="btn btn-link">Return Home</a>
+      <a
+        type="button"
+        routerLink="/home"
+        class="btn btn-link"
+        aria-label="Go Home">
+        Return Home
+      </a>
     </div>
   }
 }

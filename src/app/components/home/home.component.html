@@ -71,12 +71,14 @@
           <div class="flex gap-2">
             <button
               class="btn border-0 bg-gray-700 text-white"
-              (click)="closeModal()">
+              (click)="closeModal()"
+              aria-label="Cancel delete">
               Cancel
             </button>
             <button
               class="btn border-0 bg-red-600 text-white"
-              (click)="deleteTrip()">
+              (click)="deleteTrip()"
+              aria-label="Delete trip">
               Delete
             </button>
           </div>
@@ -98,7 +100,8 @@
     <a
       type="button"
       class="btn fixed bottom-10 right-6 z-20 h-fit w-fit rounded-full bg-neutral-800 p-4 shadow-md shadow-white/20"
-      routerLink="/new-trip">
+      routerLink="/new-trip"
+      aria-label="Create new trip">
       <mat-icon class="text-green-1000">add</mat-icon>
     </a>
   }

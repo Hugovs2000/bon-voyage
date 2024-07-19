@@ -5,7 +5,10 @@
         <h2 class="self-start text-xl font-bold text-white">
           Sign Up to BonVoyage
         </h2>
-        <button class="btn w-full rounded-full" (click)="signInWithGoogle()">
+        <button
+          class="btn w-full rounded-full"
+          (click)="signInWithGoogle()"
+          aria-label="Sign up with Google">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"
@@ -90,7 +93,8 @@
           <button
             type="submit"
             [disabled]="!signUpForm.valid"
-            class="btn rounded-full">
+            class="btn rounded-full"
+            aria-label="Register user">
             Register Now
           </button>
         </form>
@@ -99,7 +103,8 @@
           <a
             type="button"
             class="text-blue-400 underline hover:scale-105"
-            routerLink="/log-in">
+            routerLink="/log-in"
+            aria-label="Log in">
             Log In
           </a>
         </p>

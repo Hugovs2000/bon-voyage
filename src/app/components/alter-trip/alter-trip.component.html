@@ -60,14 +60,16 @@
           type="button"
           class="btn mt-4 w-fit border-0 bg-gray-700 text-base text-white"
           type="button"
-          routerLink="/home">
+          routerLink="/home"
+          aria-label="Cancel and Go Home">
           <mat-icon>cancel</mat-icon>
           Cancel
         </a>
         <button
           class="btn mt-4 w-fit border-0 bg-green-1000 text-base text-black"
           type="submit"
-          [disabled]="!tripForm.valid">
+          [disabled]="!tripForm.valid"
+          aria-label="Save trip">
           <mat-icon>save</mat-icon>
           Save trip
         </button>
@@ -85,12 +87,14 @@
           <div class="flex gap-2">
             <button
               class="btn border-0 bg-gray-700 text-white"
-              (click)="closeConfirmModal()">
+              (click)="closeConfirmModal()"
+              aria-label="Cancel delete">
               Cancel
             </button>
             <button
               class="btn border-0 bg-red-600 text-white"
-              (click)="confirmDelete()">
+              (click)="confirmDelete()"
+              aria-label="Delete activity">
               Delete
             </button>
           </div>

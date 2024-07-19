@@ -9,7 +9,8 @@
     <button
       type="button"
       class="absolute right-4 top-4 flex items-center gap-1 text-blue-400"
-      (click)="openTagModal()">
+      (click)="openTagModal()"
+      aria-label="Open tag modal">
       @if (activityForm.value.tag && activityForm.value.tag !== '') {
         {{ activityForm.value.tag }}
         <mat-icon fontIcon="edit"></mat-icon>
@@ -25,7 +26,8 @@
             <button
               type="button"
               (click)="cancelTag()"
-              class="btn btn-circle btn-ghost btn-sm absolute right-4 top-4">
+              class="btn btn-circle btn-ghost btn-sm absolute right-4 top-4"
+              aria-label="Cancel tag modal">
               ✕
             </button>
           </form>
@@ -44,7 +46,8 @@
             <button
               type="button"
               class="btn btn-sm border-0 bg-green-1000"
-              (click)="closeTagModal()">
+              (click)="closeTagModal()"
+              aria-label="Close tag modal">
               Done
             </button>
           </form>
@@ -84,7 +87,8 @@
         <button
           type="button"
           class="mb-2 w-fit self-center rounded-t-lg border-b border-white bg-slate-1000 p-4 text-white hover:bg-transparent"
-          (click)="openMapModal()">
+          (click)="openMapModal()"
+          aria-label="Open map modal">
           Choose location on map
         </button>
       </div>
@@ -133,14 +137,16 @@
           <button
             type="button"
             class="btn border-0 bg-gray-700 text-white"
-            (click)="cancelEdit()">
+            (click)="cancelEdit()"
+            aria-label="Cancel form">
             Cancel
           </button>
         } @else {
           <button
             type="button"
             class="btn border-0 bg-red-700 text-white"
-            (click)="clearForm()">
+            (click)="clearForm()"
+            aria-label="Clear form">
             Clear
           </button>
         }
@@ -149,7 +155,8 @@
           type="button"
           class="btn w-fit self-end border-none bg-blue-700 text-white"
           (click)="addActivity()"
-          [disabled]="!activityForm.valid">
+          [disabled]="!activityForm.valid"
+          aria-label="Update or add activity">
           {{
             activityForm.value.id !== '' ? 'Update activity' : 'Add activity'
           }}
@@ -164,7 +171,8 @@
         <button
           type="button"
           class="btn btn-circle btn-ghost btn-sm"
-          (click)="closeMapModal()">
+          (click)="closeMapModal()"
+          aria-label="Close map modal">
           <mat-icon>close</mat-icon>
         </button>
       </form>
@@ -177,7 +185,8 @@
         <button
           type="button"
           class="btn btn-sm border-0 bg-green-1000"
-          (click)="closeMapModal()">
+          (click)="closeMapModal()"
+          aria-label="Close map modal">
           Done
         </button>
       </form>
