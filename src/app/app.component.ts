@@ -65,6 +65,7 @@ export class AppComponent {
 
   setBaseCurrency(currency: string) {
     this.userStore.dispatch(setBaseCurrency({ baseCurrency: currency }));
+    this.tripStore.dispatch(getExchangeRates());
   }
 
   signOut() {

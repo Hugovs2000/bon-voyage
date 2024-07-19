@@ -68,7 +68,7 @@ export class ApiService {
         );
       case 'AUD':
         return this.http.get<ExchangeRatesDTO>(
-          `assets/exchangeRatesBaseAUD.json`
+          `assets/exchangeRatesBaseAUS.json`
         );
       default:
         return this.http.get<ExchangeRatesDTO>(
