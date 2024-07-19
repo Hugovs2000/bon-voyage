@@ -15,11 +15,11 @@
             <div
               class="absolute z-0 flex h-calc w-9/12 overflow-hidden rounded-xl">
               <div
-                class="shadow-inner-around flex w-1/2 items-center justify-start bg-blue-700">
+                class="flex w-1/2 items-center justify-start bg-blue-700 shadow-inner-around">
                 <mat-icon class="mx-5 scale-150 text-white">edit</mat-icon>
               </div>
               <div
-                class="shadow-inner-around flex w-1/2 items-center justify-end bg-red-700">
+                class="flex w-1/2 items-center justify-end bg-red-700 shadow-inner-around">
                 <mat-icon class="mx-5 scale-150 text-white">delete</mat-icon>
               </div>
             </div>
@@ -28,7 +28,7 @@
               (left)="onSwipeLeft(trip.docId)"
               (right)="onSwipeRight(trip.docId)"
               (onClick)="handleTripClick(trip.docId)"
-              class="animate-bounce-x z-10 w-9/12 cursor-pointer"
+              class="z-10 w-9/12 animate-bounce-x cursor-pointer"
               cdkDrag
               cdkDragLockAxis="x"
               (cdkDragReleased)="resetPosition($event)"
@@ -67,7 +67,7 @@
               {{ selectedTrip()?.title ?? 'this trip' }}?
             </p>
             <p class="pt-2">
-              You will be deleting the associated itineraries as well.
+              You will be deleting the associated itinerary as well.
             </p>
           </div>
           <div class="modal-action">
