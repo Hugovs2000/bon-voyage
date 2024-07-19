@@ -47,6 +47,22 @@
             ) {
               @if (
                 getDateWithoutTime(date).valueOf() ===
+                  getDateWithoutTime(trip.startDate).valueOf() &&
+                getDateWithoutTime(date).valueOf() ===
+                  getDateWithoutTime(trip.endDate).valueOf()
+              ) {
+                @if (date | hasActivity: trip.itinerary ?? []) {
+                  <li
+                    class="tripStartAndEndDate rounded-full bg-green-1000 text-black">
+                    {{ date.getDate() }}
+                  </li>
+                } @else {
+                  <li class="tripStartAndEndDate">
+                    {{ date.getDate() }}
+                  </li>
+                }
+              } @else if (
+                getDateWithoutTime(date).valueOf() ===
                 getDateWithoutTime(trip.startDate).valueOf()
               ) {
                 @if (date | hasActivity: trip.itinerary ?? []) {
