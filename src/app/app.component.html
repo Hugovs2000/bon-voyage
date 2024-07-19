@@ -1,49 +1,7 @@
 <div class="drawer">
   <input id="my-drawer" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content">
-    <nav>
-      <mat-toolbar class="flex justify-between shadow-md shadow-white/20">
-        <div class="flex items-center">
-          <label
-            for="my-drawer"
-            class="btn btn-ghost drawer-button -ml-2 flex items-center px-2">
-            <mat-icon class="text-white">menu</mat-icon>
-          </label>
-          <a
-            type="button"
-            class="btn btn-ghost gap-0 p-0 text-xl text-white md:px-4 md:text-2xl"
-            routerLink="/home">
-            Bon
-            <span class="text-blue-400">Voyage</span>
-          </a>
-        </div>
-        <div class="flex items-center gap-0 md:gap-4">
-          @if (isLoggedIn$ | async) {
-            <button
-              class="btn btn-ghost h-8 min-h-8 text-sm text-blue-400"
-              aria-label="Log in button"
-              (click)="signOut()">
-              Log Out
-            </button>
-          } @else {
-            <a
-              type="button"
-              class="btn btn-ghost h-8 min-h-8 text-sm text-blue-400"
-              aria-label="Log in button"
-              routerLink="/log-in">
-              Log In
-            </a>
-            <a
-              type="button"
-              class="btn h-8 min-h-8 border-0 bg-blue-400"
-              aria-label="Sign up button"
-              routerLink="/sign-up">
-              Sign Up
-            </a>
-          }
-        </div>
-      </mat-toolbar>
-    </nav>
+    <app-nav></app-nav>
     <router-outlet />
   </div>
   <div class="drawer-side z-30">
@@ -51,62 +9,6 @@
       for="my-drawer"
       aria-label="close sidebar"
       class="drawer-overlay"></label>
-    <ul
-      class="menu flex min-h-full w-72 flex-col gap-4 bg-slate-1000 p-4 text-lg text-white">
-      <li>
-        <a
-          type="button"
-          class="btn btn-ghost flex justify-start gap-0 px-4 text-xl text-white md:px-4 md:text-2xl"
-          routerLink="/home">
-          Bon
-          <span class="text-blue-400">Voyage</span>
-        </a>
-      </li>
-      <li>
-        <a type="button" routerLink="/home">
-          <mat-icon style="font-size: 20px; width: 20px; height: 20px">
-            home
-          </mat-icon>
-          Home
-        </a>
-      </li>
-      <li>
-        <a type="button" routerLink="/new-trip">
-          <mat-icon style="font-size: 20px; width: 20px; height: 20px">
-            add
-          </mat-icon>
-          Create a new trip
-        </a>
-      </li>
-      @if (isLoggedIn$ | async) {
-        <div
-          class="text-basen flex flex-col gap-2 rounded-lg bg-neutral-800 px-4 py-2 shadow-md shadow-white/20">
-          <div class="flex items-center gap-2">
-            <mat-icon style="font-size: 20px; width: 20px; height: 20px">
-              currency_exchange
-            </mat-icon>
-            Select a currency:
-          </div>
-          <div class="flex flex-row flex-wrap gap-2 text-sm">
-            @for (cur of currencies; track cur.value) {
-              @if (cur.value === baseCurrency()) {
-                <button
-                  type="button"
-                  class="h-fit w-fit rounded-full border border-white bg-blue-700/30 px-4 py-1 text-white">
-                  {{ cur.value }}
-                </button>
-              } @else {
-                <button
-                  type="button"
-                  class="h-fit w-fit rounded-full bg-blue-700/30 px-4 py-1 text-white"
-                  (click)="setBaseCurrency(cur.value)">
-                  {{ cur.value }}
-                </button>
-              }
-            }
-          </div>
-        </div>
-      }
-    </ul>
+    <app-drawer></app-drawer>
   </div>
 </div>
