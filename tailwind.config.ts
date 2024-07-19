@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       height: {
         calc: 'calc(100% - 1rem)',
+        'calc-screen': 'calc(100vh - 3rem)',
       },
       colors: {
         green: {

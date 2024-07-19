@@ -129,6 +129,11 @@ a:hover {
   color: whitesmoke;
 }
 
+a:focus {
+  color: whitesmoke !important;
+  background-color: #151515 !important;
+}
+
 button:hover {
   color: whitesmoke;
 }
