@@ -1,13 +1,8 @@
 import { CdkDragRelease, DragDropModule } from '@angular/cdk/drag-drop';
-import { AsyncPipe } from '@angular/common';
-import {
-  Component,
-  ElementRef,
-  ViewChild,
-  inject,
-  signal,
-} from '@angular/core';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
+import { Component, ElementRef, ViewChild, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { SwipeDirective } from '../../directives/swipe.directive';
@@ -30,8 +25,9 @@ import { TripCardComponent } from '../trip-card/trip-card.component';
     AsyncPipe,
     SwipeDirective,
     DragDropModule,
-    MatProgressSpinnerModule,
     RouterLink,
+    MatIconModule,
+    NgOptimizedImage,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -42,11 +38,11 @@ export class HomeComponent {
   router = inject(Router);
 
   trips$ = this.tripStore.select(selectTrips);
-  selectedTrip$ = this.tripStore.select(selectSelectedTrip);
+  selectedTrip = toSignal(this.tripStore.select(selectSelectedTrip), {
+    initialValue: null,
+  });
   loading$ = this.tripStore.select(selectLoadingState);
   baseCurrency$ = this.userStore.select(selectBaseCurrency);
-
-  selectedTripId = signal('');
 
   @ViewChild('confirmModal')
   modalRef: ElementRef<HTMLDialogElement> | null = null;
@@ -56,7 +52,6 @@ export class HomeComponent {
   }
 
   closeModal() {
-    this.selectedTripId.set('');
     this.modalRef?.nativeElement.close();
   }
 
@@ -74,14 +69,16 @@ export class HomeComponent {
     this.router.navigate(['/edit', id]);
   }
 
-  onSwipeLeft(trip: string) {
-    this.selectedTripId.set(trip);
+  onSwipeLeft(id: string) {
+    this.tripStore.dispatch(setSelectedTripId({ tripId: id }));
     this.openModal();
   }
 
   deleteTrip() {
-    if (this.selectedTripId() !== '') {
-      this.tripStore.dispatch(deleteTrip({ tripId: this.selectedTripId() }));
+    if (this.selectedTrip() !== null) {
+      this.tripStore.dispatch(
+        deleteTrip({ tripId: this.selectedTrip()?.docId ?? '' })
+      );
       this.closeModal();
     }
   }

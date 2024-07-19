@@ -1,13 +1,15 @@
 import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, ElementRef, ViewChild, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzCalendarModule } from 'ng-zorro-antd/calendar';
+import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { ItineraryItem, Trip } from '../../models/trips';
+import { HasActivityPipe } from '../../pipes/has-activity.pipe';
 import {
   deleteTrip,
   setSelectedTripId,
@@ -29,7 +31,6 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
   standalone: true,
   imports: [
     ItineraryCardComponent,
-    MatProgressSpinnerModule,
     AsyncPipe,
     DatePipe,
     CurrencyPipe,
@@ -37,6 +38,9 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
     RouterLink,
     NzCalendarModule,
     NzBadgeModule,
+    NzStepsModule,
+    MatIconModule,
+    HasActivityPipe,
   ],
   templateUrl: './trip-details.component.html',
   styleUrl: './trip-details.component.scss',

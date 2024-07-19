@@ -1,21 +1,28 @@
 @if ((loading$ | async) ?? false) {
-  <div class="flex h-full w-full items-center justify-center pb-14">
-    <mat-spinner></mat-spinner>
+  <div
+    class="flex h-screen w-full flex-col gap-4 p-6 md:mx-auto md:max-w-xl md:self-center">
+    <div class="skeleton h-10 w-1/2 rounded-lg"></div>
+    <div class="skeleton h-14 w-full rounded-lg"></div>
+    <div class="skeleton h-10 w-1/2 rounded-lg"></div>
+    <div
+      class="skeleton h-36 w-full rounded-lg shadow-md shadow-white/20"></div>
+    <div
+      class="skeleton h-96 w-full rounded-lg shadow-md shadow-white/20"></div>
   </div>
 } @else {
-  <div class="p-4">
+  <div class="p-4 md:mx-auto md:max-w-xl">
     @if (selectedTrip()?.docId && selectedTrip()?.docId !== '') {
-      <h1 class="text-xl font-extrabold">
+      <h1 class="text-2xl font-extrabold text-white">
         Edit Trip: {{ selectedTrip()?.title }}
       </h1>
     } @else {
-      <h1 class="text-xl font-extrabold">Create a new trip!</h1>
+      <h1 class="text-2xl font-extrabold text-white">Create a new trip!</h1>
     }
     <form
       class="flex flex-col gap-2"
       [formGroup]="tripForm"
       (ngSubmit)="onSubmit()">
-      <mat-form-field hideRequiredMarker="true" class="md:w-96">
+      <mat-form-field hideRequiredMarker="true" class="mt-2">
         <mat-label>Title:</mat-label>
         <input
           type="text"
@@ -26,7 +33,7 @@
         <mat-error>Please enter a title</mat-error>
       </mat-form-field>
 
-      <h2 class="mb-2 text-lg font-semibold">Itinerary:</h2>
+      <h2 class="mb-2 text-lg font-semibold text-white">Itinerary:</h2>
       @for (activity of itinerary; track activity) {
         <app-itinerary-card
           [inputActivity]="activity"
@@ -51,14 +58,14 @@
       <div class="flex gap-2 self-end">
         <a
           type="button"
-          class="btn mt-4 w-fit bg-error text-base"
+          class="btn mt-4 w-fit border-0 bg-gray-700 text-base text-white"
           type="button"
           routerLink="/home">
           <mat-icon>cancel</mat-icon>
           Cancel
         </a>
         <button
-          class="btn mt-4 w-fit bg-success text-base"
+          class="btn mt-4 w-fit border-0 bg-green-1000 text-base text-black"
           type="submit"
           [disabled]="!tripForm.valid">
           <mat-icon>save</mat-icon>
@@ -67,15 +74,23 @@
       </div>
     </form>
     <dialog #confirmModal class="modal">
-      <div class="modal-box">
-        <h3 class="text-lg font-bold">Hold on!</h3>
-        <p class="py-4">Are you sure you would like to delete this activity?</p>
+      <div class="modal-box bg-neutral-800">
+        <h3 class="text-2xl font-bold">Hold on!</h3>
+        <p class="py-4">
+          Are you sure you would like to delete
+          {{ activityToDelete()?.title ?? 'this activity' }} from
+          {{ selectedTrip()?.title ?? 'this trip' }}?
+        </p>
         <div class="modal-action">
           <div class="flex gap-2">
-            <button class="btn btn-warning" (click)="closeConfirmModal()">
+            <button
+              class="btn border-0 bg-gray-700 text-white"
+              (click)="closeConfirmModal()">
               Cancel
             </button>
-            <button class="btn btn-error" (click)="confirmDelete()">
+            <button
+              class="btn border-0 bg-red-600 text-white"
+              (click)="confirmDelete()">
               Delete
             </button>
           </div>
