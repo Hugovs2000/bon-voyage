@@ -52,32 +52,36 @@ export class ApiService {
     });
   }
 
-  getCurrencies(baseCurrency: string) {
+  getCurrenciesFromApi(baseCurrency: string) {
+    return this.http.get<ExchangeRatesDTO>(
+      // Replace the URL with the actual API URL in the production code
+      // `https://api.currencyapi.com/v3/latest?apikey=${environment.currencyApiKey}&currencies=EUR%2CUSD%2CGBP%2CAUD%2CZAR&base_currency=${baseCurrency}`
+      `https://fakeUrl.com`
+    );
+  }
+
+  getCurrenciesFromApiMock(baseCurrency: string) {
     switch (baseCurrency) {
       case 'USD':
         return this.http.get<ExchangeRatesDTO>(
-          `assets/exchangeRatesBaseUSD.json`
+          `assets/exchangeRates/exchangeRatesBaseUSD.json`
         );
       case 'GBP':
         return this.http.get<ExchangeRatesDTO>(
-          `assets/exchangeRatesBaseGBP.json`
+          `assets/exchangeRates/exchangeRatesBaseGBP.json`
         );
       case 'EUR':
         return this.http.get<ExchangeRatesDTO>(
-          `assets/exchangeRatesBaseEUR.json`
+          `assets/exchangeRates/exchangeRatesBaseEUR.json`
         );
       case 'AUD':
         return this.http.get<ExchangeRatesDTO>(
-          `assets/exchangeRatesBaseAUS.json`
+          `assets/exchangeRates/exchangeRatesBaseAUD.json`
         );
       default:
         return this.http.get<ExchangeRatesDTO>(
-          `assets/exchangeRatesBaseZAR.json`
+          `assets/exchangeRates/exchangeRatesBaseZAR.json`
         );
     }
-    // Replace the switch statement with the following code in prod:
-    // return this.http.get<ExchangeRatesDTO>(
-    //   `https://api.currencyapi.com/v3/latest?apikey=${environment.currencyApiKey}&currencies=EUR%2CUSD%2CGBP%2CAUD%2CZAR&base_currency=${baseCurrency}`
-    // );
   }
 }
