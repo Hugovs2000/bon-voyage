@@ -1,5 +1,5 @@
-import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink } from '@angular/router';
@@ -11,13 +11,15 @@ import { selectIsLoggedIn } from '../../store/user/selectors';
 @Component({
   selector: 'app-nav',
   standalone: true,
-  imports: [MatIconModule, MatToolbarModule, AsyncPipe, RouterLink],
+  imports: [MatIconModule, MatToolbarModule, RouterLink],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.scss',
 })
 export class NavComponent {
   userStore = inject(Store<UserState>);
-  isLoggedIn$ = this.userStore.select(selectIsLoggedIn);
+  isLoggedIn = toSignal(this.userStore.select(selectIsLoggedIn), {
+    initialValue: false,
+  });
 
   signOut() {
     this.userStore.dispatch(logOut());

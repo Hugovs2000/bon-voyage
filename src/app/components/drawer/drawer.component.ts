@@ -1,4 +1,3 @@
-import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,14 +16,16 @@ import {
 @Component({
   selector: 'app-drawer',
   standalone: true,
-  imports: [MatIconModule, AsyncPipe, RouterLink],
+  imports: [MatIconModule, RouterLink],
   templateUrl: './drawer.component.html',
   styleUrl: './drawer.component.scss',
 })
 export class DrawerComponent {
   userStore = inject(Store<UserState>);
   tripStore = inject(Store<TripState>);
-  isLoggedIn$ = this.userStore.select(selectIsLoggedIn);
+  isLoggedIn = toSignal(this.userStore.select(selectIsLoggedIn), {
+    initialValue: false,
+  });
   baseCurrency = toSignal(this.tripStore.select(selectBaseCurrency), {
     initialValue: 'ZAR',
   });

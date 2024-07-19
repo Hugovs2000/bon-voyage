@@ -15,7 +15,7 @@
       </a>
     </div>
     <div class="flex items-center gap-0 md:gap-4">
-      @if (isLoggedIn$ | async) {
+      @if (isLoggedIn()) {
         <button
           class="btn btn-ghost h-8 min-h-8 text-sm text-blue-400"
           aria-label="Log in button"
