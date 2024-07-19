@@ -1,4 +1,3 @@
-import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -42,7 +41,6 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
   selector: 'app-alter-trip',
   standalone: true,
   imports: [
-    AsyncPipe,
     ReactiveFormsModule,
     MatFormFieldModule,
     ItineraryCardComponent,
@@ -70,13 +68,13 @@ export class AlterTripComponent implements OnInit {
   @ViewChild('confirmModal')
   confirmModal: ElementRef<HTMLDialogElement> | null = null;
 
-  loading$ = this.store.select(selectLoadingState);
-
+  loading = toSignal(this.store.select(selectLoadingState), {
+    initialValue: false,
+  });
+  userId = toSignal(this.store.select(selectUserId), { initialValue: 'abc' });
   selectedTrip = signal<Trip | null>(null);
   activityToDelete = signal<ItineraryItem | null>(null);
   activityToEdit = signal<ItineraryItem | null>(null);
-
-  userId = toSignal(this.store.select(selectUserId), { initialValue: 'abc' });
 
   itinerary: ItineraryItem[] = [];
 

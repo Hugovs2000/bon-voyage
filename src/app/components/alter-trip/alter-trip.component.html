@@ -1,4 +1,4 @@
-@if ((loading$ | async) ?? false) {
+@if (loading()) {
   <div
     class="flex h-screen w-full flex-col gap-4 p-6 md:mx-auto md:max-w-xl md:self-center">
     <div class="skeleton h-10 w-1/2 rounded-lg"></div>
