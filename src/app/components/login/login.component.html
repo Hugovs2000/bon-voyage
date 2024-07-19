@@ -1,8 +1,10 @@
 <div class="m-4 mt-8 flex justify-center">
-  <mat-card class="w-full md:w-1/2">
+  <mat-card class="w-full md:max-w-xl">
     <mat-card-content>
-      <div class="flex flex-col gap-6 p-4 md:p-12">
-        <h2 class="self-start text-xl font-bold">Log in to BonVoyage</h2>
+      <div class="flex flex-col gap-6 bg-neutral-800 p-4 text-white md:p-12">
+        <h2 class="self-start text-xl font-bold text-white">
+          Log in to BonVoyage
+        </h2>
         <button class="btn w-full rounded-full" (click)="signInWithGoogle()">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -80,7 +82,7 @@
           Don't have an account?
           <a
             type="button"
-            class="text-slate-950 underline hover:scale-105 hover:text-slate-700"
+            class="text-blue-400 underline hover:scale-105"
             routerLink="/sign-up">
             Sign Up
           </a>

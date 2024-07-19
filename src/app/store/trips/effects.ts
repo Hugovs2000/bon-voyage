@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { catchError, map, of, retry, switchMap } from 'rxjs';
 import { Trip } from '../../models/trips';
 import { ApiService } from '../../services/api.service';
-import { AuthService } from '../../services/auth.service';
+import { UserState } from '../user/reducer';
+import { selectBaseCurrency, selectUserId } from '../user/selectors';
 import {
   createNewTrip,
   createNewTripComplete,
@@ -23,6 +26,11 @@ import {
 
 @Injectable()
 export class TripsEffects {
+  userId = toSignal(this.userStore.select(selectUserId), { initialValue: '' });
+  baseCurrency = toSignal(this.userStore.select(selectBaseCurrency), {
+    initialValue: 'ZAR',
+  });
+
   getAllTrips$ = createEffect(() =>
     this.actions$.pipe(
       ofType(getAllTrips.type),
@@ -161,8 +169,8 @@ export class TripsEffects {
   getExchangeRates$ = createEffect(() =>
     this.actions$.pipe(
       ofType(getExchangeRates.type),
-      switchMap((action: { type: string; baseCurrency: string }) =>
-        this.apiService.getCurrencies(action.baseCurrency).pipe(
+      switchMap(() =>
+        this.apiService.getCurrencies(this.baseCurrency()).pipe(
           retry(3),
           map(data => {
             if (data) {
@@ -200,8 +208,8 @@ export class TripsEffects {
   constructor(
     private actions$: Actions,
     private apiService: ApiService,
-    private authService: AuthService,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private userStore: Store<UserState>
   ) {}
 }

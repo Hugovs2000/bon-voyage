@@ -1,20 +1,21 @@
-<div class="card card-compact mb-2 w-full bg-gray-300 shadow-xl md:w-96">
+<div
+  class="card card-compact mb-4 w-full bg-neutral-800 text-white shadow-md shadow-white/10">
   <div class="card-body">
-    <h2 class="card-title">
+    <h2 class="card-title text-white">
       {{
         activityForm.value.id !== '' ? 'Edit Activity!' : 'Create an Activity!'
       }}
     </h2>
     <button
       type="button"
-      class="absolute right-4 top-4 flex items-center gap-1 text-blue-700"
+      class="absolute right-4 top-4 flex items-center gap-1 text-blue-400"
       (click)="openTagModal()">
       @if (activityForm.value.tag && activityForm.value.tag !== '') {
         {{ activityForm.value.tag }}
         <mat-icon fontIcon="edit"></mat-icon>
       } @else {
         Add tag
-        <mat-icon fontIcon="add_circle"></mat-icon>
+        <mat-icon>add_circle</mat-icon>
       }
     </button>
     <div [formGroup]="activityForm">
@@ -42,7 +43,7 @@
           <form method="dialog" class="flex justify-end">
             <button
               type="button"
-              class="btn btn-success btn-sm"
+              class="btn btn-sm border-0 bg-green-1000"
               (click)="closeTagModal()">
               Done
             </button>
@@ -82,14 +83,14 @@
       <div class="mb-4 flex flex-col">
         <button
           type="button"
-          class="btn mb-2 w-fit self-center bg-white"
+          class="mb-2 w-fit self-center rounded-t-lg border-b border-white bg-slate-1000 p-4 text-white hover:bg-transparent"
           (click)="openMapModal()">
           Choose location on map
         </button>
       </div>
 
-      <div class="flex items-center gap-2">
-        <mat-form-field hideRequiredMarker="true">
+      <div class="flex w-full items-center gap-2">
+        <mat-form-field hideRequiredMarker="true" class="w-1/2">
           <mat-label>Cost:</mat-label>
           <input
             type="number"
@@ -98,7 +99,7 @@
             formControlName="cost" />
           <mat-error class="text-nowrap">Please enter a valid amount</mat-error>
         </mat-form-field>
-        <mat-form-field hideRequiredMarker="true">
+        <mat-form-field hideRequiredMarker="true" class="w-1/2">
           <mat-label>Currency</mat-label>
           <mat-select
             name="currency"
@@ -129,18 +130,24 @@
 
       <div class="flex w-full justify-end gap-2">
         @if (activityForm.value.id !== '') {
-          <button type="button" class="btn btn-error" (click)="cancelEdit()">
+          <button
+            type="button"
+            class="btn border-0 bg-gray-700 text-white"
+            (click)="cancelEdit()">
             Cancel
           </button>
         } @else {
-          <button type="button" class="btn btn-error" (click)="clearForm()">
+          <button
+            type="button"
+            class="btn border-0 bg-red-700 text-white"
+            (click)="clearForm()">
             Clear
           </button>
         }
 
         <button
           type="button"
-          class="btn w-fit self-end border-none bg-warning"
+          class="btn w-fit self-end border-none bg-blue-700 text-white"
           (click)="addActivity()"
           [disabled]="!activityForm.valid">
           {{
@@ -169,7 +176,7 @@
       <form method="dialog" class="flex justify-end">
         <button
           type="button"
-          class="btn btn-success btn-sm"
+          class="btn btn-sm border-0 bg-green-1000"
           (click)="closeMapModal()">
           Done
         </button>

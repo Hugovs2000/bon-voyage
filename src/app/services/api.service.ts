@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   Firestore,
   addDoc,
@@ -7,21 +8,34 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  query,
   updateDoc,
+  where,
 } from '@angular/fire/firestore';
+import { Store } from '@ngrx/store';
 import { ExchangeRatesDTO, Trip } from '../models/trips';
+import { UserState } from '../store/user/reducer';
+import { selectUserId } from '../store/user/selectors';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
+  userId = toSignal(this.userStore.select(selectUserId), { initialValue: '' });
+
   constructor(
     private firestore: Firestore,
-    private http: HttpClient
+    private http: HttpClient,
+    private userStore: Store<UserState>
   ) {}
 
   getTrips() {
-    return getDocs(collection(this.firestore, 'trips'));
+    return getDocs(
+      query(
+        collection(this.firestore, 'trips'),
+        where('userId', '==', this.userId())
+      )
+    );
   }
 
   addTrip(trip: Trip) {
@@ -54,7 +68,7 @@ export class ApiService {
         );
       case 'AUD':
         return this.http.get<ExchangeRatesDTO>(
-          `assets/exchangeRatesBaseAUD.json`
+          `assets/exchangeRatesBaseAUS.json`
         );
       default:
         return this.http.get<ExchangeRatesDTO>(

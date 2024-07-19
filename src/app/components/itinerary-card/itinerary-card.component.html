@@ -1,36 +1,43 @@
 <div
-  class="mb-4 grid grid-rows-3 gap-2 rounded-xl border-2 border-blue-400 bg-blue-300 p-4"
+  class="mb-4 flex flex-col gap-2 rounded-xl bg-neutral-800 p-4 text-white shadow-md shadow-white/10 transition-all ease-in-out hover:scale-101"
   (click)="handleItineraryClick($event)">
   <div class="flex justify-between">
-    @if (newStartDate && newEndDate) {
-      <div>{{ newStartDate | date }} - {{ newEndDate | date }}</div>
+    @if (inputActivity()?.title) {
+      <div class="flex items-center justify-center text-2xl">
+        {{ inputActivity()?.title }}
+      </div>
     }
-
-    <div class="flex gap-2">
+    <div class="flex gap-4">
       <button
         type="button"
-        class="btn btn-warning z-10 text-white"
+        class="z-10 transition-all ease-in-out hover:scale-110"
         (click)="handleEditClick($event)">
         <mat-icon>edit</mat-icon>
       </button>
       <button
         type="button"
-        class="btn btn-error z-10 text-white"
+        class="z-10 transition-all ease-in-out hover:scale-110"
         (click)="handleDeleteClick($event)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
   </div>
-  @if (inputActivity()?.title) {
-    <div class="flex justify-center text-2xl">{{ inputActivity()?.title }}</div>
+  @if (newStartDate && newEndDate) {
+    <div>{{ newStartDate | date }} - {{ newEndDate | date }}</div>
   }
-
-  <div class="flex justify-end">
-    <div>
+  <div class="flex w-full items-center justify-between">
+    @if (inputActivity()?.tag) {
+      <div class="badge border-0 bg-blue-700/40 text-white">
+        {{ inputActivity()?.tag }}
+      </div>
+    } @else {
+      <div class="invisible"></div>
+    }
+    <p class="flex self-end text-xl">
       {{
         inputActivity()?.cost
           | currency: inputActivity()?.currency : 'symbol-narrow'
       }}
-    </div>
+    </p>
   </div>
 </div>

@@ -22,13 +22,11 @@ export interface TripState {
   isLoading: boolean;
   selectedTripId?: string;
   exchangeRates?: ExchangeRatesDTO;
-  baseCurrency: string;
 }
 
 const initialState: TripState = {
   trips: [],
   isLoading: false,
-  baseCurrency: 'ZAR',
 };
 
 export const tripsReducers = createReducer(

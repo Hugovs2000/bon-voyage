@@ -1,13 +1,15 @@
 import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, ElementRef, ViewChild, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzCalendarModule } from 'ng-zorro-antd/calendar';
+import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { ItineraryItem, Trip } from '../../models/trips';
+import { HasActivityPipe } from '../../pipes/has-activity.pipe';
 import {
   deleteTrip,
   setSelectedTripId,
@@ -19,6 +21,8 @@ import {
   selectLoadingState,
   selectSelectedTrip,
 } from '../../store/trips/selectors';
+import { UserState } from '../../store/user/reducer';
+import { selectBaseCurrency } from '../../store/user/selectors';
 import { ItineraryCardComponent } from '../itinerary-card/itinerary-card.component';
 import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.component';
 
@@ -27,7 +31,6 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
   standalone: true,
   imports: [
     ItineraryCardComponent,
-    MatProgressSpinnerModule,
     AsyncPipe,
     DatePipe,
     CurrencyPipe,
@@ -35,6 +38,9 @@ import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.compone
     RouterLink,
     NzCalendarModule,
     NzBadgeModule,
+    NzStepsModule,
+    MatIconModule,
+    HasActivityPipe,
   ],
   templateUrl: './trip-details.component.html',
   styleUrl: './trip-details.component.scss',
@@ -45,9 +51,10 @@ export class TripDetailsComponent {
   @ViewChild('confirmDeleteTripModal')
   tripModalRef: ElementRef<HTMLDialogElement> | null = null;
 
-  trip$ = this.store.select(selectSelectedTrip);
-  loading$ = this.store.select(selectLoadingState);
-  exchangeRates$ = this.store.select(selectExchangeRates);
+  trip$ = this.tripStore.select(selectSelectedTrip);
+  loading$ = this.tripStore.select(selectLoadingState);
+  exchangeRates$ = this.tripStore.select(selectExchangeRates);
+  baseCurrency$ = this.userStore.select(selectBaseCurrency);
 
   tripToUpdate = signal<Trip | null>(null);
   activityToDelete = signal<ItineraryItem | null>(null);
@@ -56,13 +63,14 @@ export class TripDetailsComponent {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private store: Store<TripState>,
+    private tripStore: Store<TripState>,
+    private userStore: Store<UserState>,
     private router: Router,
     private snackBar: MatSnackBar
   ) {
     this.trip$.pipe(takeUntilDestroyed()).subscribe(trip => {
       if (!trip) {
-        this.store.dispatch(
+        this.tripStore.dispatch(
           setSelectedTripId({
             tripId: this.tripId(),
           })
@@ -101,7 +109,7 @@ export class TripDetailsComponent {
       const newActivities = this.tripToUpdate()?.itinerary?.filter(
         act => act.id !== this.activityToDelete()?.id
       );
-      this.store.dispatch(
+      this.tripStore.dispatch(
         updateTrip({
           trip: {
             ...(this.tripToUpdate() ??
@@ -141,7 +149,7 @@ export class TripDetailsComponent {
       const newActivities = this.tripToUpdate()?.itinerary?.map(act =>
         act.id === activity.id ? activity : act
       );
-      this.store.dispatch(
+      this.tripStore.dispatch(
         updateTrip({
           trip: {
             ...this.tripToUpdate(),
@@ -155,7 +163,7 @@ export class TripDetailsComponent {
 
   addActivity(activity: ItineraryItem) {
     if (this.tripToUpdate()?.docId && this.tripToUpdate()?.docId !== '') {
-      this.store.dispatch(
+      this.tripStore.dispatch(
         updateTrip({
           trip: {
             ...this.tripToUpdate(),
@@ -167,7 +175,7 @@ export class TripDetailsComponent {
   }
 
   deleteTrip() {
-    this.store.dispatch(
+    this.tripStore.dispatch(
       deleteTrip({ tripId: this.tripToUpdate()?.docId ?? '' })
     );
   }
