@@ -1,3 +1,4 @@
+import { NgOptimizedImage } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import {
   FormControl,
@@ -29,6 +30,7 @@ import { UserState } from '../../store/user/reducer';
     MatCardModule,
     MatCardContent,
     RouterLink,
+    NgOptimizedImage,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',

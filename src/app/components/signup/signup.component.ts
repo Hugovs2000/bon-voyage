@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { MatError, MatFormFieldModule } from '@angular/material/form-field';
 
+import { NgOptimizedImage } from '@angular/common';
 import {
   FormControl,
   FormGroup,
@@ -30,6 +31,7 @@ import { passwordMatch } from '../../utils/passwordMatch';
     MatCardModule,
     MatCardContent,
     RouterLink,
+    NgOptimizedImage,
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss',
