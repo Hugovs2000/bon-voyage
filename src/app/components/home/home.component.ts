@@ -1,5 +1,5 @@
 import { CdkDragRelease, DragDropModule } from '@angular/cdk/drag-drop';
-import { AsyncPipe, NgOptimizedImage } from '@angular/common';
+import { NgOptimizedImage } from '@angular/common';
 import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
@@ -22,7 +22,6 @@ import { TripCardComponent } from '../trip-card/trip-card.component';
   standalone: true,
   imports: [
     TripCardComponent,
-    AsyncPipe,
     SwipeDirective,
     DragDropModule,
     RouterLink,

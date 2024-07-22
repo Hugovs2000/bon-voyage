@@ -1,4 +1,3 @@
-import { CurrencyPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -36,7 +35,6 @@ import { MapComponent } from '../map/map.component';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    CurrencyPipe,
     MatIconModule,
     MapComponent,
   ],
