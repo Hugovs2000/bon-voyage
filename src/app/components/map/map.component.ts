@@ -32,6 +32,26 @@ export class MapComponent {
           },
         ];
         zoomLevel = 12;
+      } else if (activity.startLocation) {
+        this.initialMarkers = [
+          {
+            position: Leaflet.latLng(
+              activity.startLocation?.latitude,
+              activity.startLocation?.longitude
+            ),
+          },
+        ];
+        zoomLevel = 12;
+      } else if (activity.endLocation) {
+        this.initialMarkers = [
+          {
+            position: Leaflet.latLng(
+              activity.endLocation?.latitude,
+              activity.endLocation?.longitude
+            ),
+          },
+        ];
+        zoomLevel = 12;
       }
       this.options = {
         ...this.options,
