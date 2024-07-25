@@ -11,13 +11,15 @@
       <button
         type="button"
         class="z-10 transition-all ease-in-out hover:scale-110"
-        (click)="handleEditClick($event)">
+        (click)="handleEditClick($event)"
+        aria-label="Edit activity">
         <mat-icon>edit</mat-icon>
       </button>
       <button
         type="button"
         class="z-10 transition-all ease-in-out hover:scale-110"
-        (click)="handleDeleteClick($event)">
+        (click)="handleDeleteClick($event)"
+        aria-label="Delete activity">
         <mat-icon>delete</mat-icon>
       </button>
     </div>

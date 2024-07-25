@@ -1,0 +1,67 @@
+@if (trip(); as trip) {
+  <nz-calendar [nzFullscreen]="false" [nzValue]="trip.startDate">
+    <ul *nzDateFullCell="let date" class="max-h-14 overflow-hidden">
+      @if (date && trip.startDate && trip.endDate) {
+        @if (
+          getDateWithoutTime(date).valueOf() >=
+            getDateWithoutTime(trip.startDate).valueOf() &&
+          getDateWithoutTime(date).valueOf() <=
+            getDateWithoutTime(trip.endDate).valueOf()
+        ) {
+          @if (
+            getDateWithoutTime(date).valueOf() ===
+              getDateWithoutTime(trip.startDate).valueOf() &&
+            getDateWithoutTime(date).valueOf() ===
+              getDateWithoutTime(trip.endDate).valueOf()
+          ) {
+            <li
+              [class]="
+                (date | hasActivity: trip.itinerary ?? [])
+                  ? 'tripStartAndEndDate rounded-full bg-green-1000 text-black'
+                  : 'tripStartAndEndDate'
+              ">
+              {{ date.getDate() }}
+            </li>
+          } @else if (
+            getDateWithoutTime(date).valueOf() ===
+            getDateWithoutTime(trip.startDate).valueOf()
+          ) {
+            <li
+              [class]="
+                (date | hasActivity: trip.itinerary ?? [])
+                  ? 'tripStartDate rounded-full bg-green-1000 text-black'
+                  : 'tripStartDate'
+              ">
+              {{ date.getDate() }}
+            </li>
+          } @else if (
+            getDateWithoutTime(date).valueOf() ===
+            getDateWithoutTime(trip.endDate).valueOf()
+          ) {
+            <li
+              [class]="
+                (date | hasActivity: trip.itinerary ?? [])
+                  ? 'tripEndDate rounded-full bg-green-1000 text-black'
+                  : 'tripEndDate'
+              ">
+              {{ date.getDate() }}
+            </li>
+          } @else {
+            <li
+              [class]="
+                (date | hasActivity: trip.itinerary ?? [])
+                  ? 'tripDate rounded-full bg-green-1000 text-black'
+                  : 'tripDate'
+              ">
+              {{ date.getDate() }}
+            </li>
+          }
+        } @else {
+          <li class="rounded-full">
+            {{ date.getDate() }}
+          </li>
+        }
+      }
+    </ul>
+  </nz-calendar>
+}

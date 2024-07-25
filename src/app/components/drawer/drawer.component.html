@@ -1,0 +1,59 @@
+<div
+  class="menu flex min-h-screen w-72 flex-col gap-4 bg-slate-1000 p-4 text-lg text-white">
+  <a
+    type="button"
+    class="btn btn-ghost flex justify-start gap-0 px-4 text-xl text-white md:text-2xl"
+    routerLink="/home"
+    aria-label="Go Home">
+    Bon
+    <span class="text-blue-400">Voyage</span>
+  </a>
+  <a
+    type="button"
+    routerLink="/home"
+    class="flex items-center gap-2 px-4 py-2 transition-all ease-in-out hover:scale-105"
+    aria-label="Go Home">
+    <mat-icon style="font-size: 20px; width: 20px; height: 20px">home</mat-icon>
+    Home
+  </a>
+  <a
+    type="button"
+    routerLink="/new-trip"
+    class="flex items-center gap-2 px-4 py-2 transition-all ease-in-out hover:scale-105"
+    aria-label="Create new trp">
+    <mat-icon style="font-size: 20px; width: 20px; height: 20px">add</mat-icon>
+    Create a new trip
+  </a>
+
+  @if (isLoggedIn()) {
+    <div
+      class="text-basen flex flex-col gap-2 rounded-lg bg-neutral-800 px-4 py-2 shadow-md shadow-white/20">
+      <div class="flex items-center gap-2">
+        <mat-icon style="font-size: 20px; width: 20px; height: 20px">
+          currency_exchange
+        </mat-icon>
+        Select a currency:
+      </div>
+      <div class="flex flex-row flex-wrap gap-2 text-sm">
+        @for (cur of currencies; track cur.value) {
+          @if (cur.value === baseCurrency()) {
+            <button
+              type="button"
+              class="h-fit w-fit rounded-full border border-white bg-blue-700/30 px-4 py-1 text-white"
+              aria-label="Change currency">
+              {{ cur.value }}
+            </button>
+          } @else {
+            <button
+              type="button"
+              class="h-fit w-fit rounded-full bg-blue-700/30 px-4 py-1 text-white"
+              (click)="setBaseCurrency(cur.value)"
+              aria-label="Change currency">
+              {{ cur.value }}
+            </button>
+          }
+        }
+      </div>
+    </div>
+  }
+</div>

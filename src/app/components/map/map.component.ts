@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import * as Leaflet from 'leaflet';
 import { ItineraryItem, LeafletPosition } from '../../models/trips';
-Leaflet.Icon.Default.imagePath = 'assets/';
+Leaflet.Icon.Default.imagePath = 'assets/map/';
 
 @Component({
   selector: 'app-map',
@@ -24,6 +24,26 @@ export class MapComponent {
               activity.startLocation?.longitude
             ),
           },
+          {
+            position: Leaflet.latLng(
+              activity.endLocation?.latitude,
+              activity.endLocation?.longitude
+            ),
+          },
+        ];
+        zoomLevel = 12;
+      } else if (activity.startLocation) {
+        this.initialMarkers = [
+          {
+            position: Leaflet.latLng(
+              activity.startLocation?.latitude,
+              activity.startLocation?.longitude
+            ),
+          },
+        ];
+        zoomLevel = 12;
+      } else if (activity.endLocation) {
+        this.initialMarkers = [
           {
             position: Leaflet.latLng(
               activity.endLocation?.latitude,

@@ -1,4 +1,4 @@
-@if ((loading$ | async) ?? false) {
+@if (loading()) {
   <div class="flex h-screen w-full flex-col gap-4 p-6 md:mx-auto md:max-w-xl">
     <div class="skeleton h-10 w-1/2 rounded-lg"></div>
     <div class="skeleton h-80 w-full rounded-lg"></div>
@@ -9,7 +9,7 @@
       class="skeleton h-36 w-full rounded-lg shadow-md shadow-white/20"></div>
   </div>
 } @else {
-  @if (trip$ | async; as trip) {
+  @if (trip(); as trip) {
     <div class="flex flex-col gap-4 p-6 text-white md:mx-auto md:max-w-xl">
       <div class="flex items-center justify-between">
         <h1 class="text-2xl font-bold text-white">
@@ -19,110 +19,31 @@
           <a
             type="button"
             class="flex items-center transition-all ease-in-out hover:scale-110"
-            [routerLink]="['/edit', this.tripToUpdate()?.docId]">
+            [routerLink]="['/edit', this.tripToUpdate()?.docId]"
+            aria-label="Edit trip">
             <mat-icon>edit</mat-icon>
           </a>
           <button
             (click)="confirmTripDelete()"
-            class="flex items-center transition-all ease-in-out hover:scale-110">
+            class="flex items-center transition-all ease-in-out hover:scale-110"
+            aria-label="Delete trip">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
       </div>
       <div class="flex items-end">
-        @if (baseCurrency$ | async; as baseCurrency) {
-          <p class="h-fit w-fit text-xl">
-            {{ trip.totalCost | currency: baseCurrency : 'symbol-narrow' }}
-          </p>
-        }
+        <p class="h-fit w-fit text-xl">
+          {{ trip.totalCost | currency: baseCurrency() : 'symbol-narrow' }}
+        </p>
       </div>
-      <nz-calendar [nzFullscreen]="false" [nzValue]="trip.startDate">
-        <ul *nzDateFullCell="let date" class="max-h-14 overflow-hidden">
-          @if (date && trip.startDate && trip.endDate) {
-            @if (
-              getDateWithoutTime(date).valueOf() >=
-                getDateWithoutTime(trip.startDate).valueOf() &&
-              getDateWithoutTime(date).valueOf() <=
-                getDateWithoutTime(trip.endDate).valueOf()
-            ) {
-              @if (
-                getDateWithoutTime(date).valueOf() ===
-                  getDateWithoutTime(trip.startDate).valueOf() &&
-                getDateWithoutTime(date).valueOf() ===
-                  getDateWithoutTime(trip.endDate).valueOf()
-              ) {
-                @if (date | hasActivity: trip.itinerary ?? []) {
-                  <li
-                    class="tripStartAndEndDate rounded-full bg-green-1000 text-black">
-                    {{ date.getDate() }}
-                  </li>
-                } @else {
-                  <li class="tripStartAndEndDate">
-                    {{ date.getDate() }}
-                  </li>
-                }
-              } @else if (
-                getDateWithoutTime(date).valueOf() ===
-                getDateWithoutTime(trip.startDate).valueOf()
-              ) {
-                @if (date | hasActivity: trip.itinerary ?? []) {
-                  <li
-                    class="tripStartDate rounded-full bg-green-1000 text-black">
-                    {{ date.getDate() }}
-                  </li>
-                } @else {
-                  <li class="tripStartDate">
-                    {{ date.getDate() }}
-                  </li>
-                }
-              } @else if (
-                getDateWithoutTime(date).valueOf() ===
-                getDateWithoutTime(trip.endDate).valueOf()
-              ) {
-                @if (date | hasActivity: trip.itinerary ?? []) {
-                  <li class="tripEndDate rounded-full bg-green-1000 text-black">
-                    {{ date.getDate() }}
-                  </li>
-                } @else {
-                  <li class="tripEndDate">
-                    {{ date.getDate() }}
-                  </li>
-                }
-              } @else {
-                @if (date | hasActivity: trip.itinerary ?? []) {
-                  <li class="tripDate rounded-full bg-green-1000 text-black">
-                    {{ date.getDate() }}
-                  </li>
-                } @else {
-                  <li class="tripDate">
-                    {{ date.getDate() }}
-                  </li>
-                }
-              }
-            } @else {
-              <li class="rounded-full">
-                {{ date.getDate() }}
-              </li>
-            }
-          }
-        </ul>
-      </nz-calendar>
+      <app-calendar></app-calendar>
       <div class="flex w-full md:justify-between">
         <div class="flex w-full flex-col items-start gap-1 text-nowrap">
           <p class="flex items-center gap-2">
-            <nz-steps [nzCurrent]="3" nzDirection="vertical">
-              <nz-step
-                [nzTitle]="
-                  (trip.startDate | date) + ' - ' + (trip.endDate | date)
-                "
-                nzIcon="schedule"></nz-step>
-              <nz-step
-                [nzTitle]="
-                  trip.duration + ' ' + (trip.duration === 1 ? 'day' : 'days')
-                "
-                nzIcon="field-time"
-                class="durationStep"></nz-step>
-            </nz-steps>
+            <app-steps
+              [starDate]="trip.startDate"
+              [endDate]="trip.endDate"
+              [duration]="trip.duration"></app-steps>
           </p>
         </div>
       </div>
@@ -174,12 +95,14 @@
           <div class="flex gap-2">
             <button
               class="btn border-0 bg-gray-700 text-white"
-              (click)="closeModal()">
+              (click)="closeModal()"
+              aria-label="Cancel delete">
               Cancel
             </button>
             <button
               class="btn border-0 bg-red-700 text-white"
-              (click)="deleteActivity()">
+              (click)="deleteActivity()"
+              aria-label="Delete activity">
               Delete
             </button>
           </div>
@@ -202,12 +125,14 @@
           <div class="flex gap-2">
             <button
               class="btn border-0 bg-gray-700 text-white"
-              (click)="closeModal()">
+              (click)="closeModal()"
+              aria-label="Cancel delete">
               Cancel
             </button>
             <button
               class="btn border-0 bg-red-700 text-white"
-              (click)="deleteTrip()">
+              (click)="deleteTrip()"
+              aria-label="Delete trip">
               Delete
             </button>
           </div>
@@ -219,7 +144,13 @@
       <p class="text-wrap text-center">
         Oops! Something went wrong. Please return home.
       </p>
-      <a type="button" routerLink="/home" class="btn btn-link">Return Home</a>
+      <a
+        type="button"
+        routerLink="/home"
+        class="btn btn-link"
+        aria-label="Go Home">
+        Return Home
+      </a>
     </div>
   }
 }

@@ -1,4 +1,4 @@
-@if (loading$ | async; as loading) {
+@if (loading()) {
   <div class="flex h-screen w-full flex-col gap-4 p-6 md:mx-auto md:max-w-xl">
     <div class="skeleton h-10 w-1/2 rounded-lg"></div>
     <div class="skeleton h-80 w-full rounded-lg"></div>
@@ -7,14 +7,14 @@
     }
   </div>
 } @else {
-  @if (activity()) {
+  @if (activity(); as activity) {
     <div class="flex flex-col gap-2 p-4 text-white md:mx-auto md:max-w-xl">
       <div class="flex items-center justify-between">
         <h1 class="flex items-center gap-2 text-2xl font-bold text-white">
-          {{ activity()?.title }}
-          @if (activity()?.tag; as tag) {
+          {{ activity.title }}
+          @if (activity.tag) {
             <div class="badge border-0 bg-blue-700/40 p-3 text-white">
-              {{ tag }}
+              {{ activity.tag }}
             </div>
           }
         </h1>
@@ -22,7 +22,8 @@
           <a
             type="button"
             class="flex items-center transition-all ease-in-out hover:scale-110"
-            [routerLink]="['/edit', tripId()]">
+            [routerLink]="['/edit', tripId()]"
+            aria-label="Edit trip">
             <mat-icon>edit</mat-icon>
           </a>
           <button
@@ -35,19 +36,15 @@
         </div>
       </div>
       <p class="mt-2 text-lg">
-        {{
-          activity()?.cost | currency: activity()?.currency : 'symbol-narrow'
-        }}
-
-        @if (baseCurrency$ | async; as baseCurrency) {
+        {{ activity.cost | currency: activity.currency : 'symbol-narrow' }}
+        @if (baseCurrency(); as baseCurrency) {
           @if (
-            activity()?.currency !== baseCurrency &&
-            activity()?.costInBaseCurrency
+            activity.currency !== baseCurrency && activity.costInBaseCurrency
           ) {
             <span class="text-xs text-green-1000">
               ±
               {{
-                activity()?.costInBaseCurrency
+                activity.costInBaseCurrency
                   | currency: baseCurrency : 'symbol-narrow'
               }}
             </span>
@@ -55,25 +52,16 @@
         }
       </p>
 
-      <app-map [inputActivity]="activity()"></app-map>
+      <app-map [inputActivity]="activity"></app-map>
 
       <div>
-        <nz-steps [nzCurrent]="3" nzDirection="vertical">
-          <nz-step
-            [nzTitle]="(newStartDate() | date) + ' - ' + (newEndDate() | date)"
-            nzIcon="schedule"></nz-step>
-          <nz-step
-            [nzTitle]="
-              activity()?.duration +
-              ' ' +
-              (activity()?.duration === 1 ? 'day' : 'days')
-            "
-            nzIcon="field-time"
-            class="durationStep"></nz-step>
-        </nz-steps>
-        @if (activity()?.notes) {
+        <app-steps
+          [starDate]="newStartDate()"
+          [endDate]="newEndDate()"
+          [duration]="activity.duration"></app-steps>
+        @if (activity.notes) {
           <p class="mt-2 text-xl font-bold">Notes:</p>
-          <p>{{ activity()?.notes }}</p>
+          <p>{{ activity.notes }}</p>
         }
       </div>
       <div
@@ -81,29 +69,31 @@
         <a
           type="button"
           class="btn border-0 bg-green-1000"
-          [routerLink]="['/trip', tripId()]">
+          [routerLink]="['/trip', tripId()]"
+          aria-label="Return to trip">
           Return
         </a>
       </div>
     </div>
     <dialog #confirmModal class="modal">
       <div class="modal-box">
-        <h3 class="text-2xl font-bold">Hold on!</h3>
+        <p class="text-2xl font-bold">Hold on!</p>
         <p class="py-4">
           Are you sure you would like to delete
-          {{ activity()?.title ?? 'this activity' }} from
-          {{ tripToUpdate()?.title ?? 'this trip' }}?
+          {{ activity.title }} from {{ tripToUpdate()?.title ?? 'this trip' }}?
         </p>
         <div class="modal-action">
           <div class="flex gap-2">
             <button
               class="btn border-0 bg-gray-700 text-white"
-              (click)="closeModal()">
+              (click)="closeModal()"
+              aria-label="Cancel delete">
               Cancel
             </button>
             <button
               class="btn border-0 bg-red-700 text-white"
-              (click)="deleteActivity()">
+              (click)="deleteActivity()"
+              aria-label="Delete activity">
               Delete
             </button>
           </div>
@@ -115,7 +105,11 @@
       <p class="text-wrap text-center">
         Oops! Something went wrong. Please return to the trip.
       </p>
-      <a type="button" class="btn btn-link" [routerLink]="['/trip', tripId()]">
+      <a
+        type="button"
+        class="btn btn-link"
+        [routerLink]="['/trip', tripId()]"
+        aria-label="Return to trip">
         Return
       </a>
     </div>

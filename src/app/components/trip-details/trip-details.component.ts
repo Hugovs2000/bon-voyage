@@ -1,15 +1,11 @@
-import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { Component, ElementRef, ViewChild, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { NzBadgeModule } from 'ng-zorro-antd/badge';
-import { NzCalendarModule } from 'ng-zorro-antd/calendar';
-import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { ItineraryItem, Trip } from '../../models/trips';
-import { HasActivityPipe } from '../../pipes/has-activity.pipe';
 import {
   deleteTrip,
   setSelectedTripId,
@@ -23,24 +19,22 @@ import {
 } from '../../store/trips/selectors';
 import { UserState } from '../../store/user/reducer';
 import { selectBaseCurrency } from '../../store/user/selectors';
+import { CalendarComponent } from '../calendar/calendar.component';
 import { ItineraryCardComponent } from '../itinerary-card/itinerary-card.component';
 import { ItineraryFormComponent } from '../itinerary-form/itinerary-form.component';
+import { StepsComponent } from '../steps/steps.component';
 
 @Component({
   selector: 'app-trip-details',
   standalone: true,
   imports: [
+    CalendarComponent,
     ItineraryCardComponent,
-    AsyncPipe,
-    DatePipe,
-    CurrencyPipe,
     ItineraryFormComponent,
+    StepsComponent,
     RouterLink,
-    NzCalendarModule,
-    NzBadgeModule,
-    NzStepsModule,
     MatIconModule,
-    HasActivityPipe,
+    CurrencyPipe,
   ],
   templateUrl: './trip-details.component.html',
   styleUrl: './trip-details.component.scss',
@@ -51,10 +45,16 @@ export class TripDetailsComponent {
   @ViewChild('confirmDeleteTripModal')
   tripModalRef: ElementRef<HTMLDialogElement> | null = null;
 
-  trip$ = this.tripStore.select(selectSelectedTrip);
-  loading$ = this.tripStore.select(selectLoadingState);
-  exchangeRates$ = this.tripStore.select(selectExchangeRates);
-  baseCurrency$ = this.userStore.select(selectBaseCurrency);
+  trip = toSignal(this.tripStore.select(selectSelectedTrip), {
+    initialValue: null,
+  });
+  loading = toSignal(this.tripStore.select(selectLoadingState), {
+    initialValue: false,
+  });
+  exchangeRates = toSignal(this.tripStore.select(selectExchangeRates));
+  baseCurrency = toSignal(this.userStore.select(selectBaseCurrency), {
+    initialValue: 'ZAR',
+  });
 
   tripToUpdate = signal<Trip | null>(null);
   activityToDelete = signal<ItineraryItem | null>(null);
@@ -68,22 +68,15 @@ export class TripDetailsComponent {
     private router: Router,
     private snackBar: MatSnackBar
   ) {
-    this.trip$.pipe(takeUntilDestroyed()).subscribe(trip => {
-      if (!trip) {
-        this.tripStore.dispatch(
-          setSelectedTripId({
-            tripId: this.tripId(),
-          })
-        );
-      } else {
-        this.tripToUpdate.set(trip);
-      }
-    });
-  }
-
-  getDateWithoutTime(date: Date): Date {
-    date.setHours(0, 0, 0, 0);
-    return date;
+    if (!this.trip() || this.trip()?.docId !== this.tripId()) {
+      this.tripStore.dispatch(
+        setSelectedTripId({
+          tripId: this.tripId(),
+        })
+      );
+    } else {
+      this.tripToUpdate.set(this.trip());
+    }
   }
 
   closeModal() {

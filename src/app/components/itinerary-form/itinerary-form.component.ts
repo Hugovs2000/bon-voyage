@@ -1,4 +1,3 @@
-import { CurrencyPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -36,7 +35,6 @@ import { MapComponent } from '../map/map.component';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    CurrencyPipe,
     MatIconModule,
     MapComponent,
   ],
@@ -47,20 +45,46 @@ import { MapComponent } from '../map/map.component';
 export class ItineraryFormComponent {
   @Input() set activity(activity: ItineraryItem | null) {
     if (activity) {
-      this.locations.set([
-        {
-          position: new LatLng(
-            activity.startLocation?.latitude ?? 0,
-            activity.startLocation?.longitude ?? 0
-          ),
-        },
-        {
-          position: new LatLng(
-            activity.endLocation?.latitude ?? 0,
-            activity.endLocation?.longitude ?? 0
-          ),
-        },
-      ]);
+      this.locations.set(
+        activity.startLocation?.latitude &&
+          activity.startLocation?.longitude &&
+          activity.endLocation?.latitude &&
+          activity.endLocation.longitude
+          ? [
+              {
+                position: new LatLng(
+                  activity.startLocation?.latitude,
+                  activity.startLocation?.longitude
+                ),
+              },
+              {
+                position: new LatLng(
+                  activity.endLocation?.latitude,
+                  activity.endLocation?.longitude
+                ),
+              },
+            ]
+          : activity.startLocation?.latitude
+            ? [
+                {
+                  position: new LatLng(
+                    activity.startLocation?.latitude,
+                    activity.startLocation?.longitude
+                  ),
+                },
+              ]
+            : activity.endLocation?.latitude
+              ? [
+                  {
+                    position: new LatLng(
+                      activity.endLocation?.latitude,
+                      activity.endLocation?.longitude
+                    ),
+                  },
+                ]
+              : null
+      );
+
       this.activityForm.setValue({
         id: activity.id ?? '',
         title: activity.title ?? '',

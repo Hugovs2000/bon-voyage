@@ -1,33 +1,30 @@
-import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { Component, ElementRef, ViewChild, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { NzStepsModule } from 'ng-zorro-antd/steps';
-import { ExchangeRatesDTO, ItineraryItem, Trip } from '../../models/trips';
+import { ItineraryItem, Trip } from '../../models/trips';
 import { setSelectedTripId, updateTrip } from '../../store/trips/actions';
 import { TripState } from '../../store/trips/reducer';
 import {
-  selectExchangeRates,
   selectLoadingState,
   selectSelectedTrip,
 } from '../../store/trips/selectors';
 import { selectBaseCurrency } from '../../store/user/selectors';
 import { MapComponent } from '../map/map.component';
+import { StepsComponent } from '../steps/steps.component';
 
 @Component({
   selector: 'app-itinerary-details',
   standalone: true,
   imports: [
-    AsyncPipe,
+    StepsComponent,
     CurrencyPipe,
-    DatePipe,
     RouterLink,
     MapComponent,
     MatIconModule,
-    NzStepsModule,
   ],
   templateUrl: './itinerary-details.component.html',
   styleUrl: './itinerary-details.component.scss',
@@ -37,10 +34,13 @@ export class ItineraryDetailsComponent {
   modalRef: ElementRef<HTMLDialogElement> | null = null;
 
   selectedTrip$ = this.tripStore.select(selectSelectedTrip);
-  loading$ = this.tripStore.select(selectLoadingState);
-  exchangeRates$ = this.tripStore.select(selectExchangeRates);
-  baseCurrency$ = this.userStore.select(selectBaseCurrency);
 
+  loading = toSignal(this.tripStore.select(selectLoadingState), {
+    initialValue: false,
+  });
+  baseCurrency = toSignal(this.userStore.select(selectBaseCurrency), {
+    initialValue: 'ZAR',
+  });
   tripId = signal<string>(this.activatedRoute.snapshot.params['id']);
   activityId = signal<string>(
     this.activatedRoute.snapshot.params['itineraryId']
@@ -49,7 +49,6 @@ export class ItineraryDetailsComponent {
   activity = signal<ItineraryItem | null>(null);
   newStartDate = signal<Date>(new Date());
   newEndDate = signal<Date>(new Date());
-  rates = signal<ExchangeRatesDTO | null>(null);
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -58,9 +57,6 @@ export class ItineraryDetailsComponent {
     private snackBar: MatSnackBar,
     private router: Router
   ) {
-    this.exchangeRates$.pipe(takeUntilDestroyed()).subscribe(exchangeRates => {
-      this.rates.set(exchangeRates ?? null);
-    });
     this.selectedTrip$.pipe(takeUntilDestroyed()).subscribe(trip => {
       if (!trip) {
         this.tripStore.dispatch(

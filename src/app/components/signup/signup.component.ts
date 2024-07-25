@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { MatError, MatFormFieldModule } from '@angular/material/form-field';
 
+import { NgOptimizedImage } from '@angular/common';
 import {
   FormControl,
   FormGroup,
@@ -13,9 +14,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ValidationService } from '../../services/validation.service';
 import { logInWithGoogle, signUserUp } from '../../store/user/actions';
 import { UserState } from '../../store/user/reducer';
+import { passwordMatch } from '../../utils/passwordMatch';
 
 @Component({
   selector: 'app-signup',
@@ -30,13 +31,13 @@ import { UserState } from '../../store/user/reducer';
     MatCardModule,
     MatCardContent,
     RouterLink,
+    NgOptimizedImage,
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss',
 })
 export class SignupComponent {
   store = inject(Store<UserState>);
-  validation = inject(ValidationService);
 
   hide = true;
 
@@ -51,7 +52,7 @@ export class SignupComponent {
       ]),
       confirmPassword: new FormControl('', [Validators.required]),
     },
-    this.validation.passwordMatch('password', 'confirmPassword')
+    passwordMatch('password', 'confirmPassword')
   );
 
   onSubmit() {

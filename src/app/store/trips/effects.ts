@@ -170,7 +170,7 @@ export class TripsEffects {
     this.actions$.pipe(
       ofType(getExchangeRates.type),
       switchMap(() =>
-        this.apiService.getCurrencies(this.baseCurrency()).pipe(
+        this.apiService.getCurrenciesFromApi(this.baseCurrency()).pipe(
           retry(3),
           map(data => {
             if (data) {
@@ -183,22 +183,46 @@ export class TripsEffects {
                 'Close',
                 {
                   duration: 5000,
-                  panelClass: ['snackbar'],
+                  panelClass: ['snackbar-error'],
                 }
               );
               return setLoadingState({ isLoading: false });
             }
           }),
           catchError(() => {
-            this.snackBar.open(
-              'Apologies, could not retrieve exchange rates.',
-              'Close',
-              {
-                duration: 5000,
-                panelClass: ['snackbar'],
-              }
-            );
-            return of(setLoadingState({ isLoading: false }));
+            return this.apiService
+              .getCurrenciesFromApiMock(this.baseCurrency())
+              .pipe(
+                retry(3),
+                map(data => {
+                  if (data) {
+                    return getExchangeRatesComplete({
+                      exchangeRates: data,
+                    });
+                  } else {
+                    this.snackBar.open(
+                      'Apologies, could not retrieve exchange rates.',
+                      'Close',
+                      {
+                        duration: 5000,
+                        panelClass: ['snackbar-error'],
+                      }
+                    );
+                    return setLoadingState({ isLoading: false });
+                  }
+                }),
+                catchError(() => {
+                  this.snackBar.open(
+                    'Apologies, could not retrieve exchange rates.',
+                    'Close',
+                    {
+                      duration: 5000,
+                      panelClass: ['snackbar-error'],
+                    }
+                  );
+                  return of(setLoadingState({ isLoading: false }));
+                })
+              );
           })
         )
       )

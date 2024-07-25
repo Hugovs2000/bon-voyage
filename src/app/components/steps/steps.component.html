@@ -1,0 +1,11 @@
+@if (starDate && endDate && duration) {
+  <nz-steps [nzCurrent]="3" nzDirection="vertical">
+    <nz-step
+      [nzTitle]="(starDate | date) + ' - ' + (endDate | date)"
+      nzIcon="schedule"></nz-step>
+    <nz-step
+      [nzTitle]="duration + ' ' + (duration === 1 ? 'day' : 'days')"
+      nzIcon="field-time"
+      class="durationStep"></nz-step>
+  </nz-steps>
+}
